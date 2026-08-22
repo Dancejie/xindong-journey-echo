@@ -13,11 +13,11 @@ services:
         value: 3.12.8
       - key: APP_AUTH_MODE
         value: public
-      - key: OPENAI_MODEL
-        value: gpt-5.6-luna
+      - key: DEEPSEEK_MODEL
+        value: deepseek-v4-flash
       - key: AGENT_RATE_LIMIT
         value: "20"
-      - key: OPENAI_API_KEY
+      - key: DEEPSEEK_API_KEY
         sync: false
       - key: DATABASE_URL
         fromDatabase:

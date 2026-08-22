@@ -22,7 +22,7 @@
 
 ## GitHub / Render 公网版
 
-公网版保留完整 MP4、PostgreSQL 角色独立记忆和服务端 Agent 接口，并把 Cowork 内网 SSO 替换成匿名访客身份。部署方式和密钥边界见 `README_RENDER.md` 与根目录 `render.yaml`。OpenAI 密钥只允许配置在 Render 环境变量；调用不可用时会明确回退到角色一致的确定性回复。
+公网版保留完整 MP4、PostgreSQL 角色独立记忆和服务端 Agent 接口，并把 Cowork 内网 SSO 替换成匿名访客身份。部署方式和密钥边界见 `README_RENDER.md` 与根目录 `render.yaml`。DeepSeek 密钥只允许配置在 Render 环境变量；调用不可用时会明确回退到角色一致的确定性回复。
 
 ## Mini Tool 1.4.1 离线包
 

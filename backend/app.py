@@ -87,27 +87,28 @@ def _require_user(decrypted_userinfo: Optional[str], client_id: Optional[str] = 
 
 
 async def _llm_text(messages: list[dict], max_tokens: int = 500) -> str:
-    openai_key = os.getenv("OPENAI_API_KEY", "").strip()
-    if openai_key:
-        base_url = os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1").rstrip("/")
-        model = os.getenv("OPENAI_MODEL", "gpt-5.6-luna")
+    deepseek_key = os.getenv("DEEPSEEK_API_KEY", "").strip()
+    if deepseek_key:
+        base_url = os.getenv("DEEPSEEK_API_BASE", "https://api.deepseek.com").rstrip("/")
+        model = os.getenv("DEEPSEEK_MODEL", "deepseek-v4-flash")
         async with httpx.AsyncClient(timeout=60) as client:
             response = await client.post(
-                f"{base_url}/responses",
-                headers={"Authorization": f"Bearer {openai_key}", "Content-Type": "application/json"},
-                json={"model": model, "input": messages, "max_output_tokens": max_tokens, "store": False},
+                f"{base_url}/chat/completions",
+                headers={"Authorization": f"Bearer {deepseek_key}", "Content-Type": "application/json"},
+                json={
+                    "model": model,
+                    "messages": messages,
+                    "max_tokens": max_tokens,
+                    "stream": False,
+                    "thinking": {"type": "disabled"},
+                },
             )
         response.raise_for_status()
         data = response.json()
-        parts = [
-            content.get("text", "")
-            for item in data.get("output", [])
-            for content in item.get("content", [])
-            if content.get("type") == "output_text"
-        ]
-        text = "".join(parts).strip()
+        choices = data.get("choices") or []
+        text = str(choices[0].get("message", {}).get("content") or "").strip() if choices else ""
         if not text:
-            raise RuntimeError("OpenAI returned no output text")
+            raise RuntimeError("DeepSeek returned no output text")
         return text
     props = _load_props("ai.properties")
     if not props.get("ai.base_url") or not props.get("ai.api_key"):
@@ -207,7 +208,7 @@ def health() -> dict:
         "service": "xindong-journey-echo",
         "contentVersion": "1.1.0",
         "authMode": os.getenv("APP_AUTH_MODE", "sso"),
-        "agentProvider": "openai" if os.getenv("OPENAI_API_KEY") else ("cowork" if _load_props("ai.properties").get("ai.api_key") else "fallback"),
+        "agentProvider": "deepseek" if os.getenv("DEEPSEEK_API_KEY") else ("cowork" if _load_props("ai.properties").get("ai.api_key") else "fallback"),
         "databaseConfigured": bool(os.getenv("DATABASE_URL") or _load_props("db.properties").get("db.host")),
     }
 
