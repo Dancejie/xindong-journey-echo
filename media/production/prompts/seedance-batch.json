@@ -1,0 +1,73 @@
+{
+  "defaults": {
+    "ratio": "9:16",
+    "duration": 5,
+    "resolution": "480p",
+    "generate_audio": false,
+    "watermark": false
+  },
+  "shots": [
+    {
+      "id": "CHAR-shenmo-portrait",
+      "reference_image": "../../reference-only/characters/shenmo-anchor.png",
+      "output_name": "CHAR-shenmo-portrait.mp4",
+      "prompt": "竖屏电影感恋爱真人秀动态肖像。保持参考人物的面部身份、黑色短发与清爽白衬衫，原创亚洲青年男性，INTJ式克制与观察感。落日海边心动小屋，粉紫晚霞与柔和串灯，人物从看向海面缓慢回眸，眼神与镜头短暂相遇，呼吸和发丝有极轻微自然运动，最后一秒稳定。85mm人像镜头，浅景深，真实皮肤纹理，细腻高级恋综摄影，主体上半身位于中央安全区，下方留对白空间。无文字、无标志、无水印、无多余人物、无夸张表演、无肢体畸形。"
+    },
+    {
+      "id": "CHAR-linyu-portrait",
+      "reference_image": "../../reference-only/characters/linyu-anchor.png",
+      "output_name": "CHAR-linyu-portrait.mp4",
+      "prompt": "竖屏电影感恋爱真人秀动态肖像。保持参考人物的面部身份、黑色短发与米白针织上衣，原创亚洲青年男性，ISFJ式温柔安静。落日海边心动小屋，奶油粉晚霞与虚化烛光，人物低头整理桌上的花，随后抬眼露出克制而真诚的微笑，最后一秒稳定。85mm人像镜头，浅景深，真实皮肤纹理，柔光不过曝，主体上半身中央安全区，下方留对白空间。无文字、无标志、无水印、无多余人物、无肢体畸形。"
+    },
+    {
+      "id": "CHAR-chengye-portrait",
+      "reference_image": "../../reference-only/characters/chengye-anchor.png",
+      "output_name": "CHAR-chengye-portrait.mp4",
+      "prompt": "竖屏电影感恋爱真人秀动态肖像。保持参考人物的面部身份、黑色短发和白衬衫，原创亚洲青年男性，ESTP式自信有趣。海边露台的粉紫落日与串灯，人物靠近栏杆，听见镜头外有人喊他后利落回身，嘴角带一点挑战性的笑，末尾稳定一秒。70mm中近景，真实皮肤纹理，空气感发丝与衣料微动，主体中央安全区，下方留对白空间。无文字、无标志、无水印、无多余人物、无夸张动作、无肢体畸形。"
+    },
+    {
+      "id": "CHAR-guyan-portrait",
+      "reference_image": "../../reference-only/characters/guyan-anchor.png",
+      "output_name": "CHAR-guyan-portrait.mp4",
+      "prompt": "竖屏电影感恋爱真人秀动态肖像。保持参考人物的面部身份、黑色短发与浅蓝衬衫，原创亚洲青年男性，INTP式聪明疏离。粉紫落日下的海边心动小屋，人物托腮观察一张没有可读文字的卡片，像忽然想通什么般抬眼，克制地笑一下，末尾稳定一秒。85mm人像镜头，浅景深，真实皮肤纹理，高级恋综柔光，主体上半身中央安全区，下方留对白空间。无可读文字、无标志、无水印、无多余人物、无肢体畸形。"
+    },
+    {
+      "id": "CHAR-jiangwan-portrait",
+      "reference_image": "../../reference-only/characters/jiangwan-anchor.png",
+      "output_name": "CHAR-jiangwan-portrait.mp4",
+      "prompt": "竖屏电影感恋爱真人秀动态肖像。保持参考人物的面部身份、深棕长卷发与淡粉碎花裙，原创亚洲青年女性，INFJ式安静洞察。落日海边心动小屋，粉紫晚霞和轻纱随海风，人物先看向镜头外的某个人，再缓慢看回镜头，眼神柔和但像已看懂秘密，末尾稳定一秒。85mm人像镜头，浅景深，真实皮肤纹理，细腻高级恋综摄影，主体中央安全区，下方留对白空间。无文字、无标志、无水印、无多余人物、无肢体畸形。"
+    },
+    {
+      "id": "CHAR-jiangmi-portrait",
+      "reference_image": "../../reference-only/characters/jiangmi-anchor.png",
+      "output_name": "CHAR-jiangmi-portrait.mp4",
+      "prompt": "竖屏电影感恋爱真人秀动态肖像。保持参考人物的面部身份、深棕长发与柔粉吊带裙，原创亚洲青年女性，ENFP式明亮坦率。海边晚宴粉紫落日与暖色烛光，人物双手轻托下巴，忽然被镜头外一句话逗笑，笑意自然收住后直视镜头，末尾稳定一秒。70mm人像中近景，浅景深，真实皮肤纹理，清透高级恋综质感，主体中央安全区，下方留对白空间。无文字、无标志、无水印、无多余人物、无肢体畸形。"
+    },
+    {
+      "id": "CHAR-sunnian-portrait",
+      "reference_image": "../../reference-only/characters/sunnian-anchor.png",
+      "output_name": "CHAR-sunnian-portrait.mp4",
+      "prompt": "竖屏电影感恋爱真人秀动态肖像。保持参考人物的面部身份、深棕长发与浅紫泡泡袖连衣裙，原创亚洲青年女性，ESFJ式温暖体贴。粉紫海边暮色与柔和串灯，人物把一杯饮料递向镜头外，随后收回手看向镜头微笑，神情亲切但不讨好，末尾稳定一秒。85mm人像镜头，浅景深，真实皮肤纹理，主体中央安全区，下方留对白空间。无文字、无标志、无水印、无多余人物、无手指畸形。"
+    },
+    {
+      "id": "CHAR-chensu-portrait",
+      "reference_image": "../../reference-only/characters/chensu-anchor.png",
+      "output_name": "CHAR-chensu-portrait.mp4",
+      "prompt": "竖屏电影感恋爱真人秀动态肖像。保持参考人物的面部身份、黑色短发与白色休闲上衣，原创亚洲青年男性，ISTP式沉默行动派。粉紫暮色下的海边木平台，怀中木吉他保持结构正确，人物轻轻拨一下琴弦后停住，抬眼看向镜头，表情沉静可靠，末尾稳定一秒。70mm中近景，真实皮肤纹理，电影浅景深，主体中央安全区，下方留对白空间。无文字、无标志、无水印、无多余人物、无错误手指、无错误琴弦结构。"
+    },
+    {
+      "id": "E01-arrival-reveal",
+      "reference_image": "../../reference-only/characters/jiangmi-anchor.png",
+      "reference_video": "../../reference-only/motion/arrival-reveal-reference.mp4",
+      "output_name": "E01-arrival-reveal.mp4",
+      "prompt": "原创竖屏恋爱真人秀章节开场，只借鉴参考视频的由氛围空镜推向人物揭晓的节奏，不复制参考人物、服装、场景或文字。粉紫落日海岸，镜头穿过被海风吹动的白色轻纱与虚化花束，推向一座精致心动小屋的晚宴露台；参考图中的原创亚洲青年女性站在灯串下回头，八位嘉宾的模糊剪影只作为远景氛围，人物身份不融合。电影级光影，轻微手持呼吸，结尾主角稳定于中央安全区两秒，底部留对白空间。无可读文字、无标志、无水印、无多余肢体、无快速闪烁。"
+    },
+    {
+      "id": "E01-anonymous-letter",
+      "reference_image": "../../reference-only/characters/shenmo-anchor.png",
+      "reference_video": "../../reference-only/motion/object-closeup-reference.mp4",
+      "output_name": "E01-anonymous-letter.mp4",
+      "prompt": "原创竖屏恋爱真人秀关键选择过场，只借鉴参考视频的物件特写、慢推近与留白节奏，不复制参考内容。粉紫夜色的海边心动小屋，一只结构自然的手把无字匿名心动信封推入暖光桌面中央，镜头极近景扫过封蜡、微颤的烛光与桌边八枚不同颜色的小玻璃心形标记，随后焦点转到参考图原创亚洲青年男性克制的侧脸，他没有拆信，只短暂看向镜头外，结尾稳定一秒。电影级微距质感，动作因果清楚，下方留字幕空间。无可读文字、无标志、无水印、无多余手指、无物体复制、无人物融合。"
+    }
+  ]
+}

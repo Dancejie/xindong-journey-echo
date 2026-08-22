@@ -1,0 +1,126 @@
+{
+  "format": "animated-webp",
+  "audio": false,
+  "items": [
+    {
+      "source": "E01-arrival-reveal.mp4",
+      "target": "arrival.webp",
+      "width": 360,
+      "height": 640,
+      "fps": 6,
+      "quality": 58,
+      "frames": 30,
+      "bytes": 256978,
+      "sha256": "c2c7ea3b6f512000f008416c362d7f7837cc2e2111130ab6291b4fd061daaf26",
+      "sourceSha256": "0c3f21d39b94d246f0e2f72dfedd9a81edf5934c4d8b1f8f421a9f449d70ac14"
+    },
+    {
+      "source": "E01-anonymous-letter.mp4",
+      "target": "letter.webp",
+      "width": 360,
+      "height": 640,
+      "fps": 6,
+      "quality": 58,
+      "frames": 30,
+      "bytes": 228646,
+      "sha256": "350265eb9cfb0bd17d2c4db6474576ae91d22bf5337e58584fb1086a908cf503",
+      "sourceSha256": "d93d1fdab046c6a7719517c115b3b7f50421c3b25691b6c66b0b99fe595e558f"
+    },
+    {
+      "source": "CHAR-shenmo-portrait.mp4",
+      "target": "shenmo.webp",
+      "width": 360,
+      "height": 640,
+      "fps": 6,
+      "quality": 56,
+      "frames": 30,
+      "bytes": 196950,
+      "sha256": "f446b9239df2445a0511e844117dc5bfa32038ef65a5f19f223242a5644ae434",
+      "sourceSha256": "36476487b496327b7810c4a2f327829afe59ee1870f9e81e807bcfd932971595"
+    },
+    {
+      "source": "CHAR-linyu-portrait.mp4",
+      "target": "linyu.webp",
+      "width": 360,
+      "height": 640,
+      "fps": 6,
+      "quality": 56,
+      "frames": 30,
+      "bytes": 286050,
+      "sha256": "c0b26bdbfd75b5303d35959c5359b79134eaa05b21c4d4ca192f08071dca060c",
+      "sourceSha256": "1165116f14a5ed80938ce5eac8d34791aaeea0a5bcb69a30d98486bce445473e"
+    },
+    {
+      "source": "CHAR-chengye-portrait.mp4",
+      "target": "chengye.webp",
+      "width": 360,
+      "height": 640,
+      "fps": 6,
+      "quality": 56,
+      "frames": 30,
+      "bytes": 215594,
+      "sha256": "41a107299729a44b97702ddb06447a0b596bdeb2e9616c8e19117ec1663187af",
+      "sourceSha256": "f84e49cf52a042bed530ae95e5a28b34d6f93a3b0f0f0442341df8c6219085fa"
+    },
+    {
+      "source": "CHAR-guyan-portrait.mp4",
+      "target": "guyan.webp",
+      "width": 360,
+      "height": 640,
+      "fps": 6,
+      "quality": 56,
+      "frames": 30,
+      "bytes": 304950,
+      "sha256": "7ce0ec2b14d90b41b1f02a2ec39ccaa68812673c6dd9dfc0385055c322ff826f",
+      "sourceSha256": "6edf715b2e13dafca85b8e851dedd1cc5185e9fd6786540ac0e1c21340f3bfc7"
+    },
+    {
+      "source": "CHAR-jiangwan-portrait.mp4",
+      "target": "jiangwan.webp",
+      "width": 360,
+      "height": 640,
+      "fps": 6,
+      "quality": 56,
+      "frames": 30,
+      "bytes": 274042,
+      "sha256": "5259c7110abf967dee87f873341b74c7c6ae4ae6aed93ac9d60c2e2d5b60dce1",
+      "sourceSha256": "79de8e81aa5daa2a8d7557494876fdab64bf86bc244f4ff9bb6ece53647e8a07"
+    },
+    {
+      "source": "CHAR-jiangmi-portrait.mp4",
+      "target": "jiangmi.webp",
+      "width": 360,
+      "height": 640,
+      "fps": 6,
+      "quality": 56,
+      "frames": 30,
+      "bytes": 290678,
+      "sha256": "9d95cd569dee27c37da860534ea3da387fe6a840e74207921556ed7aeab2b157",
+      "sourceSha256": "1f11102093dbda60ceec83f64f94bbb7a601b5e52727d8cb9795311107fd04cf"
+    },
+    {
+      "source": "CHAR-sunnian-portrait.mp4",
+      "target": "sunnian.webp",
+      "width": 360,
+      "height": 640,
+      "fps": 6,
+      "quality": 56,
+      "frames": 30,
+      "bytes": 267166,
+      "sha256": "9e4e74a33429a8a139cd524d608f1f0c07c7155c69b97c32e2fd67fb256f6206",
+      "sourceSha256": "c66423e4794e4b650a72a2e4256041c10060e9022d50eb29155a42cdf0589336"
+    },
+    {
+      "source": "CHAR-chensu-portrait.mp4",
+      "target": "chensu.webp",
+      "width": 360,
+      "height": 640,
+      "fps": 6,
+      "quality": 56,
+      "frames": 30,
+      "bytes": 255820,
+      "sha256": "e02808fb00390b7eb672e2f323ba2de81189d2be434151b06ed341ab7b98ac1d",
+      "sourceSha256": "7b576b706d05cf63ce6e11867adabc019a8152cc91a68ff8081be9d2b61bd6ec"
+    }
+  ]
+}

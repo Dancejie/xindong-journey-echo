@@ -1,0 +1,9 @@
+media/reference-only/
+media/.work-candidates/
+media/production/prompts/probe.txt
+world/
+qa/screenshots/
+frontend/node_modules/
+backend/__pycache__/
+**/.DS_Store
+.redInfo

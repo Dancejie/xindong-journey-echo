@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "contentVersion": "1.0.0",
+  "status": "runtime-integrated",
+  "generationRound": "seedance-round1",
+  "qaVerdict": "provisional-approved",
+  "assets": [
+    {"id":"CHAR-shenmo-portrait","kind":"dynamic-portrait","path":"/media/video/CHAR-shenmo-portrait.mp4","sha256":"36476487b496327b7810c4a2f327829afe59ee1870f9e81e807bcfd932971595","duration":5.041667},
+    {"id":"CHAR-linyu-portrait","kind":"dynamic-portrait","path":"/media/video/CHAR-linyu-portrait.mp4","sha256":"1165116f14a5ed80938ce5eac8d34791aaeea0a5bcb69a30d98486bce445473e","duration":5.041667},
+    {"id":"CHAR-chengye-portrait","kind":"dynamic-portrait","path":"/media/video/CHAR-chengye-portrait.mp4","sha256":"f84e49cf52a042bed530ae95e5a28b34d6f93a3b0f0f0442341df8c6219085fa","duration":5.041667},
+    {"id":"CHAR-guyan-portrait","kind":"dynamic-portrait","path":"/media/video/CHAR-guyan-portrait.mp4","sha256":"6edf715b2e13dafca85b8e851dedd1cc5185e9fd6786540ac0e1c21340f3bfc7","duration":5.041667},
+    {"id":"CHAR-jiangwan-portrait","kind":"dynamic-portrait","path":"/media/video/CHAR-jiangwan-portrait.mp4","sha256":"79de8e81aa5daa2a8d7557494876fdab64bf86bc244f4ff9bb6ece53647e8a07","duration":5.041667},
+    {"id":"CHAR-jiangmi-portrait","kind":"dynamic-portrait","path":"/media/video/CHAR-jiangmi-portrait.mp4","sha256":"1f11102093dbda60ceec83f64f94bbb7a601b5e52727d8cb9795311107fd04cf","duration":5.041667},
+    {"id":"CHAR-sunnian-portrait","kind":"dynamic-portrait","path":"/media/video/CHAR-sunnian-portrait.mp4","sha256":"c66423e4794e4b650a72a2e4256041c10060e9022d50eb29155a42cdf0589336","duration":5.041667},
+    {"id":"CHAR-chensu-portrait","kind":"dynamic-portrait","path":"/media/video/CHAR-chensu-portrait.mp4","sha256":"7b576b706d05cf63ce6e11867adabc019a8152cc91a68ff8081be9d2b61bd6ec","duration":5.041667},
+    {"id":"E01-arrival-reveal","kind":"cinematic","path":"/media/video/E01-arrival-reveal.mp4","sha256":"0c3f21d39b94d246f0e2f72dfedd9a81edf5934c4d8b1f8f421a9f449d70ac14","duration":5.041667,"trigger":"node.arrival.committed"},
+    {"id":"E01-anonymous-letter","kind":"cinematic","path":"/media/video/E01-anonymous-letter.mp4","sha256":"d93d1fdab046c6a7719517c115b3b7f50421c3b25691b6c66b0b99fe595e558f","duration":5.041667,"trigger":"node.anonymous-letter.committed"}
+  ],
+  "notes": [
+    "All video masters are normalized H.264 480x854 yuv420p faststart without audio.",
+    "Portrait JPG files are stable frames extracted from the corresponding Seedance masters.",
+    "Reference poster and motion video remain reference-only and are excluded from publication."
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "sourceDirectory": "../public/media/video",
+  "outputDirectory": "assets/media/motion",
+  "items": [
+    {"source": "E01-arrival-reveal.mp4", "target": "arrival.webp", "width": 360, "height": 640, "fps": 6, "quality": 58},
+    {"source": "E01-anonymous-letter.mp4", "target": "letter.webp", "width": 360, "height": 640, "fps": 6, "quality": 58},
+    {"source": "CHAR-shenmo-portrait.mp4", "target": "shenmo.webp", "width": 360, "height": 640, "fps": 6, "quality": 56},
+    {"source": "CHAR-linyu-portrait.mp4", "target": "linyu.webp", "width": 360, "height": 640, "fps": 6, "quality": 56},
+    {"source": "CHAR-chengye-portrait.mp4", "target": "chengye.webp", "width": 360, "height": 640, "fps": 6, "quality": 56},
+    {"source": "CHAR-guyan-portrait.mp4", "target": "guyan.webp", "width": 360, "height": 640, "fps": 6, "quality": 56},
+    {"source": "CHAR-jiangwan-portrait.mp4", "target": "jiangwan.webp", "width": 360, "height": 640, "fps": 6, "quality": 56},
+    {"source": "CHAR-jiangmi-portrait.mp4", "target": "jiangmi.webp", "width": 360, "height": 640, "fps": 6, "quality": 56},
+    {"source": "CHAR-sunnian-portrait.mp4", "target": "sunnian.webp", "width": 360, "height": 640, "fps": 6, "quality": 56},
+    {"source": "CHAR-chensu-portrait.mp4", "target": "chensu.webp", "width": 360, "height": 640, "fps": 6, "quality": 56}
+  ]
+}

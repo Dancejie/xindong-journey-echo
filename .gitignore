@@ -1,0 +1,15 @@
+.DS_Store
+.redInfo
+.cowork/
+.cowork.json
+.codex/
+ai.properties
+db.properties
+.env
+.env.*
+frontend/node_modules/
+frontend/dist-minitool/
+release/
+__pycache__/
+*.pyc
+.pytest_cache/
