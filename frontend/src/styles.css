@@ -145,7 +145,7 @@ button:focus-visible, textarea:focus-visible { outline: 2px solid rgba(255, 211,
 .chat-portrait__media { position: absolute; inset: 0; overflow: hidden; background: color-mix(in srgb, var(--accent) 32%, #3b2938); }
 .chat-portrait__media video { position: absolute; inset: 0; width: 100%; height: 100%; }
 .chat-portrait__blur { object-fit: cover; filter: blur(24px) saturate(.9); opacity: .68; transform: scale(1.16); }
-.chat-portrait__subject { z-index: 1; object-fit: contain; object-position: center 18%; filter: saturate(.96) contrast(1.02); }
+.chat-portrait__subject { z-index: 1; object-fit: contain; object-position: center top; filter: saturate(.96) contrast(1.02); transform: scale(1.4); transform-origin: center top; }
 .chat-portrait__scrim { z-index: 2; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(26,18,29,.08), transparent 42%, rgba(30,20,30,.78)); }
 .close-button { position: absolute; right: 15px; top: 14px; width: 35px; height: 35px; border: 1px solid rgba(255,255,255,.34); border-radius: 50%; color: white; background: rgba(33,22,34,.2); backdrop-filter: blur(9px); font-size: 22px; font-weight: 200; line-height: 1; }
 .close-button { z-index: 4; }
