@@ -5,18 +5,26 @@ type Character = {
   id: string; name: string; mbti: string; tagline: string; accent: string
   portrait: string; video: string; publicMask: string; privateFear: string
   memorySeed: string; voice: string; boundary: string; quickPrompts: string[]
+  independentInterest: string; eventLabel: string
 }
 
 type Memory = {
   id: string; characterId: string; playerText: string; agentReply: string
   intentId: string; affectionDelta: number; trustDelta: number; createdAt: string
+  attitude: string; stageDirection?: string; summary?: string
+  relationshipDelta: Record<string, number>
 }
+
+type RelationshipAxes = { trust: number; affection: number; respect: number; fear: number; debt: number; attraction: number; resentment: number }
+type StoryEvent = { eventId: string; characterId: string; label: string; text: string }
 
 type Snapshot = {
   runId: string; revision: number; nodeId: string
   player: { mbti: string; displayName: string }
   flags: { heat: number; clarity: number; publicImpression: number }
   affection: Record<string, number>; trust: Record<string, number>
+  relationships: Record<string, RelationshipAxes>; attitudes: Record<string, string>
+  eventLedger: StoryEvent[]; activeEventId: string | null
   focusCharacterId: string | null; letterRecipientId: string | null
   echoMemories: Memory[]; choiceHistory: unknown[]
 }
@@ -25,13 +33,15 @@ type Choice = { id: string; label: string; hint: string; characterId?: string }
 type StoryNode = {
   chapter: string; eyebrow: string; title: string; speaker: string; text: string
   characterId?: string; cinematic?: string; choices: Choice[]
-  requiresMemory?: boolean; characterChoice?: boolean; isEnding?: boolean
+  requiresMemory?: boolean; requiresEvent?: boolean; characterChoice?: boolean; isEnding?: boolean
 }
 type View = { snapshot: Snapshot; node: StoryNode; characters: Character[] }
-type Receipt = { kind: string; intentId?: string; patch?: Record<string, unknown> }
+type Receipt = { kind: string; intentId?: string; attitude?: string; publicReason?: string; patch?: Record<string, unknown>; eventActivation?: StoryEvent | null }
 
 const MBTIS = ['INFP', 'ENFP', 'INFJ', 'ENFJ', 'INTJ', 'ENTJ', 'INTP', 'ENTP', 'ISFP', 'ESFP', 'ISFJ', 'ESFJ', 'ISTP', 'ESTP', 'ISTJ', 'ESTJ']
-const PROGRESS: Record<string, number> = { arrival: 8, 'first-look': 30, 'private-window': 55, 'anonymous-letter': 78, callback: 100 }
+const PROGRESS: Record<string, number> = { arrival: 8, 'first-look': 26, 'private-window': 48, 'event-reveal': 68, 'anonymous-letter': 84, callback: 100 }
+const ATTITUDE_LABELS: Record<string, string> = { warm: '温暖', curious: '好奇', guarded: '戒备', challenging: '试探', vulnerable: '袒露', softened: '松动', uncertain: '迟疑', honest: '坦诚', moved: '被触动', careful: '谨慎', steady: '稳定', boundary: '边界' }
+const AXIS_LABELS: Record<string, string> = { trust: '信任', affection: '好感', respect: '尊重', fear: '压力', debt: '亏欠', attraction: '吸引', resentment: '芥蒂' }
 
 function getClientId() {
   const key = 'heart-journey-public-client-id'
@@ -153,6 +163,8 @@ function ChatSheet({ character, snapshot, onClose, onSend, busy }: {
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const memories = snapshot.echoMemories.filter(memory => memory.characterId === character.id)
   const latest = memories[memories.length - 1]
+  const axes = snapshot.relationships?.[character.id]
+  const attitude = snapshot.attitudes?.[character.id] || 'curious'
   const submit = async (event?: FormEvent) => {
     event?.preventDefault()
     const message = draft.trim()
@@ -175,15 +187,18 @@ function ChatSheet({ character, snapshot, onClose, onSend, busy }: {
         </div>
         <div className="chat-body">
           <div className="agent-note">
-            <span>只对你开放的那一面</span>
-            <p>{character.publicMask}</p>
+            <span>当前态度 · {ATTITUDE_LABELS[attitude] || attitude}</span>
+            <p>{character.independentInterest}</p>
+            {axes && <div className="relationship-axes">
+              {(['trust', 'affection', 'respect', 'attraction'] as const).map(axis => <i key={axis}>{AXIS_LABELS[axis]} {axes[axis] >= 0 ? '+' : ''}{axes[axis]}</i>)}
+            </div>}
           </div>
           <div className="message-stream">
             {!latest && <div className="message agent"><b>{character.name}</b><p>“这里没有其他人的镜头。你可以不用急着表现得正确。”</p></div>}
             {memories.slice(-4).map(memory => (
               <div className="message-pair" key={memory.id}>
                 <div className="message player"><p>{memory.playerText}</p></div>
-                <div className="message agent"><b>{character.name}</b><p>{memory.agentReply}</p><small>已写入你们的共同记忆</small></div>
+                <div className="message agent"><b>{character.name} · {ATTITUDE_LABELS[memory.attitude] || memory.attitude}</b>{memory.stageDirection && <em>{memory.stageDirection}</em>}<p>{memory.agentReply}</p><small>{memory.summary || '已写入你们的共同记忆'}</small></div>
               </div>
             ))}
             {busy && <div className="message agent typing"><i /><i /><i /></div>}
@@ -215,12 +230,10 @@ function Cinematic({ src, onDone }: { src: string; onDone: () => void }) {
 }
 
 function ReceiptToast({ receipt }: { receipt: Receipt }) {
-  const labels: Record<string, string> = {
-    'companion.flirt': '暧昧信号被接住', 'companion.listen': '一段真话被记住',
-    'companion.challenge': '关系进入更深一层', 'companion.presence': '陪伴成为共同记忆',
-    'companion.boundary': '边界已被清楚保存',
-  }
-  return <div className="receipt-toast"><HeartMark small /><div><b>{labels[receipt.intentId || ''] || '选择已写入故事'}</b><span>文字剧情 · Agent 记忆 · 影像触发已同步</span></div></div>
+  const patchCount = Object.keys(receipt.patch || {}).length
+  const title = receipt.eventActivation ? `事件激活 · ${receipt.eventActivation.label}` : receipt.kind === 'agent-turn' ? `态度更新 · ${ATTITUDE_LABELS[receipt.attitude || ''] || receipt.attitude}` : '选择已写入故事'
+  const detail = receipt.eventActivation?.text || receipt.publicReason || (patchCount ? `${patchCount} 项关系参数已提交` : '剧情状态已提交')
+  return <div className="receipt-toast"><HeartMark small /><div><b>{title}</b><span>{detail}</span></div></div>
 }
 
 function Game({ view, onView, onRestart }: { view: View; onView: (view: View) => void; onRestart: () => Promise<void> }) {
@@ -263,6 +276,7 @@ function Game({ view, onView, onRestart }: { view: View; onView: (view: View) =>
     finally { setBusy(false) }
   }
   const memoriesDone = snapshot.echoMemories.length > 0
+  const eventDone = !!snapshot.activeEventId
   return (
     <main className="game-shell">
       <header className="game-topbar">
@@ -280,14 +294,14 @@ function Game({ view, onView, onRestart }: { view: View; onView: (view: View) =>
         <div className="story-card__chapter"><span>{node.speaker}</span><i /></div>
         <h1>{node.title}</h1>
         <p>{node.text}</p>
-        {node.requiresMemory && <div className={`link-proof ${memoriesDone ? 'done' : ''}`}>
-          <span>{memoriesDone ? '✓' : '01'}</span><div><b>{memoriesDone ? '私聊记忆已经接入正片' : '先完成一次 1 对 1 交流'}</b><small>{memoriesDone ? `${snapshot.echoMemories.length} 段记忆可被后续剧情回调` : '点击下方任意嘉宾立绘进入私聊'}</small></div>
+        {node.requiresMemory && <div className={`link-proof ${eventDone ? 'done' : ''}`}>
+          <span>{eventDone ? '✓' : memoriesDone ? '02' : '01'}</span><div><b>{eventDone ? '专属事件已经进入正片' : memoriesDone ? '继续交流，触发一个具体行动' : '先完成一次 1 对 1 交流'}</b><small>{eventDone ? snapshot.eventLedger[snapshot.eventLedger.length - 1]?.label : memoriesDone ? '角色会依据人物卡决定是否交出线索或邀约' : '点击下方任意嘉宾立绘进入私聊'}</small></div>
         </div>}
         <div className={`choice-stack ${node.characterChoice ? 'character-choices' : ''}`}>
           {node.choices.map((choice, index) => {
             const character = choice.characterId ? characters.find(c => c.id === choice.characterId) : null
             return (
-              <button key={choice.id} disabled={busy || (!!node.requiresMemory && !memoriesDone)} onClick={() => choose(choice)} style={character ? { '--accent': character.accent } as React.CSSProperties : undefined}>
+              <button key={choice.id} disabled={busy || (!!node.requiresMemory && !memoriesDone) || (!!node.requiresEvent && !eventDone)} onClick={() => choose(choice)} style={character ? { '--accent': character.accent } as React.CSSProperties : undefined}>
                 {character && <img src={character.portrait} alt="" />}
                 <span className="choice-index">{String(index + 1).padStart(2, '0')}</span>
                 <span className="choice-copy"><b>{choice.label}</b><small>{choice.hint}</small></span><i>→</i>

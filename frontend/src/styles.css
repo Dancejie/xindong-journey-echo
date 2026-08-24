@@ -158,11 +158,14 @@ button:focus-visible, textarea:focus-visible { outline: 2px solid rgba(255, 211,
 .agent-note { border-left: 2px solid var(--accent); padding: 3px 0 3px 10px; margin-bottom: 14px; }
 .agent-note span { color: color-mix(in srgb, var(--accent) 76%, #452c43); font-size: 8px; letter-spacing: .12em; }
 .agent-note p { margin: 5px 0 0; color: #786975; font: 11px/1.55 "Noto Serif SC", serif; }
+.relationship-axes { display: flex; gap: 5px; overflow-x: auto; margin-top: 8px; scrollbar-width: none; }
+.relationship-axes i { flex: 0 0 auto; padding: 3px 6px; border-radius: 999px; color: color-mix(in srgb, var(--accent) 78%, #5f4659); background: color-mix(in srgb, var(--accent) 9%, white); font: normal 7px/1.4 system-ui, sans-serif; }
 .message-stream { min-height: 0; flex: 1 1 auto; display: grid; align-content: start; gap: 12px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 .message-pair { display: grid; gap: 9px; }
 .message { width: fit-content; max-width: 85%; border-radius: 16px; padding: 11px 13px; }
 .message p { margin: 0; font-size: 12px; line-height: 1.65; }
 .message b { display: block; color: var(--accent); font-size: 8px; margin-bottom: 5px; letter-spacing: .12em; }
+.message em { display: block; margin: -1px 0 5px; color: #a18f9a; font: normal 8px/1.5 "Noto Serif SC", serif; }
 .message small { display: block; color: #9a8995; font-size: 7px; margin-top: 6px; }
 .message.agent { background: white; border: 1px solid #ede2e5; box-shadow: 0 4px 16px rgba(80,53,72,.06); }
 .message.player { justify-self: end; color: white; background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 78%, #8e587e), #9b6988); border-radius: 16px 16px 4px 16px; }

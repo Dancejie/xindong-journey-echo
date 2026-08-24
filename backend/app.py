@@ -16,12 +16,13 @@ from fastapi.staticfiles import StaticFiles
 from psycopg.rows import dict_row
 
 from backend.game_content import (
+    CHARACTER_CARD_MAP,
     CHARACTER_MAP,
     CHARACTERS,
     apply_choice,
-    classify_agent_intent,
-    commit_agent_memory,
+    commit_agent_turn,
     create_snapshot,
+    migrate_snapshot,
     project_view,
 )
 
@@ -88,41 +89,23 @@ def _require_user(decrypted_userinfo: Optional[str], client_id: Optional[str] = 
 
 async def _llm_text(messages: list[dict], max_tokens: int = 500) -> str:
     deepseek_key = os.getenv("DEEPSEEK_API_KEY", "").strip()
-    if deepseek_key:
-        base_url = os.getenv("DEEPSEEK_API_BASE", "https://api.deepseek.com").rstrip("/")
-        model = os.getenv("DEEPSEEK_MODEL", "deepseek-v4-flash")
-        async with httpx.AsyncClient(timeout=60) as client:
-            response = await client.post(
-                f"{base_url}/chat/completions",
-                headers={"Authorization": f"Bearer {deepseek_key}", "Content-Type": "application/json"},
-                json={
-                    "model": model,
-                    "messages": messages,
-                    "max_tokens": max_tokens,
-                    "stream": False,
-                    "thinking": {"type": "disabled"},
-                },
-            )
-        response.raise_for_status()
-        data = response.json()
-        choices = data.get("choices") or []
-        text = str(choices[0].get("message", {}).get("content") or "").strip() if choices else ""
-        if not text:
-            raise RuntimeError("DeepSeek returned no output text")
-        return text
-    props = _load_props("ai.properties")
-    if not props.get("ai.base_url") or not props.get("ai.api_key"):
-        raise RuntimeError("AI gateway is not configured")
+    if not deepseek_key:
+        raise RuntimeError("DeepSeek is not configured")
+    base_url = os.getenv("DEEPSEEK_API_BASE", "https://api.deepseek.com").rstrip("/")
+    model = os.getenv("DEEPSEEK_MODEL", "deepseek-v4-flash")
     async with httpx.AsyncClient(timeout=60) as client:
         response = await client.post(
-            f"{props['ai.base_url']}/bedrock_runtime/model/invoke",
-            headers={"token": props["ai.api_key"], "Content-Type": "application/json"},
-            json={"anthropic_version": "bedrock-2023-05-31", "max_tokens": max_tokens, "messages": messages},
+            f"{base_url}/chat/completions",
+            headers={"Authorization": f"Bearer {deepseek_key}", "Content-Type": "application/json"},
+            json={"model": model, "messages": messages, "max_tokens": max_tokens, "stream": False, "thinking": {"type": "disabled"}},
         )
+    response.raise_for_status()
     data = response.json()
-    if data.get("Code") or data.get("Error"):
-        raise RuntimeError("Agent service returned a business error")
-    return data["content"][0]["text"].strip()
+    choices = data.get("choices") or []
+    text = str(choices[0].get("message", {}).get("content") or "").strip() if choices else ""
+    if not text:
+        raise RuntimeError("DeepSeek returned no output text")
+    return text
 
 
 def _load_run(conn: psycopg.Connection, run_id: str, owner_id: str, for_update: bool = False) -> dict:
@@ -134,7 +117,10 @@ def _load_run(conn: psycopg.Connection, run_id: str, owner_id: str, for_update: 
     if not row:
         raise HTTPException(status_code=404, detail="没有找到这段心动旅程")
     snapshot = row["snapshot"]
-    return json.loads(snapshot) if isinstance(snapshot, str) else snapshot
+    raw = json.loads(snapshot) if isinstance(snapshot, str) else snapshot
+    migrated = migrate_snapshot(raw)
+    assert migrated is not None
+    return migrated
 
 
 def _save_run(conn: psycopg.Connection, run_id: str, owner_id: str, snapshot: dict) -> None:
@@ -151,39 +137,56 @@ def _record_event(conn: psycopg.Connection, run_id: str, owner_id: str, event_ty
     )
 
 
-def _fallback_reply(character: dict, intent: str) -> str:
-    if intent == "companion.boundary":
-        return f"“我愿意继续聊，但不是用这种方式。”{character['name']}没有离开，只把边界说清楚了。"
-    if intent == "companion.flirt":
-        return f"“你把这句话留给我，我会当真一点。”{character['name']}看了你一秒，又补了一句：“但我们慢慢来。”"
-    if intent == "companion.challenge":
-        return f"“认真答案是：我在意。”{character['name']}没有躲开，“剩下的，等你也说真话。”"
-    if intent == "companion.listen":
-        return f"“我听见了。”{character['name']}把你的原话重复了一小段，“你更想被理解，还是更想有人先留下？”"
-    return f"{character['name']}安静地接住这句话：“不用急着让它变成答案，我记得就好。”"
-
-
-async def _agent_reply(character: dict, snapshot: dict, message: str) -> str:
-    intent, _, _ = classify_agent_intent(message)
-    memories = [m for m in snapshot["echoMemories"] if m["characterId"] == character["id"]][-4:]
-    memory_lines = "\n".join(f"玩家：{m['playerText']}\n你：{m['agentReply']}" for m in memories) or "尚无共同记忆"
-    prompt = f"""你正在扮演原创恋综角色 {character['name']}（{character['mbti']}）。
-公开面具：{character['publicMask']}
-隐秘恐惧：{character['privateFear']}
-长期记忆种子：{character['memorySeed']}
-说话方式：{character['voice']}
-现实边界：{character['boundary']}
-已提交的你们之间的独立记忆：
-{memory_lines}
-
-玩家刚才说：{message[:240]}
-系统已把这次输入裁决为 {intent}。你不能改写数值、剧情事实或玩家意图。
-请用 35-90 个中文字符回应。保持恋综镜头感，但像真实的一对一交流；可以追问一个小问题。不要提模型、系统、MBTI 刻板印象、好感数值或后台记忆。若触碰边界，清楚而温和地拒绝。只输出角色回复。"""
+def _extract_json(text: str) -> dict:
+    cleaned = text.strip()
+    if cleaned.startswith("```"):
+        cleaned = re.sub(r"^```(?:json)?\s*", "", cleaned)
+        cleaned = re.sub(r"\s*```$", "", cleaned)
     try:
-        reply = await _llm_text([{"role": "user", "content": prompt}], max_tokens=220)
-        return reply[:480]
-    except Exception:
-        return _fallback_reply(character, intent)
+        data = json.loads(cleaned)
+    except json.JSONDecodeError:
+        match = re.search(r"\{.*\}", cleaned, re.DOTALL)
+        if not match:
+            raise RuntimeError("DeepSeek did not return a JSON object")
+        data = json.loads(match.group(0))
+    if not isinstance(data, dict):
+        raise RuntimeError("DeepSeek returned a non-object payload")
+    return data
+
+
+async def _agent_turn(character: dict, snapshot: dict, message: str) -> dict:
+    card = CHARACTER_CARD_MAP[character["id"]]
+    memories = [item for item in snapshot["echoMemories"] if item.get("characterId") == character["id"]][-6:]
+    events = [item for item in snapshot.get("eventLedger", []) if item.get("characterId") == character["id"]]
+    context = {
+        "scene": {"nodeId": snapshot["nodeId"], "flags": snapshot["flags"]},
+        "player": snapshot["player"],
+        "relationship": snapshot["relationships"][character["id"]],
+        "currentAttitude": snapshot["attitudes"].get(character["id"], "curious"),
+        "recentMemories": [{key: item.get(key) for key in ("kind", "summary", "interpretation", "rawQuote", "agentReply", "attitude")} for item in memories],
+        "activatedEvents": events,
+    }
+    schema = {
+        "dialogue": "35-120个中文字符的原创角色台词",
+        "stageDirection": "不超过30字、镜头可见的动作",
+        "attitude": sorted(["warm", "curious", "guarded", "challenging", "vulnerable", "softened", "uncertain", "honest", "moved", "careful", "steady", "boundary"]),
+        "intentId": card["agentPolicy"]["allowedIntentIds"],
+        "publicReason": "不暴露后台的关系变化原因，不超过40字",
+        "relationshipDelta": {axis: "必须为人物卡对应范围内整数" for axis in card["agentPolicy"]["deltaBounds"]},
+        "memory": {"kind": ["episodic", "promise", "preference", "semantic"], "summary": "第三人称事实摘要", "interpretation": "角色自己的可修正理解", "salience": "0-100整数", "emotionalValence": "-100到100整数"},
+        "proposedEventId": [None, *card["agentPolicy"]["allowedEventIds"]],
+    }
+    system = """你是回声剧场的角色决策 Agent。你不是通用陪聊助手。
+你必须只依据人物卡、当前场景、该角色可见的关系与私有记忆做出本轮判断。
+人物台词、态度、七轴变化、新记忆和事件意图必须来自同一次角色判断。
+MBTI 只是一层行为偏好，人物卡中的目标、边界、盲点和现场压力优先。
+不得新增人物卡没有的身世或节目事实；不得替玩家定义感受；不得复制参考文学作品的原句或风格。
+参数变化要克制：普通交流多为 -1 到 1，只有具体承诺、明显越界或事件激活才可到 2 或 3。
+只有角色确实愿意让专属物件/邀约进入剧情时才提出 proposedEventId；否则返回 null。
+只输出一个合法 JSON 对象，不要 Markdown，不要解释。"""
+    prompt = "人物卡：\n" + json.dumps(card, ensure_ascii=False) + "\n\n当前状态：\n" + json.dumps(context, ensure_ascii=False) + "\n\n玩家输入：\n" + message[:240] + "\n\n输出合同：\n" + json.dumps(schema, ensure_ascii=False)
+    raw = await _llm_text([{"role": "system", "content": system}, {"role": "user", "content": prompt}], max_tokens=760)
+    return _extract_json(raw)
 
 
 app = FastAPI(title="心动之旅：MBTI恋综模拟器")
@@ -206,9 +209,9 @@ def health() -> dict:
     return {
         "ok": True,
         "service": "xindong-journey-echo",
-        "contentVersion": "1.1.0",
+        "contentVersion": "2.0.0",
         "authMode": os.getenv("APP_AUTH_MODE", "sso"),
-        "agentProvider": "deepseek" if os.getenv("DEEPSEEK_API_KEY") else ("cowork" if _load_props("ai.properties").get("ai.api_key") else "fallback"),
+        "agentProvider": "deepseek" if os.getenv("DEEPSEEK_API_KEY") else "unconfigured",
         "databaseConfigured": bool(os.getenv("DATABASE_URL") or _load_props("db.properties").get("db.host")),
     }
 
@@ -228,6 +231,7 @@ def bootstrap(decrypted_userinfo: Optional[str] = Header(None, alias="Decrypted-
     snapshot = row["snapshot"] if row else None
     if isinstance(snapshot, str):
         snapshot = json.loads(snapshot)
+    snapshot = migrate_snapshot(snapshot)
     return JSONResponse({"user": user, "characters": CHARACTERS, "view": project_view(snapshot) if snapshot else None})
 
 
@@ -292,12 +296,19 @@ async def agent_message(run_id: str, character_id: str, body: dict, decrypted_us
         snapshot = _load_run(conn, run_id, user["userId"])
     if snapshot["revision"] != expected_revision:
         raise HTTPException(status_code=409, detail="状态已经更新，请刷新后重试")
-    reply = await _agent_reply(character, snapshot, message)
+    try:
+        turn = await _agent_turn(character, snapshot, message)
+    except Exception as error:
+        raise HTTPException(status_code=503, detail="DeepSeek 角色判断暂时没有完成，请重试这句话") from error
     with _get_db_conn() as conn:
         current = _load_run(conn, run_id, user["userId"], for_update=True)
         if current["revision"] != expected_revision:
             raise HTTPException(status_code=409, detail="关系状态已变化，这句话没有被重复写入")
-        next_snapshot, receipt = commit_agent_memory(current, character_id, message, reply)
+        try:
+            next_snapshot, receipt = commit_agent_turn(current, character_id, message, turn)
+        except ValueError as error:
+            raise HTTPException(status_code=502, detail=f"DeepSeek 角色输出未通过人物卡校验：{error}") from error
+        reply = next_snapshot["echoMemories"][-1]["agentReply"]
         _save_run(conn, run_id, user["userId"], next_snapshot)
         conn.execute(
             "INSERT INTO agent_memories (run_id, owner_id, character_id, memory_id, player_text, agent_reply, intent_id) VALUES (%s, %s, %s, %s, %s, %s, %s)",

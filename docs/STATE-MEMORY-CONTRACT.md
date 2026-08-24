@@ -6,21 +6,42 @@
 
 ## 写入路径
 
-`用户输入 → 白名单 Effect Intent → 确定性 StatePatch → transaction commit → StatePatch receipt → UI / cinematic`
+`人物卡 + 当前场景 + 七轴关系 + 私有记忆 + 用户输入 → DeepSeek 结构化角色回合 → 白名单/限幅验证 → StatePatch → transaction commit → receipt → UI / cinematic`
 
-- 模型只生成角色回复，不生成或执行 Patch。
+- DeepSeek 必须在同一次角色判断里生成：`dialogue`、`stageDirection`、`attitude`、`intentId`、七轴 `relationshipDelta`、结构化 `memory` 与可选 `proposedEventId`。
+- DeepSeek 可以提出人物卡允许的参数变化与事件意图，但不能直接写数据库、跳转节点或创造剧情事实。
+- 服务端按人物卡逐轴限幅（普通回合通常 -1..1，强事件最多 -3..3）、校验意图与事件白名单，再原子提交；越界输出整轮拒绝，不部分写入。
 - 角色记忆按 `run_id + owner_id + character_id` 隔离。
-- 触碰人物边界时保存一次边界互动，但好感与信任不增加。
+- `boundary` 回合不能增加好感或吸引；边界是否影响信任、尊重、压力或芥蒂由该人物卡和本轮 DeepSeek 判断共同决定。
 - 影像只在新节点已提交后播放；播放器错误不能回滚已提交剧情。
+
+## EchoCore 互通人物卡
+
+人物母版存放于 `content/character_cards.v2.json`。每张卡包含：
+
+- 身份与独立兴趣：角色不围着玩家待机；
+- 七个人格轴、公开面具、欲望、价值、恐惧、盲点、边界与冲突策略；
+- 四类玩家人格的沟通策略，以及脆弱、暧昧、冲突、边界场景策略；
+- 原创 few-shot、记忆范围/召回方法与专属剧情事件；
+- DeepSeek 可输出的意图、事件和每一关系轴的变化范围。
+
+同一人物卡可通过 Surface Adapter 投影给文字游戏、情感陪伴 Agent 和互动影游；三种表面共享同一个 Runtime Snapshot，不各自维护“另一套好感”。MBTI 只是参考层，不覆盖原始人物事实。
+
+## 关系与记忆
+
+关系不是单一好感值，而是有方向的七轴：`trust / affection / respect / fear / debt / attraction / resentment`。旧版 `affection` 与 `trust` 字段只保留为 UI 兼容投影。
+
+每条记忆至少保存：原话、事实摘要、角色解释、显著度、情绪效价、来源回合和允许回调的事件。角色解释是主观 Belief，不升级为客观 Fact。
 
 ## 首次联通验收
 
 1. 玩家在正片中做两次文字选择。
 2. 玩家打开任意角色动态立绘并完成 1 对 1 对话。
-3. 对话写入该角色的独立 `agent_memories` 与运行快照。
-4. “匿名信”节点读取同一快照，允许继续。
-5. 第二天剧情从该角色最近一次记忆取回玩家原话，生成可见回声。
-6. 每次提交在 UI 显示“文字剧情 · Agent 记忆 · 影像触发已同步”的回执。
+3. DeepSeek 基于该角色完整人物卡生成台词、态度、七轴变化、记忆和事件建议。
+4. 服务端校验并写入该角色的独立 `agent_memories` 与运行快照。
+5. 至少一个角色专属事件被激活，`event-reveal` 节点显示具体物件、线索或邀约，而非泛化“被记住”。
+6. “匿名信”与第二天回声读取同一事件和记忆，让昨夜判断改变今天的行动。
+7. UI 回执公开态度、参数提交原因与事件激活，但不暴露人物卡私密字段或系统提示词。
 
 ## 隐私和发布边界
 
