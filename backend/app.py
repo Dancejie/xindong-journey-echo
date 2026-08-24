@@ -299,7 +299,8 @@ async def agent_message(run_id: str, character_id: str, body: dict, decrypted_us
     try:
         turn = await _agent_turn(character, snapshot, message)
     except Exception as error:
-        raise HTTPException(status_code=503, detail="DeepSeek 角色判断暂时没有完成，请重试这句话") from error
+        safe_kind = "http" if isinstance(error, httpx.HTTPError) else "json" if isinstance(error, (json.JSONDecodeError, RuntimeError)) else "runtime"
+        raise HTTPException(status_code=503, detail=f"DeepSeek 角色判断暂时没有完成（{safe_kind}），请重试这句话") from error
     with _get_db_conn() as conn:
         current = _load_run(conn, run_id, user["userId"], for_update=True)
         if current["revision"] != expected_revision:
