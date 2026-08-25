@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "cast-perspective-r5/approval-v1",
+  "batchId": "REPLACE_WITH_BATCH_ID",
+  "doNotSubmit": true,
+  "manifestSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "taskMatrixSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "runtimeVariantMatrixSha256": "e7ef4b874c1d06d32526c66a59400be4cab4850538f0cbaddbaf3689f86f8a6a",
+  "approvedTaskCount": 178,
+  "approvedTotalDurationSeconds": 2670,
+  "policy": {
+    "provider": "fumin",
+    "model": "seedance-2.0-mini",
+    "ratio": "9:16",
+    "durationSeconds": 15,
+    "resolution": "720p",
+    "generateAudio": true,
+    "watermark": false,
+    "concurrency": 2,
+    "maxApiRetry": 0
+  },
+  "pricing": {
+    "currency": "CNY",
+    "unitPriceAmount": 0,
+    "unitPriceBasis": "per-task",
+    "pricingEvidenceRef": "REPLACE_WITH_FUMIN_BILLING_OR_QUOTE_REFERENCE",
+    "verifiedBy": "REPLACE_WITH_REVIEWER",
+    "verifiedAt": "1970-01-01T00:00:00Z"
+  },
+  "budget": {
+    "baseGenerationMaxAmount": 0,
+    "retryTaskCountCap": 0,
+    "retryGenerationMaxAmount": 0,
+    "hardTotalMaxAmount": 0,
+    "retryRequiresNewApproval": true,
+    "budgetApprovalRef": "REPLACE_WITH_APPROVAL_REFERENCE"
+  },
+  "rights": {
+    "status": "pending",
+    "commercialUseApproved": false,
+    "publicReleaseApproved": false,
+    "likenessConsentRefIds": [],
+    "voiceConsentRefIds": [],
+    "referenceVideoRightsRefIds": [],
+    "reviewedBy": "REPLACE_WITH_RIGHTS_REVIEWER",
+    "reviewedAt": "1970-01-01T00:00:00Z"
+  },
+  "approval": {
+    "reviewedBy": "REPLACE_WITH_TECHNICAL_REVIEWER",
+    "reviewedAt": "1970-01-01T00:00:00Z",
+    "authorizedBy": "REPLACE_WITH_BUDGET_OWNER",
+    "authorizedAt": "1970-01-01T00:00:00Z",
+    "scopeRef": "REPLACE_WITH_SCOPE_OR_TICKET_REFERENCE"
+  }
+}

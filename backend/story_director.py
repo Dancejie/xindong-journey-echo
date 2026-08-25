@@ -9,7 +9,14 @@ from pathlib import Path
 from typing import Any
 from uuid import uuid4
 
-from backend.game_content import CHARACTER_CARD_MAP, CHARACTER_MAP, RELATIONSHIP_AXES, migrate_snapshot, utc_now
+from backend.game_content import (
+    CHARACTER_CARD_MAP,
+    CHARACTER_MAP,
+    RELATIONSHIP_AXES,
+    migrate_snapshot,
+    resolve_identity_safe_media,
+    utc_now,
+)
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -28,14 +35,52 @@ EVENT_PACKAGE = _load_catalog()
 STORY_EVENTS: list[dict[str, Any]] = EVENT_PACKAGE["events"]
 STORY_EVENT_MAP = {event["id"]: event for event in STORY_EVENTS}
 
+STORY_EVENT_MEDIA_ROUTING: dict[str, tuple[str, list[str]]] = {
+    "story.kitchen.two-person-shift": ("unordered-pair", []),
+    "story.house.rules-friction": ("fixed-cast", ["shenmo"]),
+    "story.signal.first-anonymous-message": ("perspective", []),
+    "story.identity.profession-reveal": ("current-eight", []),
+    "story.date.blind-box": ("perspective", []),
+    "story.date.mutual-signal": ("unordered-pair", []),
+    "story.missed-timing.empty-seat": ("perspective", []),
+    "story.care.breakfast-callback": ("participant-pov", []),
+    "story.triangle.reverse-invite": ("fixed-cast", ["shenmo", "chengye"]),
+    "story.challenge.water-bridge": ("fixed-cast", ["chensu", "jiangmi"]),
+    "story.group.truth-firepit": ("current-eight", []),
+    "story.bombshell.ninth-card": ("current-eight", []),
+    "story.past.consent-reveal": ("participant-pov", []),
+    "story.trip.last-two-days": ("fixed-cast", ["jiangwan"]),
+    "story.final.unsent-letter": ("perspective", []),
+    "story.final.confession-day": ("unordered-pair", []),
+}
 
-def resolve_story_event_media(event: dict[str, Any]) -> dict[str, Any]:
-    """Resolve the catalog's stable media contract without accepting model paths."""
+# These Story Director beats are the same physical scene families as their Day
+# 1 counterparts.  Sharing the semantic variant family avoids generating a
+# second 28-pair kitchen matrix and a second 8-character message matrix while
+# preserving exact identity-cast validation at runtime.
+STORY_EVENT_MEDIA_BASE_ALIASES: dict[str, str] = {
+    "story.kitchen.two-person-shift": "D1-A6-first-dinner-team",
+    "story.signal.first-anonymous-message": "D1-A7-heart-message",
+}
+
+
+def resolve_story_event_media(
+    event: dict[str, Any],
+    snapshot: dict[str, Any] | None = None,
+    participant_ids: list[str] | None = None,
+) -> dict[str, Any]:
+    """Resolve the stable media contract without accepting model-written paths.
+
+    Catalog inspection keeps exposing its authored base contract. Runtime
+    commits additionally bind that contract to the selected protagonist and
+    validated participant set; an identity-mismatched event master is replaced
+    by the selected protagonist's safe portrait until a reviewed variant exists.
+    """
     plan = event.get("mediaPlan") or {}
     runtime = plan.get("runtimeAsset") if isinstance(plan.get("runtimeAsset"), dict) else {}
     status = "ready" if runtime.get("src") and plan.get("status") == "ready" else "planned"
     available = status == "ready"
-    return {
+    media = {
         "eventId": event["id"],
         "assetId": str(plan.get("assetId") or runtime.get("assetId") or f"EV-{event['id'].removeprefix('story.').replace('.', '-')}") ,
         "src": str(runtime.get("src") or "") if available else "",
@@ -49,6 +94,28 @@ def resolve_story_event_media(event: dict[str, Any]) -> dict[str, Any]:
         "available": available,
         "durationSeconds": runtime.get("durationSeconds"),
         "fallback": deepcopy(plan.get("fallback") or {"kind": "scene-card", "cue": plan.get("cue")}),
+    }
+    if snapshot is None or not available:
+        return media
+    perspective_id = str(snapshot.get("player", {}).get("perspectiveCharacterId") or "")
+    if perspective_id not in CHARACTER_MAP:
+        return media
+    routing_mode, fixed_cast_ids = STORY_EVENT_MEDIA_ROUTING.get(event["id"], ("perspective", []))
+    identity_safe_base_asset_id = STORY_EVENT_MEDIA_BASE_ALIASES.get(event["id"], media["assetId"])
+    resolved = resolve_identity_safe_media(
+        identity_safe_base_asset_id,
+        perspective_id,
+        participant_ids or [],
+        routing_mode=routing_mode,
+        fixed_cast_ids=fixed_cast_ids,
+    )
+    return {
+        **media,
+        **resolved,
+        "eventId": event["id"],
+        "intent": f"story-event:{event['id']}",
+        "cue": str(plan.get("cue") or "恋综事件现场"),
+        "kind": str(plan.get("kind") or "cinematic"),
     }
 
 
@@ -394,7 +461,7 @@ def commit_story_event(snapshot: dict[str, Any], candidates: list[dict[str, Any]
     if state.get("storyMission") and state["storyMission"].get("status") == "active":
         raise ValueError("当前仍有一个未解决的主任务")
     event = STORY_EVENT_MAP[validated["proposedEventId"]]
-    runtime_media = resolve_story_event_media(event)
+    runtime_media = resolve_story_event_media(event, state, validated["participantIds"])
     mission_id = str(uuid4())
     mission = {
         "id": mission_id, "eventId": event["id"], "title": validated["bridgeTitle"],

@@ -6,8 +6,18 @@ type Character = {
   portrait: string; video: string; publicMask: string; privateFear: string
   memorySeed: string; voice: string; boundary: string; quickPrompts: string[]
   independentInterest: string; eventLabel: string
+  age?: number | string; occupation?: string; publicFacts?: { occupation?: string; publicPersona?: string }
   opener?: ChatOpener | string; openingLine?: string; suggestedPrompts?: ChatSuggestionInput[]
   isPlayerPerspective?: boolean; chatEnabled?: boolean; isGuidedTarget?: boolean
+}
+
+type SceneIdentityCard = {
+  characterId?: string; id?: string; name: string; mbti: string
+  occupation?: string; age?: number | string; tagline?: string; accent?: string
+}
+
+type SceneIdentityTimeline = {
+  characterId: string; startSeconds: number; endSeconds: number
 }
 
 type Memory = {
@@ -30,6 +40,7 @@ type StoryMission = {
     assetId?: string; src?: string; poster?: string; durationSeconds?: number
     available?: boolean; status?: 'ready' | 'planned' | string
     fallback?: { kind?: string; src?: string; poster?: string }
+    identityCards?: SceneIdentityCard[]; identityTimeline?: SceneIdentityTimeline[]
   }
 }
 
@@ -83,6 +94,7 @@ type StoryNode = {
     assetId?: string; src?: string; poster?: string; available?: boolean
     status?: 'ready' | 'planned' | string
     fallback?: { kind?: string; src?: string; poster?: string }
+    identityCards?: SceneIdentityCard[]; identityTimeline?: SceneIdentityTimeline[]
   }
   mediaCue?: string; action?: string; eventId?: string
   gameBrief?: { name: string; format: string; winCondition: string }
@@ -102,8 +114,47 @@ const PROGRESS: Record<string, number> = { 'arrival-context': 6, 'villa-arrival'
 const ATTITUDE_LABELS: Record<string, string> = { warm: '温暖', curious: '好奇', guarded: '戒备', challenging: '试探', vulnerable: '袒露', softened: '松动', uncertain: '迟疑', honest: '坦诚', moved: '被触动', careful: '谨慎', steady: '稳定', boundary: '边界' }
 const AXIS_LABELS: Record<string, string> = { trust: '信任', affection: '好感', respect: '尊重', fear: '压力', debt: '亏欠', attraction: '吸引', resentment: '芥蒂' }
 
+// Keep the currently published public card shape forward-compatible with the
+// richer Day 1 cast payload. Two source cards intentionally do not disclose a
+// confirmed occupation yet; the UI says so instead of inventing one.
+const PUBLIC_OCCUPATION_FALLBACK: Record<string, string> = {
+  shenmo: '投行 VP',
+  linyu: '建筑工程师',
+  chengye: '极限运动品牌创始人',
+  guyan: '游戏策划',
+  jiangwan: '心理咨询师',
+  jiangmi: '职业待公开',
+  sunnian: '插画师',
+  chensu: '职业待公开',
+}
+
+function identityId(identity: Character | SceneIdentityCard) {
+  return 'characterId' in identity && identity.characterId ? identity.characterId : identity.id
+}
+
+function publicOccupation(identity: Character | SceneIdentityCard) {
+  const id = identityId(identity)
+  const publicFacts = 'publicFacts' in identity ? identity.publicFacts : undefined
+  const occupation = identity.occupation || publicFacts?.occupation || (id ? PUBLIC_OCCUPATION_FALLBACK[id] : undefined)
+  if (!occupation || /待剧情|待正式确认|运行时职业待|原稿为/.test(occupation)) return '职业待公开'
+  return occupation
+}
+
+function identityCardFromCharacter(character: Character): SceneIdentityCard {
+  return {
+    characterId: character.id,
+    name: character.name,
+    mbti: character.mbti,
+    age: character.age,
+    occupation: publicOccupation(character),
+    tagline: character.tagline,
+    accent: character.accent,
+  }
+}
+
 type SceneMediaAsset = {
   assetId: string; src?: string; poster?: string; fallbackSrc: string; fallbackPoster?: string; cue?: string
+  identityCards?: SceneIdentityCard[]; identityTimeline?: SceneIdentityTimeline[]
 }
 
 const NODE_MEDIA: Record<string, SceneMediaAsset> = {
@@ -533,23 +584,23 @@ function MediaVideo({ src, className = '', poster, onError, onCanPlay, active = 
   return <video ref={videoRef} className={className} src={src} poster={poster} autoPlay={active} muted loop playsInline preload={preload || (active ? 'metadata' : 'none')} onCanPlay={onCanPlay} onError={onError} />
 }
 
-function EventMediaVideo({ src, className = '', poster, onError, onCanPlay, active, preload, firstPassConsumed = false }: {
+function EventMediaVideo({ src, className = '', poster, onError, onCanPlay, onTimeUpdate, active, preload, firstPassConsumed = false }: {
   src: string; className?: string; poster?: string; onError?: () => void; onCanPlay?: () => void
-  active: boolean; preload?: 'none' | 'metadata' | 'auto'; firstPassConsumed?: boolean
+  onTimeUpdate?: (currentTime: number) => void; active: boolean; preload?: 'none' | 'metadata' | 'auto'; firstPassConsumed?: boolean
 }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const playback = useEventPlayback(videoRef, src, active, firstPassConsumed)
   return <>
-    <video ref={videoRef} className={className} src={src} poster={poster} autoPlay={active} muted={playback.muted} playsInline preload={preload || (active ? 'auto' : 'metadata')} onCanPlay={onCanPlay} onError={onError} onEnded={playback.handleEnded} />
+    <video ref={videoRef} className={className} src={src} poster={poster} autoPlay={active} muted={playback.muted} playsInline preload={preload || (active ? 'auto' : 'metadata')} onCanPlay={onCanPlay} onError={onError} onTimeUpdate={event => onTimeUpdate?.(event.currentTarget.currentTime)} onEnded={playback.handleEnded} />
     {active && <button type="button" className={`scene-audio-toggle ${playback.needsGesture ? 'scene-audio-toggle--attention' : ''}`} onClick={playback.toggleSound} aria-label={playback.muted ? '开启视频声音' : '关闭视频声音'} aria-pressed={!playback.muted}>
       <span aria-hidden="true">{playback.muted ? '🔇' : '🔊'}</span><b>{playback.soundLabel}</b>
     </button>}
   </>
 }
 
-function SceneMedia({ src, poster, fallbackSrc, fallbackPoster, active, cue, assetId, firstPassConsumed = false, soundEnabled = true }: {
+function SceneMedia({ src, poster, fallbackSrc, fallbackPoster, active, cue, assetId, firstPassConsumed = false, soundEnabled = true, onTimeUpdate }: {
   src: string; poster?: string; fallbackSrc?: string; fallbackPoster?: string
-  active: boolean; cue?: string; assetId?: string; firstPassConsumed?: boolean; soundEnabled?: boolean
+  active: boolean; cue?: string; assetId?: string; firstPassConsumed?: boolean; soundEnabled?: boolean; onTimeUpdate?: (currentTime: number) => void
 }) {
   const [layers, setLayers] = useState(() => [{ src, poster }])
   const [visibleSrc, setVisibleSrc] = useState(src)
@@ -604,6 +655,7 @@ function SceneMedia({ src, poster, fallbackSrc, fallbackPoster, active, cue, ass
         poster={layer.poster}
         active={active && visibleSrc === layer.src}
         firstPassConsumed={firstPassConsumed && visibleSrc === layer.src}
+        onTimeUpdate={active && visibleSrc === layer.src ? onTimeUpdate : undefined}
         preload={desiredSrcRef.current === layer.src ? 'auto' : 'metadata'}
         onCanPlay={() => promote(layer.src)}
         onError={() => reject(layer.src)}
@@ -622,6 +674,48 @@ function SceneMedia({ src, poster, fallbackSrc, fallbackPoster, active, cue, ass
 
 function HeartMark({ small = false }: { small?: boolean }) {
   return <span className={small ? 'heart-mark heart-mark--small' : 'heart-mark'} aria-hidden="true">♡</span>
+}
+
+function CharacterIdentityPlate({ identity, context = '嘉宾登场', className = '', durationSeconds = 3.4 }: { identity: SceneIdentityCard; context?: string; className?: string; durationSeconds?: number }) {
+  const age = identity.age ? `${identity.age}岁 · ` : ''
+  return <div className={`scene-identity-plate ${className}`} style={{ '--accent': identity.accent || '#d986a3', '--identity-duration': `${Math.max(.8, durationSeconds)}s` } as React.CSSProperties} aria-label={`${identity.name}，${publicOccupation(identity)}，${identity.mbti}，${identity.tagline || ''}`}>
+    <span>{context}</span>
+    <b>{identity.name}</b>
+    <small>{age}{publicOccupation(identity)} · {identity.mbti}</small>
+    {identity.tagline && <em>{identity.tagline}</em>}
+  </div>
+}
+
+function SceneIdentitySequence({ cards, sceneKey, timeline = [], currentTime = 0, context = '嘉宾登场', className = '' }: { cards: SceneIdentityCard[]; sceneKey: string; timeline?: SceneIdentityTimeline[]; currentTime?: number; context?: string; className?: string }) {
+  const [index, setIndex] = useState(0)
+  const [timelineCycleDone, setTimelineCycleDone] = useState(false)
+  const lastTimelineTimeRef = useRef(0)
+  const signature = cards.map(card => identityId(card) || `${card.name}:${card.mbti}`).join('|')
+  const timelineSignature = timeline.map(item => `${item.characterId}:${item.startSeconds}:${item.endSeconds}`).join('|')
+  useEffect(() => {
+    setIndex(0)
+    setTimelineCycleDone(false)
+    lastTimelineTimeRef.current = 0
+  }, [sceneKey, signature, timelineSignature])
+  useEffect(() => {
+    if (timeline.length || cards.length < 2 || index >= cards.length - 1) return
+    const timer = window.setTimeout(() => setIndex(current => Math.min(current + 1, cards.length - 1)), 3400)
+    return () => window.clearTimeout(timer)
+  }, [cards.length, index, sceneKey, signature, timeline.length, timelineSignature])
+  const timelineWrappedThisFrame = timeline.length > 0 && currentTime + .2 < lastTimelineTimeRef.current
+  useEffect(() => {
+    if (!timeline.length) return
+    if (currentTime + .2 < lastTimelineTimeRef.current) setTimelineCycleDone(true)
+    lastTimelineTimeRef.current = currentTime
+  }, [currentTime, timeline.length, timelineSignature])
+  const timedEntry = timeline.find(item => currentTime >= item.startSeconds && currentTime < item.endSeconds)
+  const identity = timeline.length
+    ? (!timelineCycleDone && !timelineWrappedThisFrame && timedEntry ? cards.find(card => identityId(card) === timedEntry.characterId) : undefined)
+    : (cards[index] || cards[0])
+  if (!identity) return null
+  const identityKey = timedEntry ? `${timedEntry.characterId}:${timedEntry.startSeconds}` : `${identityId(identity) || identity.name}:${index}`
+  const durationSeconds = timedEntry ? timedEntry.endSeconds - timedEntry.startSeconds : 3.4
+  return <CharacterIdentityPlate key={`${sceneKey}:${identityKey}`} identity={identity} context={context} className={className} durationSeconds={durationSeconds} />
 }
 
 function Loading() {
@@ -674,12 +768,12 @@ function Landing({ characters, onStart, busy }: { characters: Character[]; onSta
         <section className="landing-copy landing-copy--cast">
           <p className="landing-overline">选择你的观察视角</p>
           <h1 className="selected-name">{selected.name}</h1>
-          <p className="selected-tagline">{selected.mbti} · {selected.tagline}</p>
+          <p className="selected-tagline">{publicOccupation(selected)} · {selected.mbti} · {selected.tagline}</p>
         </section>
         <section className="cast-picker" aria-label="选择观察人物">
           {characters.map(character => <button key={character.id} className={character.id === selected.id ? 'active' : ''} onClick={() => setSelectedId(character.id)} style={{ '--accent': character.accent } as React.CSSProperties} aria-pressed={character.id === selected.id} aria-label={`从${character.name}，${character.mbti}，${character.tagline}的视角进入`}>
-            <img src={character.portrait} alt="" />
-            <span className="cast-picker__copy"><b>{character.name}</b><em>{character.mbti}</em><small>{character.tagline}</small></span>
+            <img src={character.portrait} alt={`${character.name}头像`} />
+            <span className="cast-picker__copy"><b>{character.name}</b><em>{publicOccupation(character)} · {character.mbti}</em><small>{character.tagline}</small></span>
           </button>)}
         </section>
         <section className="character-preview glass-card" style={{ '--accent': selected.accent } as React.CSSProperties}>
@@ -839,7 +933,7 @@ function ChatSheet({ character, characters, snapshot, embeddedOpener, onClose, o
           </div>
           <div className="chat-portrait__scrim" />
           <button className="close-button" onClick={onClose} aria-label="关闭私聊">×</button>
-          <div className="chat-identity"><span>{character.mbti}</span><h2>{character.name}</h2><p>{character.tagline}</p></div>
+          <div className="chat-identity"><span>{character.mbti}</span><h2>{character.name}</h2><p>{publicOccupation(character)} · {character.tagline}</p></div>
           <div className="memory-seal"><HeartMark small /><span>{memories.length ? `${memories.length} 段共同记忆` : '从这一句话开始记住你'}</span></div>
         </div>
         <div className="chat-body">
@@ -876,9 +970,10 @@ function ChatSheet({ character, characters, snapshot, embeddedOpener, onClose, o
   )
 }
 
-function Cinematic({ src, title, onDone }: { src: string; title: string; onDone: () => void }) {
+function Cinematic({ src, title, identityCards, identityTimeline, onDone }: { src: string; title: string; identityCards?: SceneIdentityCard[]; identityTimeline?: SceneIdentityTimeline[]; onDone: () => void }) {
   const [ready, setReady] = useState(false)
   const [showTitle, setShowTitle] = useState(false)
+  const [currentTime, setCurrentTime] = useState(0)
   const videoRef = useRef<HTMLVideoElement>(null)
   const playback = useEventPlayback(videoRef, src, true)
   useEffect(() => {
@@ -889,8 +984,9 @@ function Cinematic({ src, title, onDone }: { src: string; title: string; onDone:
   }, [ready, src])
   return (
     <div className="cinematic-overlay" role="dialog" aria-modal="true" aria-label={title} data-playback-mode="first-pass-autoclose">
-      <video ref={videoRef} src={src} autoPlay muted={playback.muted} playsInline onCanPlay={() => setReady(true)} onEnded={onDone} onError={onDone} />
+      <video ref={videoRef} src={src} autoPlay muted={playback.muted} playsInline onCanPlay={() => setReady(true)} onTimeUpdate={event => setCurrentTime(event.currentTarget.currentTime)} onEnded={onDone} onError={onDone} />
       <div className="cinematic-grade" />
+      {ready && !!identityCards?.length && <SceneIdentitySequence cards={identityCards} sceneKey={src} timeline={identityTimeline} currentTime={currentTime} context="本幕嘉宾" className="scene-identity-plate--cinematic" />}
       <div className={`cinematic-title ${showTitle ? 'show' : ''}`}><span>HEART JOURNEY · STORY EVENT</span><b>{title}</b></div>
       <div className="cinematic-controls">
         <button type="button" className={playback.needsGesture ? 'audio-attention' : ''} onClick={playback.toggleSound} aria-label={playback.muted ? '开启视频声音' : '关闭视频声音'} aria-pressed={!playback.muted}><span aria-hidden="true">{playback.muted ? '🔇' : '🔊'}</span>{playback.soundLabel}</button>
@@ -943,19 +1039,28 @@ function resolveSceneMedia(view: View, guidedCharacterId?: string | null) {
   const eventId = snapshot.storyMission?.eventId || node.eventId || (snapshot.activeEventId && EVENT_MEDIA[snapshot.activeEventId] ? snapshot.activeEventId : undefined)
   const eventAsset = eventId ? EVENT_MEDIA[eventId] : undefined
   const missionMedia = snapshot.storyMission?.media
+  const perspectiveCharacter = characters.find(character => character.id === snapshot.player.perspectiveCharacterId)
   const missionMediaReady = !!missionMedia?.src && missionMedia.available !== false && missionMedia.status !== 'planned'
   const nodeMediaReady = !!node.media?.src && node.media.available !== false && node.media.status !== 'planned'
   const explicitNodeSrc = node.sceneVideo || node.backgroundVideo || (nodeMediaReady ? node.media?.src : undefined)
   const guidedCharacter = projectedNodeId === 'guided-chat' && guidedCharacterId
     ? characters.find(character => character.id === guidedCharacterId)
     : undefined
-  if (snapshot.storyMission && eventAsset) return {
-    src: (missionMediaReady ? missionMedia?.src : undefined) || eventAsset.src || eventAsset.fallbackSrc,
-    poster: (missionMediaReady ? missionMedia?.poster : undefined) || eventAsset.poster || eventAsset.fallbackPoster,
-    fallbackSrc: missionMedia?.fallback ? missionMedia.fallback.src : eventAsset.fallbackSrc,
-    fallbackPoster: missionMedia?.fallback ? missionMedia.fallback.poster : eventAsset.fallbackPoster,
-    assetId: missionMedia?.assetId || eventAsset.assetId,
-    cue: snapshot.storyMission.visualCue || eventAsset.cue || node.mediaCue || node.action,
+  // The backend resolver owns cast identity. Never resurrect a static Jiangmi
+  // event table when the committed mission says its exact variant is missing.
+  if (snapshot.storyMission && eventAsset) {
+    const safeFallbackSrc = missionMedia?.fallback?.src || perspectiveCharacter?.video || ''
+    const safeFallbackPoster = missionMedia?.fallback?.poster || perspectiveCharacter?.portrait
+    return {
+      src: (missionMediaReady ? missionMedia?.src : undefined) || safeFallbackSrc,
+      poster: (missionMediaReady ? missionMedia?.poster : undefined) || safeFallbackPoster,
+      fallbackSrc: safeFallbackSrc,
+      fallbackPoster: safeFallbackPoster,
+      assetId: missionMedia?.assetId || (perspectiveCharacter ? `CHAR-${perspectiveCharacter.id}-portrait` : eventAsset.assetId),
+      cue: snapshot.storyMission.visualCue || eventAsset.cue || node.mediaCue || node.action,
+      identityCards: missionMedia?.identityCards,
+      identityTimeline: missionMedia?.identityTimeline,
+    }
   }
   if (snapshot.storyMission && missionMediaReady && missionMedia?.src) return {
     src: missionMedia.src,
@@ -964,6 +1069,8 @@ function resolveSceneMedia(view: View, guidedCharacterId?: string | null) {
     fallbackPoster: missionMedia.fallback ? missionMedia.fallback.poster : nodeAsset.fallbackPoster,
     assetId: missionMedia.assetId,
     cue: snapshot.storyMission.visualCue || node.mediaCue || node.action,
+    identityCards: missionMedia.identityCards,
+    identityTimeline: missionMedia.identityTimeline,
   }
   if (explicitNodeSrc) return {
     src: explicitNodeSrc,
@@ -972,6 +1079,8 @@ function resolveSceneMedia(view: View, guidedCharacterId?: string | null) {
     fallbackPoster: node.media?.fallback ? node.media.fallback.poster : nodeAsset.fallbackPoster,
     assetId: node.media?.assetId || nodeAsset.assetId,
     cue: node.mediaCue || node.action,
+    identityCards: node.media?.identityCards,
+    identityTimeline: node.media?.identityTimeline,
   }
   if (guidedCharacter?.video) return {
     src: guidedCharacter.video,
@@ -980,6 +1089,7 @@ function resolveSceneMedia(view: View, guidedCharacterId?: string | null) {
     fallbackPoster: nodeAsset.fallbackPoster,
     assetId: `CHAR-${guidedCharacter.id}-guided-scene`,
     cue: node.mediaCue || node.action || `${guidedCharacter.name}停下手边的事，正在等你开口`,
+    identityCards: [identityCardFromCharacter(guidedCharacter)],
   }
   if (node.cinematic) return {
     src: node.cinematic,
@@ -988,14 +1098,20 @@ function resolveSceneMedia(view: View, guidedCharacterId?: string | null) {
     fallbackPoster: node.media?.fallback?.poster || nodeAsset.fallbackPoster,
     assetId: nodeAsset.assetId,
     cue: node.mediaCue || node.action,
+    identityCards: node.media?.identityCards,
+    identityTimeline: node.media?.identityTimeline,
   }
+  const safeFallbackSrc = node.media?.fallback?.src || perspectiveCharacter?.video || ''
+  const safeFallbackPoster = node.media?.fallback?.poster || perspectiveCharacter?.portrait
   return {
-    src: nodeAsset.src || nodeAsset.fallbackSrc,
-    poster: nodeAsset.poster || nodeAsset.fallbackPoster,
-    fallbackSrc: node.media?.fallback?.src || nodeAsset.fallbackSrc,
-    fallbackPoster: node.media?.fallback?.poster || nodeAsset.fallbackPoster,
-    assetId: nodeAsset.assetId,
+    src: safeFallbackSrc,
+    poster: safeFallbackPoster,
+    fallbackSrc: safeFallbackSrc,
+    fallbackPoster: safeFallbackPoster,
+    assetId: node.media?.assetId || (perspectiveCharacter ? `CHAR-${perspectiveCharacter.id}-portrait` : nodeAsset.assetId),
     cue: node.mediaCue || node.action || nodeAsset.cue,
+    identityCards: node.media?.identityCards || (perspectiveCharacter ? [identityCardFromCharacter(perspectiveCharacter)] : undefined),
+    identityTimeline: node.media?.identityTimeline,
   }
 }
 
@@ -1013,6 +1129,7 @@ function Game({ view, onView, onRestart }: { view: View; onView: (view: View) =>
   const perspectiveCharacter = characters.find(character => character.id === perspectiveId)
   const nodeCharacter = characters.find(character => character.id === (node.speakerCharacterId || node.characterId))
   const activeCharacter = nodeCharacter?.id === perspectiveId ? undefined : nodeCharacter
+  const sceneIdentityCharacter = activeCharacter || perspectiveCharacter
   const narrationBeats = useMemo(() => buildNarrationBeats(node.text || '', node.textBeats), [node.text, node.textBeats])
   const presentationKey = `${snapshot.nodeId}:${node.title}:${narrationBeats.join('\u241e')}`
   // A cinematic is an authored reading beat, not merely a visual layer. Keep
@@ -1024,6 +1141,21 @@ function Game({ view, onView, onRestart }: { view: View; onView: (view: View) =>
   const guidedCandidateId = resolveGuidedCharacterId(view)
   const guidedCharacterId = guidedCandidateId && guidedCandidateId !== perspectiveId && characters.some(character => character.id === guidedCandidateId) ? guidedCandidateId : null
   const sceneMedia = resolveSceneMedia(view, guidedCharacterId)
+  const authoredIdentityCards = sceneMedia.identityCards || []
+  const authoredIdentityTimeline = sceneMedia.identityTimeline || []
+  const sceneIdentityCards = authoredIdentityCards.length ? authoredIdentityCards.map(identity => {
+    const character = characters.find(item => item.id === identity.characterId || item.id === identity.id)
+    return {
+      ...(character ? identityCardFromCharacter(character) : {}),
+      ...identity,
+      characterId: identity.characterId || identity.id || character?.id,
+      accent: identity.accent || character?.accent,
+      tagline: identity.tagline || character?.tagline,
+    } as SceneIdentityCard
+  }) : (sceneIdentityCharacter ? [identityCardFromCharacter(sceneIdentityCharacter)] : [])
+  const sceneIdentityKey = `${snapshot.nodeId}:${sceneMedia.assetId || sceneMedia.src}`
+  const [scenePlaybackTime, setScenePlaybackTime] = useState(0)
+  useEffect(() => setScenePlaybackTime(0), [sceneIdentityKey])
   const pendingChat = resolvePendingChat(view)
   const pendingAutoOpen = !!pendingChat && (typeof pendingChat !== 'object' || (pendingChat.autoOpen !== false && pendingChat.status !== 'completed'))
   const pendingToken = typeof pendingChat === 'object' && pendingChat?.id ? pendingChat.id : `${snapshot.runId}:${snapshot.nodeId}:${guidedCharacterId}`
@@ -1110,11 +1242,16 @@ function Game({ view, onView, onRestart }: { view: View; onView: (view: View) =>
         <button className="signal-button" aria-label="关系状态"><HeartMark small /><span>{snapshot.flags.heat + snapshot.echoMemories.length}</span></button>
       </header>
       <section className="scene-stage">
-        <SceneMedia src={sceneMedia.src} poster={sceneMedia.poster} fallbackSrc={sceneMedia.fallbackSrc} fallbackPoster={sceneMedia.fallbackPoster} assetId={sceneMedia.assetId} cue={sceneMedia.cue} active={!chatCharacter && !cinematic} firstPassConsumed={cinematicPreviewedSrc === sceneMedia.src} />
+        <SceneMedia src={sceneMedia.src} poster={sceneMedia.poster} fallbackSrc={sceneMedia.fallbackSrc} fallbackPoster={sceneMedia.fallbackPoster} assetId={sceneMedia.assetId} cue={sceneMedia.cue} active={!chatCharacter && !cinematic} firstPassConsumed={cinematicPreviewedSrc === sceneMedia.src} onTimeUpdate={setScenePlaybackTime} />
         <div className="scene-atmosphere" />
         <div className="scene-time"><span>{node.eyebrow}</span><i /></div>
-        {activeCharacter && <div className="scene-character-tag" style={{ '--accent': activeCharacter.accent } as React.CSSProperties}><b>{activeCharacter.name}</b><span>{activeCharacter.mbti} · {activeCharacter.tagline}</span></div>}
-        {!activeCharacter && perspectiveCharacter && <div className="scene-pov-tag"><span>你的视角</span><b>{perspectiveCharacter.name}正在经历这一幕</b></div>}
+        {!!sceneIdentityCards.length && <SceneIdentitySequence
+          cards={sceneIdentityCards}
+          sceneKey={sceneIdentityKey}
+          timeline={authoredIdentityTimeline}
+          currentTime={scenePlaybackTime}
+          context={authoredIdentityCards.length || activeCharacter ? '嘉宾登场' : '你的视角'}
+        />}
       </section>
       <div className="story-overlay-zone">
       <section className={`story-card story-card--${storyOverlayPhase}`} data-story-phase={storyOverlayPhase}>
@@ -1139,15 +1276,23 @@ function Game({ view, onView, onRestart }: { view: View; onView: (view: View) =>
                 const choiceCharacterId = choice.characterId || choice.targetCharacterId
                 const character = choiceCharacterId ? characters.find(c => c.id === choiceCharacterId) : null
                 return (
-                  <button key={choice.id} disabled={busy || (!!node.requiresGuidedInteraction && !requiredInteractionDone) || (!!node.requiresMemory && !memoriesDone) || (!!node.requiresEvent && !eventDone)} onClick={() => choose(choice)} style={character ? { '--accent': character.accent } as React.CSSProperties : undefined}>
+                  <button key={choice.id} className={character && snapshot.nodeId !== 'icebreaker-choice' ? 'choice-button--character' : undefined} disabled={busy || (!!node.requiresGuidedInteraction && !requiredInteractionDone) || (!!node.requiresMemory && !memoriesDone) || (!!node.requiresEvent && !eventDone)} onClick={() => choose(choice)} style={character ? { '--accent': character.accent } as React.CSSProperties : undefined}>
                     {snapshot.nodeId === 'icebreaker-choice' && character ? <>
                       <span className="icebreaker-card__top"><em>三分钟生活观察卡</em><i>{String(index + 1).padStart(2, '0')}</i></span>
-                      <span className="icebreaker-card__person"><img src={character.portrait} alt="" /><span><b>{character.name}<em>{character.mbti}</em></b><small>{character.tagline}</small></span></span>
+                      <span className="icebreaker-card__person"><img src={character.portrait} alt={`${character.name}头像`} /><span><b>{character.name}<em>{character.mbti}</em></b><small>{publicOccupation(character)} · {character.tagline}</small></span></span>
                       <span className="icebreaker-card__action"><em>你要做什么</em><b>{choice.label}</b></span>
                       <span className="icebreaker-card__question"><em>三分钟内，问到这件小事</em><span>{choice.hint || character.independentInterest}</span></span>
                       <i className="icebreaker-card__arrow">→</i>
+                    </> : character ? <>
+                      <img className="choice-character-photo" src={character.portrait} alt={`${character.name}头像`} />
+                      <span className="choice-copy choice-copy--character">
+                        <span className="choice-character-identity"><b>{character.name}</b><em>{publicOccupation(character)} · {character.mbti}</em></span>
+                        <small className="choice-character-personality">{character.tagline}</small>
+                        <strong>{choice.label}</strong>
+                        <small>{choice.hint}</small>
+                      </span>
+                      <i>→</i>
                     </> : <>
-                      {character && <img src={character.portrait} alt="" />}
                       <span className="choice-index">{String(index + 1).padStart(2, '0')}</span>
                       <span className="choice-copy"><b>{choice.label}</b><small>{choice.hint}</small></span><i>→</i>
                     </>}
@@ -1163,7 +1308,7 @@ function Game({ view, onView, onRestart }: { view: View; onView: (view: View) =>
       </div>
       <CharacterDock characters={characters} snapshot={snapshot} guidedCharacterId={typewriter.readyForChoices ? guidedCharacterId : null} guidedComplete={node.requiresGuidedInteraction ? requiredInteractionDone : node.requiresEvent ? eventDone : memoriesDone} onOpen={setChatCharacter} />
       {chatCharacter && chatCharacter.id !== perspectiveId && <ChatSheet key={chatCharacter.id} character={chatCharacter} characters={characters} snapshot={snapshot} embeddedOpener={view.chatOpeners?.[chatCharacter.id] || snapshot.chatOpeners?.[chatCharacter.id]} onClose={() => setChatCharacter(null)} onSend={send} busy={busy} />}
-      {cinematic && <Cinematic src={cinematic} title={cinematicTitle} onDone={() => { setCinematicPreviewedSrc(cinematic); setCinematic(null) }} />}
+      {cinematic && <Cinematic src={cinematic} title={cinematicTitle} identityCards={sceneIdentityCards} identityTimeline={authoredIdentityTimeline} onDone={() => { setCinematicPreviewedSrc(cinematic); setCinematic(null) }} />}
       {receipt && <ReceiptToast receipt={receipt} />}
     </main>
   )

@@ -1,0 +1,4387 @@
+{
+  "schemaVersion": "heart-journey/runtime-variant-matrix-v1",
+  "authority": {
+    "purpose": "Authoritative minimum semantic runtime-master matrix for the fixed eight-person cast across every Day 1 node and Story Director event.",
+    "reuseGate": "identity-and-content-contract",
+    "resolver": "backend.game_content.resolve_identity_safe_media",
+    "storyEventResolver": "backend.story_director.resolve_story_event_media",
+    "characterOrder": [
+      "shenmo",
+      "linyu",
+      "chengye",
+      "guyan",
+      "jiangwan",
+      "jiangmi",
+      "sunnian",
+      "chensu"
+    ],
+    "namingRules": {
+      "perspective": "{baseAssetId}--p-{perspectiveCharacterId}",
+      "participantPov": "{baseAssetId}--npc-{participantId}",
+      "unorderedPair": "{baseAssetId}--pair-{characterIdA}-{characterIdB}; A/B follow characterOrder",
+      "fixedCast": "{baseAssetId}--fixed-{fixedCastIds joined by hyphen in resolver order}",
+      "currentEight": "{baseAssetId}--group-current-eight"
+    },
+    "fieldSemantics": {
+      "perspectiveCharacterId": "Non-null only when the master is keyed to one selected protagonist. Shared npc, unordered-pair, fixed-cast, and current-eight masters use null.",
+      "applicablePerspectiveCharacterIds": "Selected protagonist ids that may resolve to this one semantic master.",
+      "participantIds": "Identity-bearing event participants for a shared master; empty for a perspective-only master.",
+      "identityCast": "Exact recognizable cast required by the runtime resolver. Set and cardinality must both match the manifest asset.",
+      "status": "existingApprovedReusable only when the current runtime manifest has a non-empty path, an allowed approved status, an exact identityCast, and event-specific content QA satisfies the current product contract; otherwise requiresGeneration."
+    }
+  },
+  "sourceValidation": {
+    "validatedOn": "2026-08-25",
+    "runtimeManifest": {
+      "path": "media/runtime-media-manifest.json",
+      "sha256": "5987c48289fb43ff41748802aa1acc9375ec9a253b5b630c000ad082b419610d",
+      "allowedStatuses": [
+        "ready",
+        "approved-runtime"
+      ],
+      "checks": [
+        "asset path is non-empty",
+        "asset status is ready or approved-runtime",
+        "manifest identityCast has exact set equality with required identityCast",
+        "manifest identityCast has exact cardinality equality with required identityCast"
+      ]
+    },
+    "resolverSources": [
+      {
+        "path": "backend/game_content.py",
+        "sha256": "739024769082cc224f156b92399d4759d25f283b2afceab68df00a75fa50c684"
+      },
+      {
+        "path": "backend/story_director.py",
+        "sha256": "068e1b161a1134784bccf64736c11b341e684420d5308f5d6b3a5c185e17b83e"
+      },
+      {
+        "path": "content/story_event_catalog.v1.json",
+        "sha256": "841a2879657e95a7cfa9aa99538bf44547fef6c6aa21c8e8000b55ff7d42c991"
+      },
+      {
+        "path": "content/character_cards.v3.json",
+        "sha256": "881909af0bb08bd366eb294bbb237821fa0155c53040cd9b1be1097c8b83b2e1"
+      }
+    ],
+    "introductionAudioAudit": {
+      "targetAssetId": "D1-A3-cast-introductions--p-jiangmi",
+      "currentManifestAssetId": "D1-A3-cast-introductions",
+      "currentProductContract": "The selected protagonist Agent must deliver an intelligible voiced self-introduction in character; ambient or unintelligible greetings do not satisfy the introduction event.",
+      "qaEvidence": {
+        "path": "media/production/identity-audio-r4/audio-content-qa-r4.json",
+        "sha256": "203cf28039bf69589f41abd13ed1b4a3bb0682eb3f92585967ffb988fc178634",
+        "dialogueDetected": [],
+        "mediumVadTranscript": "",
+        "backgroundAndActions": "室内粉/白噪底、不可辨 speech-like 人声纹理；尾段有杯碟/轻碰。",
+        "legacyQaVerdict": "passed-for-old-unintelligible-greeting-no-narration-contract"
+      },
+      "verdict": "requiresGeneration",
+      "reason": "The clip passes identity routing but contains no intelligible Jiangmi Agent self-introduction, so it fails the current event content contract."
+    },
+    "castFirstImpressionsAudit": {
+      "targetAssetId": "D1-A3B-cast-first-impressions--group-current-eight",
+      "requiredIdentityCast": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "currentManifestAsset": {
+        "assetId": "D1-A3B-cast-first-impressions",
+        "status": "approved-runtime",
+        "identityScope": "reviewed-montage-six",
+        "identityCast": [
+          "shenmo",
+          "guyan",
+          "jiangwan",
+          "sunnian",
+          "chensu",
+          "jiangmi"
+        ],
+        "hasPath": true
+      },
+      "verdict": "requiresGeneration",
+      "reason": "The current D1-A3B master is reviewed-montage-six with six declared identities, not an exact current-eight asset."
+    }
+  },
+  "sharedEventAliases": [
+    {
+      "eventId": "story.kitchen.two-person-shift",
+      "sharedBaseAssetId": "D1-A6-first-dinner-team",
+      "sharesWithEventId": "day1.team-up",
+      "routingMode": "unordered-pair"
+    },
+    {
+      "eventId": "story.signal.first-anonymous-message",
+      "sharedBaseAssetId": "D1-A7-heart-message",
+      "sharesWithEventId": "day1.anonymous-letter",
+      "routingMode": "perspective"
+    }
+  ],
+  "summary": {
+    "totalUniqueMasters": 188,
+    "currentReusable": 10,
+    "generationGap": 178,
+    "manifestReadyWithExactIdentityCast": 10,
+    "identityMatchedButHeldByContentContract": 1,
+    "contentContractRejectedTargetAssetIds": [
+      "D1-A3-cast-introductions--p-jiangmi"
+    ],
+    "servedEventCount": 25,
+    "byRoutingMode": {
+      "perspective": 64,
+      "current-eight": 4,
+      "participant-pov": 32,
+      "unordered-pair": 84,
+      "fixed-cast": 4
+    },
+    "existingApprovedReusableTargetAssetIds": [
+      "D1-A1-island-hotel-establish--p-jiangmi",
+      "D1-A2-villa-entry--p-jiangmi",
+      "D1-A6-first-dinner-team--pair-jiangmi-chensu",
+      "D1-A7-heart-message--p-jiangmi",
+      "EV-DATE-blind-box--p-jiangmi",
+      "EV-DATE-mutual-signal--pair-jiangmi-chensu",
+      "EV-MISSED-empty-seat--p-jiangmi",
+      "EV-BRIDGE-hidden-courage--fixed-chensu-jiangmi",
+      "EV-FINAL-unsent-letter--p-jiangmi",
+      "EV-FINAL-confession-day--pair-jiangmi-chensu"
+    ]
+  },
+  "masters": [
+    {
+      "targetAssetId": "D1-A1-island-hotel-establish--p-shenmo",
+      "eventId": "day1.arrival-context",
+      "servedEventIds": [
+        "day1.arrival-context"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "shenmo",
+      "applicablePerspectiveCharacterIds": [
+        "shenmo"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "shenmo"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A1-island-hotel-establish--p-linyu",
+      "eventId": "day1.arrival-context",
+      "servedEventIds": [
+        "day1.arrival-context"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "linyu",
+      "applicablePerspectiveCharacterIds": [
+        "linyu"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "linyu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A1-island-hotel-establish--p-chengye",
+      "eventId": "day1.arrival-context",
+      "servedEventIds": [
+        "day1.arrival-context"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "chengye",
+      "applicablePerspectiveCharacterIds": [
+        "chengye"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "chengye"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A1-island-hotel-establish--p-guyan",
+      "eventId": "day1.arrival-context",
+      "servedEventIds": [
+        "day1.arrival-context"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "guyan",
+      "applicablePerspectiveCharacterIds": [
+        "guyan"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "guyan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A1-island-hotel-establish--p-jiangwan",
+      "eventId": "day1.arrival-context",
+      "servedEventIds": [
+        "day1.arrival-context"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "jiangwan",
+      "applicablePerspectiveCharacterIds": [
+        "jiangwan"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "jiangwan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A1-island-hotel-establish--p-jiangmi",
+      "eventId": "day1.arrival-context",
+      "servedEventIds": [
+        "day1.arrival-context"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "jiangmi",
+      "applicablePerspectiveCharacterIds": [
+        "jiangmi"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "jiangmi"
+      ],
+      "status": "existingApprovedReusable",
+      "existingAssetId": "D1-A1-island-hotel-establish"
+    },
+    {
+      "targetAssetId": "D1-A1-island-hotel-establish--p-sunnian",
+      "eventId": "day1.arrival-context",
+      "servedEventIds": [
+        "day1.arrival-context"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "sunnian",
+      "applicablePerspectiveCharacterIds": [
+        "sunnian"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A1-island-hotel-establish--p-chensu",
+      "eventId": "day1.arrival-context",
+      "servedEventIds": [
+        "day1.arrival-context"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "chensu",
+      "applicablePerspectiveCharacterIds": [
+        "chensu"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A2-villa-entry--p-shenmo",
+      "eventId": "day1.villa-arrival",
+      "servedEventIds": [
+        "day1.villa-arrival"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "shenmo",
+      "applicablePerspectiveCharacterIds": [
+        "shenmo"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "shenmo"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A2-villa-entry--p-linyu",
+      "eventId": "day1.villa-arrival",
+      "servedEventIds": [
+        "day1.villa-arrival"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "linyu",
+      "applicablePerspectiveCharacterIds": [
+        "linyu"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "linyu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A2-villa-entry--p-chengye",
+      "eventId": "day1.villa-arrival",
+      "servedEventIds": [
+        "day1.villa-arrival"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "chengye",
+      "applicablePerspectiveCharacterIds": [
+        "chengye"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "chengye"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A2-villa-entry--p-guyan",
+      "eventId": "day1.villa-arrival",
+      "servedEventIds": [
+        "day1.villa-arrival"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "guyan",
+      "applicablePerspectiveCharacterIds": [
+        "guyan"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "guyan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A2-villa-entry--p-jiangwan",
+      "eventId": "day1.villa-arrival",
+      "servedEventIds": [
+        "day1.villa-arrival"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "jiangwan",
+      "applicablePerspectiveCharacterIds": [
+        "jiangwan"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "jiangwan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A2-villa-entry--p-jiangmi",
+      "eventId": "day1.villa-arrival",
+      "servedEventIds": [
+        "day1.villa-arrival"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "jiangmi",
+      "applicablePerspectiveCharacterIds": [
+        "jiangmi"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "jiangmi"
+      ],
+      "status": "existingApprovedReusable",
+      "existingAssetId": "D1-A2-villa-entry"
+    },
+    {
+      "targetAssetId": "D1-A2-villa-entry--p-sunnian",
+      "eventId": "day1.villa-arrival",
+      "servedEventIds": [
+        "day1.villa-arrival"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "sunnian",
+      "applicablePerspectiveCharacterIds": [
+        "sunnian"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A2-villa-entry--p-chensu",
+      "eventId": "day1.villa-arrival",
+      "servedEventIds": [
+        "day1.villa-arrival"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "chensu",
+      "applicablePerspectiveCharacterIds": [
+        "chensu"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A3-cast-introductions--p-shenmo",
+      "eventId": "day1.introductions",
+      "servedEventIds": [
+        "day1.introductions"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "shenmo",
+      "applicablePerspectiveCharacterIds": [
+        "shenmo"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "shenmo"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A3-cast-introductions--p-linyu",
+      "eventId": "day1.introductions",
+      "servedEventIds": [
+        "day1.introductions"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "linyu",
+      "applicablePerspectiveCharacterIds": [
+        "linyu"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "linyu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A3-cast-introductions--p-chengye",
+      "eventId": "day1.introductions",
+      "servedEventIds": [
+        "day1.introductions"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "chengye",
+      "applicablePerspectiveCharacterIds": [
+        "chengye"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "chengye"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A3-cast-introductions--p-guyan",
+      "eventId": "day1.introductions",
+      "servedEventIds": [
+        "day1.introductions"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "guyan",
+      "applicablePerspectiveCharacterIds": [
+        "guyan"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "guyan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A3-cast-introductions--p-jiangwan",
+      "eventId": "day1.introductions",
+      "servedEventIds": [
+        "day1.introductions"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "jiangwan",
+      "applicablePerspectiveCharacterIds": [
+        "jiangwan"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "jiangwan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A3-cast-introductions--p-jiangmi",
+      "eventId": "day1.introductions",
+      "servedEventIds": [
+        "day1.introductions"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "jiangmi",
+      "applicablePerspectiveCharacterIds": [
+        "jiangmi"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "jiangmi"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null,
+      "contentContractFailure": "Current audio QA found no intelligible voiced Jiangmi self-introduction."
+    },
+    {
+      "targetAssetId": "D1-A3-cast-introductions--p-sunnian",
+      "eventId": "day1.introductions",
+      "servedEventIds": [
+        "day1.introductions"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "sunnian",
+      "applicablePerspectiveCharacterIds": [
+        "sunnian"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A3-cast-introductions--p-chensu",
+      "eventId": "day1.introductions",
+      "servedEventIds": [
+        "day1.introductions"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "chensu",
+      "applicablePerspectiveCharacterIds": [
+        "chensu"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A3B-cast-first-impressions--group-current-eight",
+      "eventId": "day1.cast-first-impressions",
+      "servedEventIds": [
+        "day1.cast-first-impressions"
+      ],
+      "routingMode": "current-eight",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "identityCast": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A4-icebreaker-selection--p-shenmo",
+      "eventId": "day1.icebreaker-choice",
+      "servedEventIds": [
+        "day1.icebreaker-choice"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "shenmo",
+      "applicablePerspectiveCharacterIds": [
+        "shenmo"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "shenmo"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A4-icebreaker-selection--p-linyu",
+      "eventId": "day1.icebreaker-choice",
+      "servedEventIds": [
+        "day1.icebreaker-choice"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "linyu",
+      "applicablePerspectiveCharacterIds": [
+        "linyu"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "linyu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A4-icebreaker-selection--p-chengye",
+      "eventId": "day1.icebreaker-choice",
+      "servedEventIds": [
+        "day1.icebreaker-choice"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "chengye",
+      "applicablePerspectiveCharacterIds": [
+        "chengye"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "chengye"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A4-icebreaker-selection--p-guyan",
+      "eventId": "day1.icebreaker-choice",
+      "servedEventIds": [
+        "day1.icebreaker-choice"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "guyan",
+      "applicablePerspectiveCharacterIds": [
+        "guyan"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "guyan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A4-icebreaker-selection--p-jiangwan",
+      "eventId": "day1.icebreaker-choice",
+      "servedEventIds": [
+        "day1.icebreaker-choice"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "jiangwan",
+      "applicablePerspectiveCharacterIds": [
+        "jiangwan"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "jiangwan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A4-icebreaker-selection--p-jiangmi",
+      "eventId": "day1.icebreaker-choice",
+      "servedEventIds": [
+        "day1.icebreaker-choice"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "jiangmi",
+      "applicablePerspectiveCharacterIds": [
+        "jiangmi"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "jiangmi"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A4-icebreaker-selection--p-sunnian",
+      "eventId": "day1.icebreaker-choice",
+      "servedEventIds": [
+        "day1.icebreaker-choice"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "sunnian",
+      "applicablePerspectiveCharacterIds": [
+        "sunnian"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A4-icebreaker-selection--p-chensu",
+      "eventId": "day1.icebreaker-choice",
+      "servedEventIds": [
+        "day1.icebreaker-choice"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "chensu",
+      "applicablePerspectiveCharacterIds": [
+        "chensu"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A5-guided-smalltalk--npc-shenmo",
+      "eventId": "day1.guided-chat",
+      "servedEventIds": [
+        "day1.guided-chat"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "shenmo"
+      ],
+      "identityCast": [
+        "shenmo"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A5-guided-smalltalk--npc-linyu",
+      "eventId": "day1.guided-chat",
+      "servedEventIds": [
+        "day1.guided-chat"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "linyu"
+      ],
+      "identityCast": [
+        "linyu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A5-guided-smalltalk--npc-chengye",
+      "eventId": "day1.guided-chat",
+      "servedEventIds": [
+        "day1.guided-chat"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "chengye"
+      ],
+      "identityCast": [
+        "chengye"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A5-guided-smalltalk--npc-guyan",
+      "eventId": "day1.guided-chat",
+      "servedEventIds": [
+        "day1.guided-chat"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "guyan"
+      ],
+      "identityCast": [
+        "guyan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A5-guided-smalltalk--npc-jiangwan",
+      "eventId": "day1.guided-chat",
+      "servedEventIds": [
+        "day1.guided-chat"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "jiangwan"
+      ],
+      "identityCast": [
+        "jiangwan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A5-guided-smalltalk--npc-jiangmi",
+      "eventId": "day1.guided-chat",
+      "servedEventIds": [
+        "day1.guided-chat"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "jiangmi"
+      ],
+      "identityCast": [
+        "jiangmi"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A5-guided-smalltalk--npc-sunnian",
+      "eventId": "day1.guided-chat",
+      "servedEventIds": [
+        "day1.guided-chat"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "chensu"
+      ],
+      "participantIds": [
+        "sunnian"
+      ],
+      "identityCast": [
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A5-guided-smalltalk--npc-chensu",
+      "eventId": "day1.guided-chat",
+      "servedEventIds": [
+        "day1.guided-chat"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian"
+      ],
+      "participantIds": [
+        "chensu"
+      ],
+      "identityCast": [
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-shenmo-linyu",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu"
+      ],
+      "participantIds": [
+        "shenmo",
+        "linyu"
+      ],
+      "identityCast": [
+        "shenmo",
+        "linyu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-shenmo-chengye",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "chengye"
+      ],
+      "participantIds": [
+        "shenmo",
+        "chengye"
+      ],
+      "identityCast": [
+        "shenmo",
+        "chengye"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-shenmo-guyan",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "guyan"
+      ],
+      "participantIds": [
+        "shenmo",
+        "guyan"
+      ],
+      "identityCast": [
+        "shenmo",
+        "guyan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-shenmo-jiangwan",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "jiangwan"
+      ],
+      "participantIds": [
+        "shenmo",
+        "jiangwan"
+      ],
+      "identityCast": [
+        "shenmo",
+        "jiangwan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-shenmo-jiangmi",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "jiangmi"
+      ],
+      "participantIds": [
+        "shenmo",
+        "jiangmi"
+      ],
+      "identityCast": [
+        "shenmo",
+        "jiangmi"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-shenmo-sunnian",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "sunnian"
+      ],
+      "participantIds": [
+        "shenmo",
+        "sunnian"
+      ],
+      "identityCast": [
+        "shenmo",
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-shenmo-chensu",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "chensu"
+      ],
+      "participantIds": [
+        "shenmo",
+        "chensu"
+      ],
+      "identityCast": [
+        "shenmo",
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-linyu-chengye",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "linyu",
+        "chengye"
+      ],
+      "participantIds": [
+        "linyu",
+        "chengye"
+      ],
+      "identityCast": [
+        "linyu",
+        "chengye"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-linyu-guyan",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "linyu",
+        "guyan"
+      ],
+      "participantIds": [
+        "linyu",
+        "guyan"
+      ],
+      "identityCast": [
+        "linyu",
+        "guyan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-linyu-jiangwan",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "linyu",
+        "jiangwan"
+      ],
+      "participantIds": [
+        "linyu",
+        "jiangwan"
+      ],
+      "identityCast": [
+        "linyu",
+        "jiangwan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-linyu-jiangmi",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "linyu",
+        "jiangmi"
+      ],
+      "participantIds": [
+        "linyu",
+        "jiangmi"
+      ],
+      "identityCast": [
+        "linyu",
+        "jiangmi"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-linyu-sunnian",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "linyu",
+        "sunnian"
+      ],
+      "participantIds": [
+        "linyu",
+        "sunnian"
+      ],
+      "identityCast": [
+        "linyu",
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-linyu-chensu",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "linyu",
+        "chensu"
+      ],
+      "participantIds": [
+        "linyu",
+        "chensu"
+      ],
+      "identityCast": [
+        "linyu",
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-chengye-guyan",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "chengye",
+        "guyan"
+      ],
+      "participantIds": [
+        "chengye",
+        "guyan"
+      ],
+      "identityCast": [
+        "chengye",
+        "guyan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-chengye-jiangwan",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "chengye",
+        "jiangwan"
+      ],
+      "participantIds": [
+        "chengye",
+        "jiangwan"
+      ],
+      "identityCast": [
+        "chengye",
+        "jiangwan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-chengye-jiangmi",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "chengye",
+        "jiangmi"
+      ],
+      "participantIds": [
+        "chengye",
+        "jiangmi"
+      ],
+      "identityCast": [
+        "chengye",
+        "jiangmi"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-chengye-sunnian",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "chengye",
+        "sunnian"
+      ],
+      "participantIds": [
+        "chengye",
+        "sunnian"
+      ],
+      "identityCast": [
+        "chengye",
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-chengye-chensu",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "chengye",
+        "chensu"
+      ],
+      "participantIds": [
+        "chengye",
+        "chensu"
+      ],
+      "identityCast": [
+        "chengye",
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-guyan-jiangwan",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "guyan",
+        "jiangwan"
+      ],
+      "participantIds": [
+        "guyan",
+        "jiangwan"
+      ],
+      "identityCast": [
+        "guyan",
+        "jiangwan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-guyan-jiangmi",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "guyan",
+        "jiangmi"
+      ],
+      "participantIds": [
+        "guyan",
+        "jiangmi"
+      ],
+      "identityCast": [
+        "guyan",
+        "jiangmi"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-guyan-sunnian",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "guyan",
+        "sunnian"
+      ],
+      "participantIds": [
+        "guyan",
+        "sunnian"
+      ],
+      "identityCast": [
+        "guyan",
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-guyan-chensu",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "guyan",
+        "chensu"
+      ],
+      "participantIds": [
+        "guyan",
+        "chensu"
+      ],
+      "identityCast": [
+        "guyan",
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-jiangwan-jiangmi",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "jiangwan",
+        "jiangmi"
+      ],
+      "participantIds": [
+        "jiangwan",
+        "jiangmi"
+      ],
+      "identityCast": [
+        "jiangwan",
+        "jiangmi"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-jiangwan-sunnian",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "jiangwan",
+        "sunnian"
+      ],
+      "participantIds": [
+        "jiangwan",
+        "sunnian"
+      ],
+      "identityCast": [
+        "jiangwan",
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-jiangwan-chensu",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "jiangwan",
+        "chensu"
+      ],
+      "participantIds": [
+        "jiangwan",
+        "chensu"
+      ],
+      "identityCast": [
+        "jiangwan",
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-jiangmi-sunnian",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "jiangmi",
+        "sunnian"
+      ],
+      "participantIds": [
+        "jiangmi",
+        "sunnian"
+      ],
+      "identityCast": [
+        "jiangmi",
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-jiangmi-chensu",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "jiangmi",
+        "chensu"
+      ],
+      "participantIds": [
+        "jiangmi",
+        "chensu"
+      ],
+      "identityCast": [
+        "jiangmi",
+        "chensu"
+      ],
+      "status": "existingApprovedReusable",
+      "existingAssetId": "D1-A6-first-dinner-team"
+    },
+    {
+      "targetAssetId": "D1-A6-first-dinner-team--pair-sunnian-chensu",
+      "eventId": "day1.team-up",
+      "servedEventIds": [
+        "day1.team-up",
+        "story.kitchen.two-person-shift"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "sunnian",
+        "chensu"
+      ],
+      "identityCast": [
+        "sunnian",
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A7-heart-message--p-shenmo",
+      "eventId": "day1.anonymous-letter",
+      "servedEventIds": [
+        "day1.anonymous-letter",
+        "story.signal.first-anonymous-message"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "shenmo",
+      "applicablePerspectiveCharacterIds": [
+        "shenmo"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "shenmo"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A7-heart-message--p-linyu",
+      "eventId": "day1.anonymous-letter",
+      "servedEventIds": [
+        "day1.anonymous-letter",
+        "story.signal.first-anonymous-message"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "linyu",
+      "applicablePerspectiveCharacterIds": [
+        "linyu"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "linyu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A7-heart-message--p-chengye",
+      "eventId": "day1.anonymous-letter",
+      "servedEventIds": [
+        "day1.anonymous-letter",
+        "story.signal.first-anonymous-message"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "chengye",
+      "applicablePerspectiveCharacterIds": [
+        "chengye"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "chengye"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A7-heart-message--p-guyan",
+      "eventId": "day1.anonymous-letter",
+      "servedEventIds": [
+        "day1.anonymous-letter",
+        "story.signal.first-anonymous-message"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "guyan",
+      "applicablePerspectiveCharacterIds": [
+        "guyan"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "guyan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A7-heart-message--p-jiangwan",
+      "eventId": "day1.anonymous-letter",
+      "servedEventIds": [
+        "day1.anonymous-letter",
+        "story.signal.first-anonymous-message"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "jiangwan",
+      "applicablePerspectiveCharacterIds": [
+        "jiangwan"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "jiangwan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A7-heart-message--p-jiangmi",
+      "eventId": "day1.anonymous-letter",
+      "servedEventIds": [
+        "day1.anonymous-letter",
+        "story.signal.first-anonymous-message"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "jiangmi",
+      "applicablePerspectiveCharacterIds": [
+        "jiangmi"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "jiangmi"
+      ],
+      "status": "existingApprovedReusable",
+      "existingAssetId": "D1-A7-heart-message"
+    },
+    {
+      "targetAssetId": "D1-A7-heart-message--p-sunnian",
+      "eventId": "day1.anonymous-letter",
+      "servedEventIds": [
+        "day1.anonymous-letter",
+        "story.signal.first-anonymous-message"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "sunnian",
+      "applicablePerspectiveCharacterIds": [
+        "sunnian"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D1-A7-heart-message--p-chensu",
+      "eventId": "day1.anonymous-letter",
+      "servedEventIds": [
+        "day1.anonymous-letter",
+        "story.signal.first-anonymous-message"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "chensu",
+      "applicablePerspectiveCharacterIds": [
+        "chensu"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D2-A1-memory-callback--npc-shenmo",
+      "eventId": "day2.morning-callback",
+      "servedEventIds": [
+        "day2.morning-callback"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "shenmo"
+      ],
+      "identityCast": [
+        "shenmo"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D2-A1-memory-callback--npc-linyu",
+      "eventId": "day2.morning-callback",
+      "servedEventIds": [
+        "day2.morning-callback"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "linyu"
+      ],
+      "identityCast": [
+        "linyu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D2-A1-memory-callback--npc-chengye",
+      "eventId": "day2.morning-callback",
+      "servedEventIds": [
+        "day2.morning-callback"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "chengye"
+      ],
+      "identityCast": [
+        "chengye"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D2-A1-memory-callback--npc-guyan",
+      "eventId": "day2.morning-callback",
+      "servedEventIds": [
+        "day2.morning-callback"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "guyan"
+      ],
+      "identityCast": [
+        "guyan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D2-A1-memory-callback--npc-jiangwan",
+      "eventId": "day2.morning-callback",
+      "servedEventIds": [
+        "day2.morning-callback"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "jiangwan"
+      ],
+      "identityCast": [
+        "jiangwan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D2-A1-memory-callback--npc-jiangmi",
+      "eventId": "day2.morning-callback",
+      "servedEventIds": [
+        "day2.morning-callback"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "jiangmi"
+      ],
+      "identityCast": [
+        "jiangmi"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D2-A1-memory-callback--npc-sunnian",
+      "eventId": "day2.morning-callback",
+      "servedEventIds": [
+        "day2.morning-callback"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "chensu"
+      ],
+      "participantIds": [
+        "sunnian"
+      ],
+      "identityCast": [
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "D2-A1-memory-callback--npc-chensu",
+      "eventId": "day2.morning-callback",
+      "servedEventIds": [
+        "day2.morning-callback"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian"
+      ],
+      "participantIds": [
+        "chensu"
+      ],
+      "identityCast": [
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-RULES-house-friction--fixed-shenmo",
+      "eventId": "story.house.rules-friction",
+      "servedEventIds": [
+        "story.house.rules-friction"
+      ],
+      "routingMode": "fixed-cast",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "shenmo"
+      ],
+      "identityCast": [
+        "shenmo"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-IDENTITY-profession-reveal--group-current-eight",
+      "eventId": "story.identity.profession-reveal",
+      "servedEventIds": [
+        "story.identity.profession-reveal"
+      ],
+      "routingMode": "current-eight",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "identityCast": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-blind-box--p-shenmo",
+      "eventId": "story.date.blind-box",
+      "servedEventIds": [
+        "story.date.blind-box"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "shenmo",
+      "applicablePerspectiveCharacterIds": [
+        "shenmo"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "shenmo"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-blind-box--p-linyu",
+      "eventId": "story.date.blind-box",
+      "servedEventIds": [
+        "story.date.blind-box"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "linyu",
+      "applicablePerspectiveCharacterIds": [
+        "linyu"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "linyu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-blind-box--p-chengye",
+      "eventId": "story.date.blind-box",
+      "servedEventIds": [
+        "story.date.blind-box"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "chengye",
+      "applicablePerspectiveCharacterIds": [
+        "chengye"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "chengye"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-blind-box--p-guyan",
+      "eventId": "story.date.blind-box",
+      "servedEventIds": [
+        "story.date.blind-box"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "guyan",
+      "applicablePerspectiveCharacterIds": [
+        "guyan"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "guyan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-blind-box--p-jiangwan",
+      "eventId": "story.date.blind-box",
+      "servedEventIds": [
+        "story.date.blind-box"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "jiangwan",
+      "applicablePerspectiveCharacterIds": [
+        "jiangwan"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "jiangwan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-blind-box--p-jiangmi",
+      "eventId": "story.date.blind-box",
+      "servedEventIds": [
+        "story.date.blind-box"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "jiangmi",
+      "applicablePerspectiveCharacterIds": [
+        "jiangmi"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "jiangmi"
+      ],
+      "status": "existingApprovedReusable",
+      "existingAssetId": "EV-DATE-blind-box"
+    },
+    {
+      "targetAssetId": "EV-DATE-blind-box--p-sunnian",
+      "eventId": "story.date.blind-box",
+      "servedEventIds": [
+        "story.date.blind-box"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "sunnian",
+      "applicablePerspectiveCharacterIds": [
+        "sunnian"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-blind-box--p-chensu",
+      "eventId": "story.date.blind-box",
+      "servedEventIds": [
+        "story.date.blind-box"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "chensu",
+      "applicablePerspectiveCharacterIds": [
+        "chensu"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-shenmo-linyu",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu"
+      ],
+      "participantIds": [
+        "shenmo",
+        "linyu"
+      ],
+      "identityCast": [
+        "shenmo",
+        "linyu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-shenmo-chengye",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "chengye"
+      ],
+      "participantIds": [
+        "shenmo",
+        "chengye"
+      ],
+      "identityCast": [
+        "shenmo",
+        "chengye"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-shenmo-guyan",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "guyan"
+      ],
+      "participantIds": [
+        "shenmo",
+        "guyan"
+      ],
+      "identityCast": [
+        "shenmo",
+        "guyan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-shenmo-jiangwan",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "jiangwan"
+      ],
+      "participantIds": [
+        "shenmo",
+        "jiangwan"
+      ],
+      "identityCast": [
+        "shenmo",
+        "jiangwan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-shenmo-jiangmi",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "jiangmi"
+      ],
+      "participantIds": [
+        "shenmo",
+        "jiangmi"
+      ],
+      "identityCast": [
+        "shenmo",
+        "jiangmi"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-shenmo-sunnian",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "sunnian"
+      ],
+      "participantIds": [
+        "shenmo",
+        "sunnian"
+      ],
+      "identityCast": [
+        "shenmo",
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-shenmo-chensu",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "chensu"
+      ],
+      "participantIds": [
+        "shenmo",
+        "chensu"
+      ],
+      "identityCast": [
+        "shenmo",
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-linyu-chengye",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "linyu",
+        "chengye"
+      ],
+      "participantIds": [
+        "linyu",
+        "chengye"
+      ],
+      "identityCast": [
+        "linyu",
+        "chengye"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-linyu-guyan",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "linyu",
+        "guyan"
+      ],
+      "participantIds": [
+        "linyu",
+        "guyan"
+      ],
+      "identityCast": [
+        "linyu",
+        "guyan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-linyu-jiangwan",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "linyu",
+        "jiangwan"
+      ],
+      "participantIds": [
+        "linyu",
+        "jiangwan"
+      ],
+      "identityCast": [
+        "linyu",
+        "jiangwan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-linyu-jiangmi",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "linyu",
+        "jiangmi"
+      ],
+      "participantIds": [
+        "linyu",
+        "jiangmi"
+      ],
+      "identityCast": [
+        "linyu",
+        "jiangmi"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-linyu-sunnian",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "linyu",
+        "sunnian"
+      ],
+      "participantIds": [
+        "linyu",
+        "sunnian"
+      ],
+      "identityCast": [
+        "linyu",
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-linyu-chensu",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "linyu",
+        "chensu"
+      ],
+      "participantIds": [
+        "linyu",
+        "chensu"
+      ],
+      "identityCast": [
+        "linyu",
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-chengye-guyan",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "chengye",
+        "guyan"
+      ],
+      "participantIds": [
+        "chengye",
+        "guyan"
+      ],
+      "identityCast": [
+        "chengye",
+        "guyan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-chengye-jiangwan",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "chengye",
+        "jiangwan"
+      ],
+      "participantIds": [
+        "chengye",
+        "jiangwan"
+      ],
+      "identityCast": [
+        "chengye",
+        "jiangwan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-chengye-jiangmi",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "chengye",
+        "jiangmi"
+      ],
+      "participantIds": [
+        "chengye",
+        "jiangmi"
+      ],
+      "identityCast": [
+        "chengye",
+        "jiangmi"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-chengye-sunnian",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "chengye",
+        "sunnian"
+      ],
+      "participantIds": [
+        "chengye",
+        "sunnian"
+      ],
+      "identityCast": [
+        "chengye",
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-chengye-chensu",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "chengye",
+        "chensu"
+      ],
+      "participantIds": [
+        "chengye",
+        "chensu"
+      ],
+      "identityCast": [
+        "chengye",
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-guyan-jiangwan",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "guyan",
+        "jiangwan"
+      ],
+      "participantIds": [
+        "guyan",
+        "jiangwan"
+      ],
+      "identityCast": [
+        "guyan",
+        "jiangwan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-guyan-jiangmi",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "guyan",
+        "jiangmi"
+      ],
+      "participantIds": [
+        "guyan",
+        "jiangmi"
+      ],
+      "identityCast": [
+        "guyan",
+        "jiangmi"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-guyan-sunnian",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "guyan",
+        "sunnian"
+      ],
+      "participantIds": [
+        "guyan",
+        "sunnian"
+      ],
+      "identityCast": [
+        "guyan",
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-guyan-chensu",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "guyan",
+        "chensu"
+      ],
+      "participantIds": [
+        "guyan",
+        "chensu"
+      ],
+      "identityCast": [
+        "guyan",
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-jiangwan-jiangmi",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "jiangwan",
+        "jiangmi"
+      ],
+      "participantIds": [
+        "jiangwan",
+        "jiangmi"
+      ],
+      "identityCast": [
+        "jiangwan",
+        "jiangmi"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-jiangwan-sunnian",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "jiangwan",
+        "sunnian"
+      ],
+      "participantIds": [
+        "jiangwan",
+        "sunnian"
+      ],
+      "identityCast": [
+        "jiangwan",
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-jiangwan-chensu",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "jiangwan",
+        "chensu"
+      ],
+      "participantIds": [
+        "jiangwan",
+        "chensu"
+      ],
+      "identityCast": [
+        "jiangwan",
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-jiangmi-sunnian",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "jiangmi",
+        "sunnian"
+      ],
+      "participantIds": [
+        "jiangmi",
+        "sunnian"
+      ],
+      "identityCast": [
+        "jiangmi",
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-jiangmi-chensu",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "jiangmi",
+        "chensu"
+      ],
+      "participantIds": [
+        "jiangmi",
+        "chensu"
+      ],
+      "identityCast": [
+        "jiangmi",
+        "chensu"
+      ],
+      "status": "existingApprovedReusable",
+      "existingAssetId": "EV-DATE-mutual-signal"
+    },
+    {
+      "targetAssetId": "EV-DATE-mutual-signal--pair-sunnian-chensu",
+      "eventId": "story.date.mutual-signal",
+      "servedEventIds": [
+        "story.date.mutual-signal"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "sunnian",
+        "chensu"
+      ],
+      "identityCast": [
+        "sunnian",
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-MISSED-empty-seat--p-shenmo",
+      "eventId": "story.missed-timing.empty-seat",
+      "servedEventIds": [
+        "story.missed-timing.empty-seat"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "shenmo",
+      "applicablePerspectiveCharacterIds": [
+        "shenmo"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "shenmo"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-MISSED-empty-seat--p-linyu",
+      "eventId": "story.missed-timing.empty-seat",
+      "servedEventIds": [
+        "story.missed-timing.empty-seat"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "linyu",
+      "applicablePerspectiveCharacterIds": [
+        "linyu"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "linyu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-MISSED-empty-seat--p-chengye",
+      "eventId": "story.missed-timing.empty-seat",
+      "servedEventIds": [
+        "story.missed-timing.empty-seat"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "chengye",
+      "applicablePerspectiveCharacterIds": [
+        "chengye"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "chengye"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-MISSED-empty-seat--p-guyan",
+      "eventId": "story.missed-timing.empty-seat",
+      "servedEventIds": [
+        "story.missed-timing.empty-seat"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "guyan",
+      "applicablePerspectiveCharacterIds": [
+        "guyan"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "guyan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-MISSED-empty-seat--p-jiangwan",
+      "eventId": "story.missed-timing.empty-seat",
+      "servedEventIds": [
+        "story.missed-timing.empty-seat"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "jiangwan",
+      "applicablePerspectiveCharacterIds": [
+        "jiangwan"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "jiangwan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-MISSED-empty-seat--p-jiangmi",
+      "eventId": "story.missed-timing.empty-seat",
+      "servedEventIds": [
+        "story.missed-timing.empty-seat"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "jiangmi",
+      "applicablePerspectiveCharacterIds": [
+        "jiangmi"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "jiangmi"
+      ],
+      "status": "existingApprovedReusable",
+      "existingAssetId": "EV-MISSED-empty-seat"
+    },
+    {
+      "targetAssetId": "EV-MISSED-empty-seat--p-sunnian",
+      "eventId": "story.missed-timing.empty-seat",
+      "servedEventIds": [
+        "story.missed-timing.empty-seat"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "sunnian",
+      "applicablePerspectiveCharacterIds": [
+        "sunnian"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-MISSED-empty-seat--p-chensu",
+      "eventId": "story.missed-timing.empty-seat",
+      "servedEventIds": [
+        "story.missed-timing.empty-seat"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "chensu",
+      "applicablePerspectiveCharacterIds": [
+        "chensu"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-CARE-breakfast-callback--npc-shenmo",
+      "eventId": "story.care.breakfast-callback",
+      "servedEventIds": [
+        "story.care.breakfast-callback"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "shenmo"
+      ],
+      "identityCast": [
+        "shenmo"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-CARE-breakfast-callback--npc-linyu",
+      "eventId": "story.care.breakfast-callback",
+      "servedEventIds": [
+        "story.care.breakfast-callback"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "linyu"
+      ],
+      "identityCast": [
+        "linyu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-CARE-breakfast-callback--npc-chengye",
+      "eventId": "story.care.breakfast-callback",
+      "servedEventIds": [
+        "story.care.breakfast-callback"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "chengye"
+      ],
+      "identityCast": [
+        "chengye"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-CARE-breakfast-callback--npc-guyan",
+      "eventId": "story.care.breakfast-callback",
+      "servedEventIds": [
+        "story.care.breakfast-callback"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "guyan"
+      ],
+      "identityCast": [
+        "guyan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-CARE-breakfast-callback--npc-jiangwan",
+      "eventId": "story.care.breakfast-callback",
+      "servedEventIds": [
+        "story.care.breakfast-callback"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "jiangwan"
+      ],
+      "identityCast": [
+        "jiangwan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-CARE-breakfast-callback--npc-jiangmi",
+      "eventId": "story.care.breakfast-callback",
+      "servedEventIds": [
+        "story.care.breakfast-callback"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "jiangmi"
+      ],
+      "identityCast": [
+        "jiangmi"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-CARE-breakfast-callback--npc-sunnian",
+      "eventId": "story.care.breakfast-callback",
+      "servedEventIds": [
+        "story.care.breakfast-callback"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "chensu"
+      ],
+      "participantIds": [
+        "sunnian"
+      ],
+      "identityCast": [
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-CARE-breakfast-callback--npc-chensu",
+      "eventId": "story.care.breakfast-callback",
+      "servedEventIds": [
+        "story.care.breakfast-callback"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian"
+      ],
+      "participantIds": [
+        "chensu"
+      ],
+      "identityCast": [
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-TRIANGLE-reverse-invite--fixed-shenmo-chengye",
+      "eventId": "story.triangle.reverse-invite",
+      "servedEventIds": [
+        "story.triangle.reverse-invite"
+      ],
+      "routingMode": "fixed-cast",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "shenmo",
+        "chengye"
+      ],
+      "identityCast": [
+        "shenmo",
+        "chengye"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-BRIDGE-hidden-courage--fixed-chensu-jiangmi",
+      "eventId": "story.challenge.water-bridge",
+      "servedEventIds": [
+        "story.challenge.water-bridge"
+      ],
+      "routingMode": "fixed-cast",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "chensu",
+        "jiangmi"
+      ],
+      "identityCast": [
+        "chensu",
+        "jiangmi"
+      ],
+      "status": "existingApprovedReusable",
+      "existingAssetId": "EV-BRIDGE-hidden-courage"
+    },
+    {
+      "targetAssetId": "EV-GROUP-truth-firepit--group-current-eight",
+      "eventId": "story.group.truth-firepit",
+      "servedEventIds": [
+        "story.group.truth-firepit"
+      ],
+      "routingMode": "current-eight",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "identityCast": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-BOMBSHELL-ninth-card--group-current-eight",
+      "eventId": "story.bombshell.ninth-card",
+      "servedEventIds": [
+        "story.bombshell.ninth-card"
+      ],
+      "routingMode": "current-eight",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "identityCast": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-PAST-consent-reveal--npc-shenmo",
+      "eventId": "story.past.consent-reveal",
+      "servedEventIds": [
+        "story.past.consent-reveal"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "shenmo"
+      ],
+      "identityCast": [
+        "shenmo"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-PAST-consent-reveal--npc-linyu",
+      "eventId": "story.past.consent-reveal",
+      "servedEventIds": [
+        "story.past.consent-reveal"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "linyu"
+      ],
+      "identityCast": [
+        "linyu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-PAST-consent-reveal--npc-chengye",
+      "eventId": "story.past.consent-reveal",
+      "servedEventIds": [
+        "story.past.consent-reveal"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "chengye"
+      ],
+      "identityCast": [
+        "chengye"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-PAST-consent-reveal--npc-guyan",
+      "eventId": "story.past.consent-reveal",
+      "servedEventIds": [
+        "story.past.consent-reveal"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "guyan"
+      ],
+      "identityCast": [
+        "guyan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-PAST-consent-reveal--npc-jiangwan",
+      "eventId": "story.past.consent-reveal",
+      "servedEventIds": [
+        "story.past.consent-reveal"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "jiangwan"
+      ],
+      "identityCast": [
+        "jiangwan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-PAST-consent-reveal--npc-jiangmi",
+      "eventId": "story.past.consent-reveal",
+      "servedEventIds": [
+        "story.past.consent-reveal"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "jiangmi"
+      ],
+      "identityCast": [
+        "jiangmi"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-PAST-consent-reveal--npc-sunnian",
+      "eventId": "story.past.consent-reveal",
+      "servedEventIds": [
+        "story.past.consent-reveal"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "chensu"
+      ],
+      "participantIds": [
+        "sunnian"
+      ],
+      "identityCast": [
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-PAST-consent-reveal--npc-chensu",
+      "eventId": "story.past.consent-reveal",
+      "servedEventIds": [
+        "story.past.consent-reveal"
+      ],
+      "routingMode": "participant-pov",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian"
+      ],
+      "participantIds": [
+        "chensu"
+      ],
+      "identityCast": [
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-TRIP-last-two-days--fixed-jiangwan",
+      "eventId": "story.trip.last-two-days",
+      "servedEventIds": [
+        "story.trip.last-two-days"
+      ],
+      "routingMode": "fixed-cast",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "jiangwan"
+      ],
+      "identityCast": [
+        "jiangwan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-unsent-letter--p-shenmo",
+      "eventId": "story.final.unsent-letter",
+      "servedEventIds": [
+        "story.final.unsent-letter"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "shenmo",
+      "applicablePerspectiveCharacterIds": [
+        "shenmo"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "shenmo"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-unsent-letter--p-linyu",
+      "eventId": "story.final.unsent-letter",
+      "servedEventIds": [
+        "story.final.unsent-letter"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "linyu",
+      "applicablePerspectiveCharacterIds": [
+        "linyu"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "linyu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-unsent-letter--p-chengye",
+      "eventId": "story.final.unsent-letter",
+      "servedEventIds": [
+        "story.final.unsent-letter"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "chengye",
+      "applicablePerspectiveCharacterIds": [
+        "chengye"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "chengye"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-unsent-letter--p-guyan",
+      "eventId": "story.final.unsent-letter",
+      "servedEventIds": [
+        "story.final.unsent-letter"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "guyan",
+      "applicablePerspectiveCharacterIds": [
+        "guyan"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "guyan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-unsent-letter--p-jiangwan",
+      "eventId": "story.final.unsent-letter",
+      "servedEventIds": [
+        "story.final.unsent-letter"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "jiangwan",
+      "applicablePerspectiveCharacterIds": [
+        "jiangwan"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "jiangwan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-unsent-letter--p-jiangmi",
+      "eventId": "story.final.unsent-letter",
+      "servedEventIds": [
+        "story.final.unsent-letter"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "jiangmi",
+      "applicablePerspectiveCharacterIds": [
+        "jiangmi"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "jiangmi"
+      ],
+      "status": "existingApprovedReusable",
+      "existingAssetId": "EV-FINAL-unsent-letter"
+    },
+    {
+      "targetAssetId": "EV-FINAL-unsent-letter--p-sunnian",
+      "eventId": "story.final.unsent-letter",
+      "servedEventIds": [
+        "story.final.unsent-letter"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "sunnian",
+      "applicablePerspectiveCharacterIds": [
+        "sunnian"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-unsent-letter--p-chensu",
+      "eventId": "story.final.unsent-letter",
+      "servedEventIds": [
+        "story.final.unsent-letter"
+      ],
+      "routingMode": "perspective",
+      "perspectiveCharacterId": "chensu",
+      "applicablePerspectiveCharacterIds": [
+        "chensu"
+      ],
+      "participantIds": [],
+      "identityCast": [
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-shenmo-linyu",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "linyu"
+      ],
+      "participantIds": [
+        "shenmo",
+        "linyu"
+      ],
+      "identityCast": [
+        "shenmo",
+        "linyu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-shenmo-chengye",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "chengye"
+      ],
+      "participantIds": [
+        "shenmo",
+        "chengye"
+      ],
+      "identityCast": [
+        "shenmo",
+        "chengye"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-shenmo-guyan",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "guyan"
+      ],
+      "participantIds": [
+        "shenmo",
+        "guyan"
+      ],
+      "identityCast": [
+        "shenmo",
+        "guyan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-shenmo-jiangwan",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "jiangwan"
+      ],
+      "participantIds": [
+        "shenmo",
+        "jiangwan"
+      ],
+      "identityCast": [
+        "shenmo",
+        "jiangwan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-shenmo-jiangmi",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "jiangmi"
+      ],
+      "participantIds": [
+        "shenmo",
+        "jiangmi"
+      ],
+      "identityCast": [
+        "shenmo",
+        "jiangmi"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-shenmo-sunnian",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "sunnian"
+      ],
+      "participantIds": [
+        "shenmo",
+        "sunnian"
+      ],
+      "identityCast": [
+        "shenmo",
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-shenmo-chensu",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "shenmo",
+        "chensu"
+      ],
+      "participantIds": [
+        "shenmo",
+        "chensu"
+      ],
+      "identityCast": [
+        "shenmo",
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-linyu-chengye",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "linyu",
+        "chengye"
+      ],
+      "participantIds": [
+        "linyu",
+        "chengye"
+      ],
+      "identityCast": [
+        "linyu",
+        "chengye"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-linyu-guyan",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "linyu",
+        "guyan"
+      ],
+      "participantIds": [
+        "linyu",
+        "guyan"
+      ],
+      "identityCast": [
+        "linyu",
+        "guyan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-linyu-jiangwan",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "linyu",
+        "jiangwan"
+      ],
+      "participantIds": [
+        "linyu",
+        "jiangwan"
+      ],
+      "identityCast": [
+        "linyu",
+        "jiangwan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-linyu-jiangmi",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "linyu",
+        "jiangmi"
+      ],
+      "participantIds": [
+        "linyu",
+        "jiangmi"
+      ],
+      "identityCast": [
+        "linyu",
+        "jiangmi"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-linyu-sunnian",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "linyu",
+        "sunnian"
+      ],
+      "participantIds": [
+        "linyu",
+        "sunnian"
+      ],
+      "identityCast": [
+        "linyu",
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-linyu-chensu",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "linyu",
+        "chensu"
+      ],
+      "participantIds": [
+        "linyu",
+        "chensu"
+      ],
+      "identityCast": [
+        "linyu",
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-chengye-guyan",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "chengye",
+        "guyan"
+      ],
+      "participantIds": [
+        "chengye",
+        "guyan"
+      ],
+      "identityCast": [
+        "chengye",
+        "guyan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-chengye-jiangwan",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "chengye",
+        "jiangwan"
+      ],
+      "participantIds": [
+        "chengye",
+        "jiangwan"
+      ],
+      "identityCast": [
+        "chengye",
+        "jiangwan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-chengye-jiangmi",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "chengye",
+        "jiangmi"
+      ],
+      "participantIds": [
+        "chengye",
+        "jiangmi"
+      ],
+      "identityCast": [
+        "chengye",
+        "jiangmi"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-chengye-sunnian",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "chengye",
+        "sunnian"
+      ],
+      "participantIds": [
+        "chengye",
+        "sunnian"
+      ],
+      "identityCast": [
+        "chengye",
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-chengye-chensu",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "chengye",
+        "chensu"
+      ],
+      "participantIds": [
+        "chengye",
+        "chensu"
+      ],
+      "identityCast": [
+        "chengye",
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-guyan-jiangwan",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "guyan",
+        "jiangwan"
+      ],
+      "participantIds": [
+        "guyan",
+        "jiangwan"
+      ],
+      "identityCast": [
+        "guyan",
+        "jiangwan"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-guyan-jiangmi",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "guyan",
+        "jiangmi"
+      ],
+      "participantIds": [
+        "guyan",
+        "jiangmi"
+      ],
+      "identityCast": [
+        "guyan",
+        "jiangmi"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-guyan-sunnian",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "guyan",
+        "sunnian"
+      ],
+      "participantIds": [
+        "guyan",
+        "sunnian"
+      ],
+      "identityCast": [
+        "guyan",
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-guyan-chensu",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "guyan",
+        "chensu"
+      ],
+      "participantIds": [
+        "guyan",
+        "chensu"
+      ],
+      "identityCast": [
+        "guyan",
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-jiangwan-jiangmi",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "jiangwan",
+        "jiangmi"
+      ],
+      "participantIds": [
+        "jiangwan",
+        "jiangmi"
+      ],
+      "identityCast": [
+        "jiangwan",
+        "jiangmi"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-jiangwan-sunnian",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "jiangwan",
+        "sunnian"
+      ],
+      "participantIds": [
+        "jiangwan",
+        "sunnian"
+      ],
+      "identityCast": [
+        "jiangwan",
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-jiangwan-chensu",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "jiangwan",
+        "chensu"
+      ],
+      "participantIds": [
+        "jiangwan",
+        "chensu"
+      ],
+      "identityCast": [
+        "jiangwan",
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-jiangmi-sunnian",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "jiangmi",
+        "sunnian"
+      ],
+      "participantIds": [
+        "jiangmi",
+        "sunnian"
+      ],
+      "identityCast": [
+        "jiangmi",
+        "sunnian"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-jiangmi-chensu",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "jiangmi",
+        "chensu"
+      ],
+      "participantIds": [
+        "jiangmi",
+        "chensu"
+      ],
+      "identityCast": [
+        "jiangmi",
+        "chensu"
+      ],
+      "status": "existingApprovedReusable",
+      "existingAssetId": "EV-FINAL-confession-day"
+    },
+    {
+      "targetAssetId": "EV-FINAL-confession-day--pair-sunnian-chensu",
+      "eventId": "story.final.confession-day",
+      "servedEventIds": [
+        "story.final.confession-day"
+      ],
+      "routingMode": "unordered-pair",
+      "perspectiveCharacterId": null,
+      "applicablePerspectiveCharacterIds": [
+        "sunnian",
+        "chensu"
+      ],
+      "participantIds": [
+        "sunnian",
+        "chensu"
+      ],
+      "identityCast": [
+        "sunnian",
+        "chensu"
+      ],
+      "status": "requiresGeneration",
+      "existingAssetId": null
+    }
+  ]
+}

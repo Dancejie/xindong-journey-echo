@@ -2,6 +2,7 @@ import json
 import unittest
 from copy import deepcopy
 from pathlib import Path
+from unittest.mock import patch
 
 from backend.game_content import CHARACTER_MAP, DAY1_MEDIA_CONTRACT, NODES, create_snapshot, project_view
 from backend.story_director import (
@@ -198,8 +199,55 @@ class StoryDirectorContractTests(unittest.TestCase):
         candidates = eligible_story_events(snapshot, limit=20)
         triangle = next(item for item in candidates if item["eventId"] == "story.triangle.reverse-invite")
         next_snapshot, receipt = commit_story_event(snapshot, candidates, valid_proposal(triangle))
-        self.assertEqual("EV-TRIANGLE-reverse-invite", receipt["mission"]["media"]["assetId"])
-        self.assertEqual("/media/video/EV-TRIANGLE-reverse-invite.mp4", next_snapshot["storyMission"]["media"]["src"])
+        media = receipt["mission"]["media"]
+        self.assertEqual("EV-TRIANGLE-reverse-invite", media["baseAssetId"])
+        self.assertEqual("CHAR-shenmo-portrait", media["assetId"])
+        self.assertEqual("fixed-cast", media["routingMode"])
+        self.assertEqual(["shenmo", "chengye"], media["requiredIdentityCast"])
+        self.assertEqual(["shenmo"], media["identityCast"])
+        self.assertEqual("/media/video/CHAR-shenmo-portrait.mp4", next_snapshot["storyMission"]["media"]["src"])
+        self.assertEqual("/media/video/EV-TRIANGLE-reverse-invite--fixed-shenmo-chengye.mp4", media["plannedSrc"])
+
+    def test_exact_pair_variant_routes_only_when_reviewed_cast_matches(self):
+        snapshot = create_snapshot("ENFP", "jiangmi")
+        event = next(item for item in STORY_EVENTS if item["id"] == "story.final.confession-day")
+        exact_id = "EV-FINAL-confession-day--pair-shenmo-jiangmi"
+        assets = {
+            exact_id: {
+                "path": f"/media/video/{exact_id}.mp4", "poster": f"/media/posters/{exact_id}.jpg",
+                "status": "approved-runtime", "identityCast": ["shenmo", "jiangmi"], "identityScope": "pair",
+            }
+        }
+        with patch("backend.game_content._runtime_asset_map", return_value=assets):
+            media = resolve_story_event_media(event, snapshot, ["shenmo"])
+        self.assertEqual(exact_id, media["assetId"])
+        self.assertEqual("unordered-pair", media["routingMode"])
+        self.assertEqual({"shenmo", "jiangmi"}, set(media["identityCast"]))
+
+        assets[exact_id]["identityCast"] = ["shenmo", "jiangmi", "chensu"]
+        with patch("backend.game_content._runtime_asset_map", return_value=assets):
+            rejected = resolve_story_event_media(event, snapshot, ["shenmo"])
+        self.assertEqual("CHAR-jiangmi-portrait", rejected["assetId"])
+        self.assertEqual("identity-safe-fallback", rejected["status"])
+
+    def test_shared_story_families_reuse_day1_semantic_variant_ids(self):
+        snapshot = create_snapshot("ENFP", "jiangmi")
+        kitchen = next(item for item in STORY_EVENTS if item["id"] == "story.kitchen.two-person-shift")
+        signal = next(item for item in STORY_EVENTS if item["id"] == "story.signal.first-anonymous-message")
+
+        kitchen_media = resolve_story_event_media(kitchen, snapshot, ["shenmo"])
+        signal_media = resolve_story_event_media(signal, snapshot, [])
+
+        self.assertEqual("D1-A6-first-dinner-team", kitchen_media["baseAssetId"])
+        self.assertEqual(
+            "/media/video/D1-A6-first-dinner-team--pair-shenmo-jiangmi.mp4",
+            kitchen_media["plannedSrc"],
+        )
+        self.assertEqual("D1-A7-heart-message", signal_media["baseAssetId"])
+        self.assertEqual(
+            "/media/video/D1-A7-heart-message--p-jiangmi.mp4",
+            signal_media["plannedSrc"],
+        )
 
     def test_memory_callbacks_are_limited_to_selected_participants(self):
         snapshot = create_snapshot("INFP", "jiangmi")

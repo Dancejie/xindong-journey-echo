@@ -12,7 +12,7 @@ from uuid import uuid4
 ROOT = Path(__file__).resolve().parent.parent
 RELATIONSHIP_AXES = ("trust", "affection", "respect", "fear", "debt", "attraction", "resentment")
 ATTITUDES = {"warm", "curious", "guarded", "challenging", "vulnerable", "softened", "uncertain", "honest", "moved", "careful", "steady", "boundary"}
-CONTENT_VERSION = "3.5.0-cast-impression-transition"
+CONTENT_VERSION = "3.6.0-identity-safe-media-routing"
 INTRODUCTION_MODES = {
     "intro-clear": "camera-full",
     "intro-question": "living-room-keepsake",
@@ -137,11 +137,11 @@ STORY_OBJECTIVES = {
 DAY1_MEDIA_CONTRACT: dict[str, dict[str, Any]] = {
     "arrival-context": {"eventId": "day1.arrival-context", "assetId": "D1-A1-island-hotel-establish", "intent": "establish-island-journey"},
     "villa-arrival": {"eventId": "day1.villa-arrival", "assetId": "D1-A2-villa-entry", "intent": "enter-villa-and-meet-cast"},
-    "introductions": {"eventId": "day1.introductions", "assetId": "D1-A3-cast-introductions", "intent": "camera-ready-self-introduction"},
+    "introductions": {"eventId": "day1.introductions", "assetId": "D1-A3-cast-introductions", "intent": "camera-ready-self-introduction", "routingMode": "perspective"},
     "cast-first-impressions": {
         "eventId": "day1.cast-first-impressions",
         "assetId": "D1-A3B-cast-first-impressions",
-        "intent": "hear-full-cast-and-seed-first-impression",
+        "intent": "hear-full-cast-and-seed-first-impression", "routingMode": "current-eight",
     },
     "icebreaker-choice": {"eventId": "day1.icebreaker-choice", "assetId": "D1-A4-icebreaker-selection", "intent": "choose-first-small-talk"},
     "guided-chat": {"eventId": "day1.guided-chat", "assetId": "D1-A5-guided-smalltalk", "intent": "guided-one-to-one-smalltalk"},
@@ -170,10 +170,19 @@ CHARACTER_CARD_MAP = {card["id"]: card for card in CHARACTER_CARDS}
 
 def _public_character(card: dict[str, Any]) -> dict[str, Any]:
     psychology, voice = card["psychology"], card["voice"]
+    facts = card.get("sourceProfile", {}).get("facts", {})
+    raw_occupation = facts.get("occupation")
+    occupation = str(raw_occupation).strip() if isinstance(raw_occupation, str) else ""
+    if not occupation or any(marker in occupation for marker in ("待剧情", "待正式确认", "运行时职业待", "原稿为")):
+        occupation = "职业待公开"
+    raw_age = facts.get("age")
+    age = raw_age if isinstance(raw_age, int) and raw_age > 0 else None
     return {
         "id": card["id"], "name": card["names"]["primary"], "mbti": card["mbti"],
         "tagline": card["tagline"], "accent": card["accent"], "portrait": card["portrait"],
-        "video": card["video"], "publicMask": "、".join(psychology["publicMask"]),
+        "video": card["video"], "age": age, "occupation": occupation,
+        "publicFacts": {"age": age, "occupation": occupation},
+        "publicMask": "、".join(psychology["publicMask"]),
         "privateFear": psychology["fears"][0], "memorySeed": card["drives"]["stakes"],
         "voice": f"{voice['register']}；{voice['sentenceShape']}",
         "boundary": "；".join(psychology["boundaries"]),
@@ -395,57 +404,183 @@ def _runtime_asset_map() -> dict[str, dict[str, Any]]:
     return {str(item.get("id")): item for item in package.get("assets", []) if isinstance(item, dict) and item.get("id")}
 
 
+APPROVED_RUNTIME_MEDIA_STATUSES = {"ready", "approved-runtime"}
+
+
+def _asset_is_runtime_ready(asset: dict[str, Any]) -> bool:
+    return bool(asset.get("path")) and asset.get("status") in APPROVED_RUNTIME_MEDIA_STATUSES
+
+
+def _asset_identity_cast(asset: dict[str, Any]) -> list[str]:
+    cast = asset.get("identityCast")
+    if not isinstance(cast, list):
+        return []
+    return [str(character_id) for character_id in cast if str(character_id) in CHARACTER_MAP]
+
+
+def _identity_card(character_id: str) -> dict[str, Any]:
+    character = CHARACTER_MAP[character_id]
+    return {
+        "characterId": character_id,
+        "name": character["name"],
+        "mbti": character["mbti"],
+        "age": character.get("age"),
+        "occupation": character.get("occupation") or "职业待公开",
+        "tagline": character["tagline"],
+    }
+
+
+def resolve_identity_safe_media(
+    base_asset_id: str,
+    perspective_character_id: str,
+    participant_ids: list[str] | None = None,
+    *,
+    routing_mode: str = "perspective",
+    fixed_cast_ids: list[str] | None = None,
+    asset_map: dict[str, dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """Resolve only footage whose reviewed identity cast covers the live scene.
+
+    A generated clip is never considered interchangeable merely because its
+    event matches.  It must also name the selected protagonist and every
+    committed participant in ``identityCast``.  Until that exact variant has
+    passed review, the selected protagonist's existing dynamic portrait is the
+    safe runtime fallback; the old Jiangmi event master is never substituted.
+    """
+    if perspective_character_id not in CHARACTER_MAP:
+        raise ValueError("媒体视角人物不存在")
+    asset_map = asset_map if asset_map is not None else _runtime_asset_map()
+    participants: list[str] = []
+    for character_id in participant_ids or []:
+        if character_id in CHARACTER_MAP and character_id != perspective_character_id and character_id not in participants:
+            participants.append(character_id)
+    cast_order = list(CHARACTER_MAP)
+    order_index = {character_id: index for index, character_id in enumerate(cast_order)}
+    if routing_mode == "participant-pov" and participants:
+        required_cast = [participants[0]]
+        canonical_asset_id = f"{base_asset_id}--npc-{participants[0]}"
+    elif routing_mode == "unordered-pair" and participants:
+        pair = sorted({perspective_character_id, participants[0]}, key=lambda item: order_index[item])
+        required_cast = pair
+        canonical_asset_id = f"{base_asset_id}--pair-{'-'.join(pair)}"
+    elif routing_mode == "fixed-cast":
+        fixed = [character_id for character_id in fixed_cast_ids or participants if character_id in CHARACTER_MAP]
+        required_cast = list(dict.fromkeys(fixed)) or [perspective_character_id]
+        canonical_asset_id = f"{base_asset_id}--fixed-{'-'.join(required_cast)}"
+    elif routing_mode == "current-eight":
+        required_cast = cast_order
+        canonical_asset_id = f"{base_asset_id}--group-current-eight"
+    else:
+        routing_mode = "perspective"
+        required_cast = [perspective_character_id]
+        canonical_asset_id = f"{base_asset_id}--p-{perspective_character_id}"
+
+    # New R5 semantic IDs come first. Directed R4-style IDs remain readable
+    # during migration, but identity metadata must prove the exact same cast.
+    directed_cast = [perspective_character_id, *participants]
+    legacy_directed = f"{base_asset_id}--{'--'.join(directed_cast)}"
+    legacy_perspective = f"{base_asset_id}--{perspective_character_id}"
+    candidate_ids = list(dict.fromkeys([canonical_asset_id, legacy_directed, legacy_perspective, base_asset_id]))
+
+    selected_asset_id = ""
+    selected_asset: dict[str, Any] = {}
+    for candidate_id in candidate_ids:
+        candidate = asset_map.get(candidate_id, {})
+        if not _asset_is_runtime_ready(candidate):
+            continue
+        identity_cast = _asset_identity_cast(candidate)
+        if set(identity_cast) == set(required_cast) and len(identity_cast) == len(required_cast):
+            selected_asset_id, selected_asset = candidate_id, candidate
+            break
+
+    planned_asset_id = canonical_asset_id
+    if selected_asset_id:
+        identity_cast = _asset_identity_cast(selected_asset)
+        identity_timeline = selected_asset.get("identityTimeline") if isinstance(selected_asset.get("identityTimeline"), list) else []
+        return {
+            "assetId": selected_asset_id,
+            "baseAssetId": base_asset_id,
+            "variantForCharacterId": perspective_character_id if selected_asset_id != base_asset_id else None,
+            "src": selected_asset["path"],
+            "poster": selected_asset.get("poster") or "",
+            "plannedSrc": f"/media/video/{planned_asset_id}.mp4",
+            "plannedPoster": f"/media/posters/{planned_asset_id}.jpg",
+            "available": True,
+            "status": "ready",
+            "selectionReason": "reviewed-identity-cast",
+            "routingMode": routing_mode,
+            "requiredIdentityCast": required_cast,
+            "identityCast": identity_cast,
+            "identityCards": [_identity_card(character_id) for character_id in identity_cast],
+            "identityTimeline": deepcopy(identity_timeline),
+            "fallback": {
+                "kind": "dynamic-portrait",
+                "characterId": perspective_character_id,
+                "src": CHARACTER_MAP[perspective_character_id]["video"],
+                "poster": CHARACTER_MAP[perspective_character_id]["portrait"],
+            },
+        }
+
+    fallback_character_id = required_cast[0] if routing_mode in {"participant-pov", "fixed-cast"} and required_cast else perspective_character_id
+    portrait_asset_id = f"CHAR-{fallback_character_id}-portrait"
+    portrait_asset = asset_map.get(portrait_asset_id, {})
+    portrait_src = str(portrait_asset.get("path") or CHARACTER_MAP[fallback_character_id]["video"])
+    portrait_poster = CHARACTER_MAP[fallback_character_id]["portrait"]
+    return {
+        "assetId": portrait_asset_id,
+        "baseAssetId": base_asset_id,
+        "variantForCharacterId": fallback_character_id,
+        "src": portrait_src,
+        "poster": portrait_poster,
+        "plannedSrc": f"/media/video/{planned_asset_id}.mp4",
+        "plannedPoster": f"/media/posters/{planned_asset_id}.jpg",
+        "available": bool(portrait_src),
+        "status": "identity-safe-fallback",
+        "selectionReason": "exact-event-variant-awaiting-review",
+        "routingMode": routing_mode,
+        "requiredIdentityCast": required_cast,
+        "identityCast": [fallback_character_id],
+        "identityCards": [_identity_card(fallback_character_id)],
+        "identityTimeline": [{"characterId": fallback_character_id, "startSeconds": 0, "endSeconds": 3}],
+        "fallback": {
+            "kind": "dynamic-portrait",
+            "characterId": fallback_character_id,
+            "src": portrait_src,
+            "poster": portrait_poster,
+        },
+    }
+
+
 def day1_media_context(state: dict[str, Any], node: dict[str, Any] | None = None) -> dict[str, Any]:
     """Project an engine-owned media cue; model-written copy cannot alter asset routing."""
     node_id = state["nodeId"]
     blueprint = NODES[node_id]
     contract = DAY1_MEDIA_CONTRACT[node_id]
-    asset_map = _runtime_asset_map()
-    selected_asset_id = contract["assetId"]
     guided_id = state.get("guidedTargetCharacterId")
     perspective_id = state["player"]["perspectiveCharacterId"]
-    variant_character_id = None
-    variant_ids = contract.get("variantAssetIds", {})
-    if contract.get("variantRouting") == "perspective":
-        candidate_ids = [perspective_id]
-    elif contract.get("variantRouting") == "participants":
-        candidate_ids = [perspective_id, guided_id]
-    else:
-        candidate_ids = []
-    for character_id in candidate_ids:
-        candidate_asset_id = variant_ids.get(character_id)
-        candidate_asset = asset_map.get(candidate_asset_id, {}) if candidate_asset_id else {}
-        if (
-            candidate_asset_id
-            and candidate_asset.get("path")
-            and candidate_asset.get("status") in {"ready", "approved-runtime"}
-        ):
-            selected_asset_id = candidate_asset_id
-            variant_character_id = character_id
-            break
-    asset = asset_map.get(selected_asset_id, {})
-    expected_src = f"/media/video/{selected_asset_id}.mp4"
-    expected_poster = f"/media/posters/{selected_asset_id}.jpg"
-    available = bool(asset.get("path")) and asset.get("status") in {"ready", "approved-runtime"}
+    participant_ids: list[str] = []
+    if node_id in {"guided-chat", "team-up"} and guided_id:
+        participant_ids.append(guided_id)
+    if node_id == "callback":
+        callback_character_id = state.get("letterRecipientId") or state.get("focusCharacterId") or guided_id
+        if callback_character_id:
+            participant_ids.append(callback_character_id)
+    routing_mode = str(contract.get("routingMode") or {
+        "guided-chat": "participant-pov",
+        "team-up": "unordered-pair",
+        "callback": "participant-pov",
+    }.get(node_id, "perspective"))
+    media = resolve_identity_safe_media(
+        contract["assetId"],
+        perspective_id,
+        participant_ids,
+        routing_mode=routing_mode,
+    )
     return {
         "eventId": contract["eventId"],
-        "assetId": selected_asset_id,
-        "baseAssetId": contract["assetId"],
-        "variantForCharacterId": variant_character_id,
         "intent": contract["intent"],
         "cue": blueprint.get("mediaCue") or "恋综现场的自然过场",
-        "src": asset.get("path") if available else "",
-        "poster": asset.get("poster") or "" if available else "",
-        "plannedSrc": expected_src,
-        "plannedPoster": expected_poster,
-        "available": available,
-        "status": "ready" if available else "planned",
-        "fallback": {
-            "kind": "scene-card",
-            "characterId": None,
-            "src": None,
-            "poster": asset.get("poster") if available else None,
-        },
+        **media,
         "allowedChoiceIntentIds": [choice["intentId"] for choice in blueprint.get("choices", [])],
     }
 

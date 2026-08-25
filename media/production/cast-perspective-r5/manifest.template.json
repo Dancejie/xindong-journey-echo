@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "cast-perspective-r5/provider-manifest-v2",
+  "planId": "REPLACE_WITH_BATCH_ID",
+  "planStatus": "blocked-template",
+  "doNotSubmit": true,
+  "taskMatrix": "task-matrix.json",
+  "scope": "178 paid provider candidates: the exact requiresGeneration semantic-master gap in runtime-variant-matrix.json, including all 8 voiced introductions and the D1-A3B current-eight master.",
+  "defaults": {
+    "doNotSubmit": true,
+    "ratio": "9:16",
+    "duration": 15,
+    "resolution": "720p",
+    "generate_audio": true,
+    "watermark": false
+  },
+  "policy": {
+    "provider": "fumin",
+    "model": "seedance-2.0-mini",
+    "expectedTaskCount": 178,
+    "concurrency": 2,
+    "maxApiRetry": 0,
+    "candidateRoot": ".work-candidates",
+    "approvalRule": "Every output remains a candidate until identity, speech, audio, frame, continuity and runtime QA pass. No automatic paid retry."
+  },
+  "shots": []
+}

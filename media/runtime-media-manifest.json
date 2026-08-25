@@ -146,7 +146,7 @@
       "posterSha256": "63fb9293e235abb2c33d5d995f2482a7470069e8f0f9b569c42897217bd2fdc8",
       "duration": 15.0,
       "trigger": "node.introductions.committed",
-      "status": "approved-runtime",
+      "status": "identity-audio-incomplete-hold",
       "visualQa": "human-reviewed-identity-audio-r4",
       "assemblyAtoms": [
         "D1-INTRO-B-RELAY",
@@ -161,7 +161,7 @@
         "D1-INTRO-C-WARMTH"
       ],
       "assemblyNotes": [
-        "Exact-eight group relay -> actual eight-character 0.625s self-introduction roll-call -> exact-eight warm group response; this is event-specific coverage, not portrait fallback."
+        "Legacy relay retained only as source history. R5 review confirms Jiangmi is the sole anchored identity and the audio contains no intelligible cast self-introduction."
       ],
       "identityReference": "frontend/public/media/portraits/jiangmi.jpg",
       "identityCast": [
@@ -179,6 +179,7 @@
         "qaVerdict": "passed"
       },
       "qaVerdict": "passed",
+      "r5ContractVerdict": "held: no intelligible character self-introduction; regenerate all eight voiced perspective variants",
       "qaEvidence": "media/production/identity-audio-r4/audio-content-qa-r4.json",
       "visualQaEvidence": "media/production/identity-audio-r4/visual-content-qa-r4.json"
     },
@@ -1032,15 +1033,21 @@
       "identityReference": "media/production/identity-audio-r4/refs/current-eight-identity-sheet-hq.jpg",
       "identityCast": [
         "shenmo",
-        "linyu",
-        "chengye",
         "guyan",
         "jiangwan",
-        "jiangmi",
         "sunnian",
-        "chensu"
+        "chensu",
+        "jiangmi"
       ],
-      "identityScope": "current-eight",
+      "identityScope": "reviewed-montage-six",
+      "identityTimeline": [
+        {"characterId": "shenmo", "startSeconds": 0.0, "endSeconds": 4.0},
+        {"characterId": "guyan", "startSeconds": 4.0, "endSeconds": 6.0},
+        {"characterId": "jiangwan", "startSeconds": 6.0, "endSeconds": 7.0},
+        {"characterId": "sunnian", "startSeconds": 7.0, "endSeconds": 9.0},
+        {"characterId": "chensu", "startSeconds": 9.0, "endSeconds": 12.0},
+        {"characterId": "jiangmi", "startSeconds": 12.0, "endSeconds": 15.0}
+      ],
       "generationPromptFile": "media/production/identity-audio-r4/prompts/D1-A3B-cast-first-impressions--jiangmi-r4.txt",
       "generationModel": "seedance-2.0-mini",
       "audio": {
@@ -1053,13 +1060,14 @@
       },
       "qaVerdict": "passed",
       "qaEvidence": "media/production/identity-audio-r4/audio-content-qa-r4.json",
-      "visualQaEvidence": "media/production/identity-audio-r4/visual-content-qa-r4.json"
+      "visualQaEvidence": "qa/IDENTITY-SAFE-MEDIA-R5.md"
     }
   ],
   "notes": [
     "24 event contracts resolve to 22 unique video SHAs; only the kitchen and first-anonymous-message exact-behavior pairs reuse byte-identical masters.",
     "Two Day1 character variants remain separate runtime assets for Shenmo dinner-team and Jiangmi heart-message coverage.",
-    "All event videos are H.264 480x854 yuv420p faststart without audio and have matching posters, hashes, durations, and full-decode QA evidence.",
+    "The 25 canonical event files have first-play audio metadata and matching posters, hashes, durations, and QA evidence; D1-A3 is held from R5 runtime because its technically valid track contains no intelligible self-introduction, and the two legacy character variants do not claim audio approval.",
+    "Runtime routing now requires an exact reviewed identityCast for the committed perspective and participants; otherwise it falls back to the correct character portrait instead of showing mismatched event footage.",
     "Generated candidates rejected for wrong cast/card count, pseudo-UI or text, continuity reset, collage composition, or unrelated fallback are excluded from runtime integration."
   ]
 }

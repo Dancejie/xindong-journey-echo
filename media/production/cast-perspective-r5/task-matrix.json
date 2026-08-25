@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "cast-perspective-r5/task-matrix-v2",
+  "sourceRuntimeVariantMatrix": {
+    "path": "runtime-variant-matrix.json",
+    "sha256": "e7ef4b874c1d06d32526c66a59400be4cab4850538f0cbaddbaf3689f86f8a6a",
+    "schemaVersion": "heart-journey/runtime-variant-matrix-v1",
+    "expectedTotalUniqueMasters": 188,
+    "expectedCurrentReusable": 10,
+    "expectedGenerationGap": 178
+  },
+  "derivation": {
+    "statusField": "status",
+    "requiredStatus": "requiresGeneration",
+    "uniqueKey": "targetAssetId",
+    "semanticFields": [
+      "targetAssetId",
+      "eventId",
+      "servedEventIds",
+      "routingMode",
+      "perspectiveCharacterId",
+      "applicablePerspectiveCharacterIds",
+      "participantIds",
+      "identityCast"
+    ]
+  },
+  "generationContract": {
+    "expectedTaskCount": 178,
+    "durationSecondsPerTask": 15,
+    "expectedTotalDurationSeconds": 2670,
+    "requiredRoutingModeCounts": {
+      "perspective": 58,
+      "current-eight": 4,
+      "participant-pov": 32,
+      "unordered-pair": 81,
+      "fixed-cast": 3
+    }
+  },
+  "requiredVoicedIntroductions": {
+    "eventId": "day1.introductions",
+    "audioMode": "character-speech",
+    "expectedTaskCount": 8,
+    "targetAssetIds": [
+      "D1-A3-cast-introductions--p-shenmo",
+      "D1-A3-cast-introductions--p-linyu",
+      "D1-A3-cast-introductions--p-chengye",
+      "D1-A3-cast-introductions--p-guyan",
+      "D1-A3-cast-introductions--p-jiangwan",
+      "D1-A3-cast-introductions--p-jiangmi",
+      "D1-A3-cast-introductions--p-sunnian",
+      "D1-A3-cast-introductions--p-chensu"
+    ]
+  },
+  "characters": {
+    "shenmo": { "displayName": "沈墨" },
+    "linyu": { "displayName": "林屿" },
+    "chengye": { "displayName": "程野" },
+    "guyan": { "displayName": "顾言" },
+    "jiangwan": { "displayName": "江晚" },
+    "jiangmi": { "displayName": "姜米" },
+    "sunnian": { "displayName": "苏念" },
+    "chensu": { "displayName": "陈叙" }
+  },
+  "requiredCurrentEightMaster": "D1-A3B-cast-first-impressions--group-current-eight",
+  "claimBoundary": "The paid batch is the exact requiresGeneration subset of the bound runtime variant matrix. D1-A3B is itself a required current-eight generated master. All eight D1-A3 introductions require new character-speech masters; the previous Jiangmi clip is not reusable because it has no intelligible self-introduction dialogue."
+}

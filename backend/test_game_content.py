@@ -64,6 +64,16 @@ class CharacterCardContractTests(unittest.TestCase):
             self.assertEqual({"supportive", "probing", "challenging", "boundaryViolation"}, set(card["reactionMatrix"]))
             self.assertIn("新事实", card["dialoguePolicy"]["mustAdvanceBy"])
 
+    def test_public_identity_cards_use_confirmed_occupation_or_explicit_holdback(self):
+        expected = {
+            "shenmo": "投行VP", "linyu": "建筑工程师", "chengye": "极限运动品牌创始人",
+            "guyan": "游戏策划/外包", "jiangwan": "心理咨询师", "jiangmi": "职业待公开",
+            "sunnian": "插画师", "chensu": "职业待公开",
+        }
+        self.assertEqual(expected, {character_id: character["occupation"] for character_id, character in CHARACTER_MAP.items()})
+        self.assertIsNone(CHARACTER_MAP["jiangmi"]["age"])
+        self.assertEqual(29, CHARACTER_MAP["shenmo"]["age"])
+
     def test_deepseek_delta_is_bounded_by_each_card(self):
         for card in CHARACTER_CARDS:
             perspective_id = "jiangmi" if card["id"] != "jiangmi" else "shenmo"
@@ -144,8 +154,12 @@ class CharacterCardContractTests(unittest.TestCase):
             allowed_asset_ids = {
                 contract["assetId"],
                 *contract.get("variantAssetIds", {}).values(),
+                f"CHAR-{snapshot['player']['perspectiveCharacterId']}-portrait",
             }
-            self.assertIn(media["assetId"], allowed_asset_ids)
+            self.assertTrue(media["assetId"] in allowed_asset_ids or media["assetId"].startswith("CHAR-"))
+            if media["assetId"].startswith("CHAR-"):
+                self.assertEqual("identity-safe-fallback", media["status"])
+                self.assertEqual(1, len(media["identityCast"]))
             if media["available"]:
                 self.assertTrue(media["src"].startswith("/media/video/"))
                 self.assertEqual(media["src"], view["node"]["cinematic"])
@@ -161,20 +175,26 @@ class CharacterCardContractTests(unittest.TestCase):
     def test_character_specific_media_variants_only_route_when_identity_matches(self):
         assets = {
             "D1-A6-first-dinner-team": {"path": "/media/video/D1-A6-first-dinner-team.mp4", "status": "ready"},
-            "D1-A6-first-dinner-team--shenmo": {"path": "/media/video/D1-A6-first-dinner-team--shenmo.mp4", "status": "ready"},
+            "D1-A6-first-dinner-team--pair-shenmo-jiangmi": {
+                "path": "/media/video/D1-A6-first-dinner-team--pair-shenmo-jiangmi.mp4",
+                "status": "ready", "identityCast": ["jiangmi", "shenmo"], "identityScope": "pair",
+            },
             "D1-A7-heart-message": {"path": "/media/video/D1-A7-heart-message.mp4", "status": "ready"},
-            "D1-A7-heart-message--jiangmi": {"path": "/media/video/D1-A7-heart-message--jiangmi.mp4", "status": "ready"},
+            "D1-A7-heart-message--p-jiangmi": {
+                "path": "/media/video/D1-A7-heart-message--p-jiangmi.mp4",
+                "status": "ready", "identityCast": ["jiangmi"], "identityScope": "single",
+            },
         }
         snapshot = create_snapshot("ENFP", "jiangmi")
         with patch("backend.game_content._runtime_asset_map", return_value=assets):
             snapshot["nodeId"] = "team-up"
             snapshot["guidedTargetCharacterId"] = "shenmo"
             team_media = project_view(snapshot)["mediaContext"]
-            self.assertEqual("D1-A6-first-dinner-team--shenmo", team_media["assetId"])
-            self.assertEqual("shenmo", team_media["variantForCharacterId"])
+            self.assertEqual("D1-A6-first-dinner-team--pair-shenmo-jiangmi", team_media["assetId"])
+            self.assertEqual("jiangmi", team_media["variantForCharacterId"])
             snapshot["nodeId"] = "anonymous-letter"
             letter_media = project_view(snapshot)["mediaContext"]
-            self.assertEqual("D1-A7-heart-message--jiangmi", letter_media["assetId"])
+            self.assertEqual("D1-A7-heart-message--p-jiangmi", letter_media["assetId"])
             self.assertEqual("jiangmi", letter_media["variantForCharacterId"])
 
     def test_unapproved_media_never_routes_as_runtime_cinematic(self):
@@ -189,9 +209,51 @@ class CharacterCardContractTests(unittest.TestCase):
         }
         with patch("backend.game_content._runtime_asset_map", return_value=assets):
             view = project_view(snapshot)
-        self.assertFalse(view["mediaContext"]["available"])
-        self.assertEqual("", view["mediaContext"]["src"])
-        self.assertIsNone(view["node"]["cinematic"])
+        self.assertTrue(view["mediaContext"]["available"])
+        self.assertEqual("identity-safe-fallback", view["mediaContext"]["status"])
+        self.assertEqual("CHAR-jiangmi-portrait", view["mediaContext"]["assetId"])
+        self.assertNotEqual(assets["D1-A1-island-hotel-establish"]["path"], view["mediaContext"]["src"])
+        self.assertEqual(view["mediaContext"]["src"], view["node"]["cinematic"])
+
+    def test_non_jiangmi_perspectives_never_receive_jiangmi_only_event_footage(self):
+        assets = {
+            "D1-A2-villa-entry": {
+                "path": "/media/video/D1-A2-villa-entry.mp4", "status": "approved-runtime",
+                "identityCast": ["jiangmi"], "identityScope": "single",
+            },
+            "CHAR-shenmo-portrait": {"path": "/media/video/CHAR-shenmo-portrait.mp4"},
+        }
+        snapshot = create_snapshot("INTJ", "shenmo")
+        snapshot["nodeId"] = "villa-arrival"
+        with patch("backend.game_content._runtime_asset_map", return_value=assets):
+            media = project_view(snapshot)["mediaContext"]
+        self.assertEqual("CHAR-shenmo-portrait", media["assetId"])
+        self.assertEqual(["shenmo"], media["identityCast"])
+        self.assertNotEqual("/media/video/D1-A2-villa-entry.mp4", media["src"])
+
+    def test_legacy_intro_without_intelligible_agent_speech_is_held_from_r5(self):
+        snapshot = create_snapshot("ENFP", "jiangmi")
+        snapshot["nodeId"] = "introductions"
+
+        media = project_view(snapshot)["mediaContext"]
+
+        self.assertEqual("CHAR-jiangmi-portrait", media["assetId"])
+        self.assertEqual("identity-safe-fallback", media["status"])
+        self.assertEqual(
+            "/media/video/D1-A3-cast-introductions--p-jiangmi.mp4",
+            media["plannedSrc"],
+        )
+
+    def test_six_person_legacy_montage_never_routes_as_current_eight(self):
+        snapshot = create_snapshot("INTJ", "shenmo")
+        snapshot["nodeId"] = "cast-first-impressions"
+
+        media = project_view(snapshot)["mediaContext"]
+
+        self.assertEqual("current-eight", media["routingMode"])
+        self.assertEqual(list(CHARACTER_MAP), media["requiredIdentityCast"])
+        self.assertEqual("CHAR-shenmo-portrait", media["assetId"])
+        self.assertNotEqual("/media/video/D1-A3B-cast-first-impressions.mp4", media["src"])
 
     def test_fallback_introductions_are_direct_character_specific_speech(self):
         for card in CHARACTER_CARDS:

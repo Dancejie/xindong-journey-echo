@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://echo.local/schemas/cast-perspective-r5-batch-approval.schema.json",
+  "title": "Heart Journey Cast Perspective R5 Paid Batch Approval",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "batchId",
+    "doNotSubmit",
+    "manifestSha256",
+    "taskMatrixSha256",
+    "runtimeVariantMatrixSha256",
+    "approvedTaskCount",
+    "approvedTotalDurationSeconds",
+    "policy",
+    "pricing",
+    "budget",
+    "rights",
+    "approval"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "cast-perspective-r5/approval-v1" },
+    "batchId": { "type": "string", "minLength": 1 },
+    "doNotSubmit": { "type": "boolean" },
+    "manifestSha256": { "$ref": "#/$defs/sha256" },
+    "taskMatrixSha256": { "$ref": "#/$defs/sha256" },
+    "runtimeVariantMatrixSha256": { "$ref": "#/$defs/sha256" },
+    "approvedTaskCount": { "const": 178 },
+    "approvedTotalDurationSeconds": { "const": 2670 },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "model", "ratio", "durationSeconds", "resolution", "generateAudio", "watermark", "concurrency", "maxApiRetry"],
+      "properties": {
+        "provider": { "const": "fumin" },
+        "model": { "const": "seedance-2.0-mini" },
+        "ratio": { "const": "9:16" },
+        "durationSeconds": { "const": 15 },
+        "resolution": { "const": "720p" },
+        "generateAudio": { "const": true },
+        "watermark": { "const": false },
+        "concurrency": { "const": 2 },
+        "maxApiRetry": { "const": 0 }
+      }
+    },
+    "pricing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["currency", "unitPriceAmount", "unitPriceBasis", "pricingEvidenceRef", "verifiedBy", "verifiedAt"],
+      "properties": {
+        "currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+        "unitPriceAmount": { "type": "number", "minimum": 0 },
+        "unitPriceBasis": { "enum": ["per-task", "per-second"] },
+        "pricingEvidenceRef": { "type": "string", "minLength": 1 },
+        "verifiedBy": { "type": "string", "minLength": 1 },
+        "verifiedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["baseGenerationMaxAmount", "retryTaskCountCap", "retryGenerationMaxAmount", "hardTotalMaxAmount", "retryRequiresNewApproval", "budgetApprovalRef"],
+      "properties": {
+        "baseGenerationMaxAmount": { "type": "number", "minimum": 0 },
+        "retryTaskCountCap": { "type": "integer", "minimum": 0, "maximum": 178 },
+        "retryGenerationMaxAmount": { "type": "number", "minimum": 0 },
+        "hardTotalMaxAmount": { "type": "number", "minimum": 0 },
+        "retryRequiresNewApproval": { "const": true },
+        "budgetApprovalRef": { "type": "string", "minLength": 1 }
+      }
+    },
+    "rights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "commercialUseApproved", "publicReleaseApproved", "likenessConsentRefIds", "voiceConsentRefIds", "referenceVideoRightsRefIds", "reviewedBy", "reviewedAt"],
+      "properties": {
+        "status": { "enum": ["pending", "approved", "rejected"] },
+        "commercialUseApproved": { "type": "boolean" },
+        "publicReleaseApproved": { "type": "boolean" },
+        "likenessConsentRefIds": { "$ref": "#/$defs/refIds" },
+        "voiceConsentRefIds": { "$ref": "#/$defs/refIds" },
+        "referenceVideoRightsRefIds": { "$ref": "#/$defs/refIds" },
+        "reviewedBy": { "type": "string", "minLength": 1 },
+        "reviewedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reviewedBy", "reviewedAt", "authorizedBy", "authorizedAt", "scopeRef"],
+      "properties": {
+        "reviewedBy": { "type": "string", "minLength": 1 },
+        "reviewedAt": { "type": "string", "format": "date-time" },
+        "authorizedBy": { "type": "string", "minLength": 1 },
+        "authorizedAt": { "type": "string", "format": "date-time" },
+        "scopeRef": { "type": "string", "minLength": 1 }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "refIds": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    }
+  }
+}
