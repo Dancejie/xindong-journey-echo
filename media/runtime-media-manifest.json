@@ -2,23 +2,1064 @@
   "schemaVersion": 1,
   "contentVersion": "1.0.0",
   "status": "runtime-integrated",
-  "generationRound": "seedance-round1",
-  "qaVerdict": "provisional-approved",
+  "generationRound": "seedance-r3-complete-late13+compose-safe-r3",
+  "qaVerdict": "24-approved-ready+2-provisional-connectors+0-rejected",
   "assets": [
-    {"id":"CHAR-shenmo-portrait","kind":"dynamic-portrait","path":"/media/video/CHAR-shenmo-portrait.mp4","sha256":"36476487b496327b7810c4a2f327829afe59ee1870f9e81e807bcfd932971595","duration":5.041667},
-    {"id":"CHAR-linyu-portrait","kind":"dynamic-portrait","path":"/media/video/CHAR-linyu-portrait.mp4","sha256":"1165116f14a5ed80938ce5eac8d34791aaeea0a5bcb69a30d98486bce445473e","duration":5.041667},
-    {"id":"CHAR-chengye-portrait","kind":"dynamic-portrait","path":"/media/video/CHAR-chengye-portrait.mp4","sha256":"f84e49cf52a042bed530ae95e5a28b34d6f93a3b0f0f0442341df8c6219085fa","duration":5.041667},
-    {"id":"CHAR-guyan-portrait","kind":"dynamic-portrait","path":"/media/video/CHAR-guyan-portrait.mp4","sha256":"6edf715b2e13dafca85b8e851dedd1cc5185e9fd6786540ac0e1c21340f3bfc7","duration":5.041667},
-    {"id":"CHAR-jiangwan-portrait","kind":"dynamic-portrait","path":"/media/video/CHAR-jiangwan-portrait.mp4","sha256":"79de8e81aa5daa2a8d7557494876fdab64bf86bc244f4ff9bb6ece53647e8a07","duration":5.041667},
-    {"id":"CHAR-jiangmi-portrait","kind":"dynamic-portrait","path":"/media/video/CHAR-jiangmi-portrait.mp4","sha256":"1f11102093dbda60ceec83f64f94bbb7a601b5e52727d8cb9795311107fd04cf","duration":5.041667},
-    {"id":"CHAR-sunnian-portrait","kind":"dynamic-portrait","path":"/media/video/CHAR-sunnian-portrait.mp4","sha256":"c66423e4794e4b650a72a2e4256041c10060e9022d50eb29155a42cdf0589336","duration":5.041667},
-    {"id":"CHAR-chensu-portrait","kind":"dynamic-portrait","path":"/media/video/CHAR-chensu-portrait.mp4","sha256":"7b576b706d05cf63ce6e11867adabc019a8152cc91a68ff8081be9d2b61bd6ec","duration":5.041667},
-    {"id":"E01-arrival-reveal","kind":"cinematic","path":"/media/video/E01-arrival-reveal.mp4","sha256":"0c3f21d39b94d246f0e2f72dfedd9a81edf5934c4d8b1f8f421a9f449d70ac14","duration":5.041667,"trigger":"node.arrival.committed"},
-    {"id":"E01-anonymous-letter","kind":"cinematic","path":"/media/video/E01-anonymous-letter.mp4","sha256":"d93d1fdab046c6a7719517c115b3b7f50421c3b25691b6c66b0b99fe595e558f","duration":5.041667,"trigger":"node.anonymous-letter.committed"}
+    {
+      "id": "CHAR-shenmo-portrait",
+      "kind": "dynamic-portrait",
+      "path": "/media/video/CHAR-shenmo-portrait.mp4",
+      "sha256": "36476487b496327b7810c4a2f327829afe59ee1870f9e81e807bcfd932971595",
+      "duration": 5.041667
+    },
+    {
+      "id": "CHAR-linyu-portrait",
+      "kind": "dynamic-portrait",
+      "path": "/media/video/CHAR-linyu-portrait.mp4",
+      "sha256": "1165116f14a5ed80938ce5eac8d34791aaeea0a5bcb69a30d98486bce445473e",
+      "duration": 5.041667
+    },
+    {
+      "id": "CHAR-chengye-portrait",
+      "kind": "dynamic-portrait",
+      "path": "/media/video/CHAR-chengye-portrait.mp4",
+      "sha256": "f84e49cf52a042bed530ae95e5a28b34d6f93a3b0f0f0442341df8c6219085fa",
+      "duration": 5.041667
+    },
+    {
+      "id": "CHAR-guyan-portrait",
+      "kind": "dynamic-portrait",
+      "path": "/media/video/CHAR-guyan-portrait.mp4",
+      "sha256": "6edf715b2e13dafca85b8e851dedd1cc5185e9fd6786540ac0e1c21340f3bfc7",
+      "duration": 5.041667
+    },
+    {
+      "id": "CHAR-jiangwan-portrait",
+      "kind": "dynamic-portrait",
+      "path": "/media/video/CHAR-jiangwan-portrait.mp4",
+      "sha256": "79de8e81aa5daa2a8d7557494876fdab64bf86bc244f4ff9bb6ece53647e8a07",
+      "duration": 5.041667
+    },
+    {
+      "id": "CHAR-jiangmi-portrait",
+      "kind": "dynamic-portrait",
+      "path": "/media/video/CHAR-jiangmi-portrait.mp4",
+      "sha256": "1f11102093dbda60ceec83f64f94bbb7a601b5e52727d8cb9795311107fd04cf",
+      "duration": 5.041667
+    },
+    {
+      "id": "CHAR-sunnian-portrait",
+      "kind": "dynamic-portrait",
+      "path": "/media/video/CHAR-sunnian-portrait.mp4",
+      "sha256": "c66423e4794e4b650a72a2e4256041c10060e9022d50eb29155a42cdf0589336",
+      "duration": 5.041667
+    },
+    {
+      "id": "CHAR-chensu-portrait",
+      "kind": "dynamic-portrait",
+      "path": "/media/video/CHAR-chensu-portrait.mp4",
+      "sha256": "7b576b706d05cf63ce6e11867adabc019a8152cc91a68ff8081be9d2b61bd6ec",
+      "duration": 5.041667
+    },
+    {
+      "id": "D1-A1-island-hotel-establish",
+      "kind": "day1-event-cinematic",
+      "path": "/media/video/D1-A1-island-hotel-establish.mp4",
+      "poster": "/media/posters/D1-A1-island-hotel-establish.jpg",
+      "sha256": "2274200e00d2a98c76fb763b7de35fba82113a622291cddf51b76142cf840d89",
+      "posterSha256": "b3de04cd48996651e1233e826c8ee3cfc704af5bdbe4764d14fe823e9dab5207",
+      "duration": 15.0,
+      "trigger": "node.arrival-context.committed",
+      "status": "approved-runtime",
+      "visualQa": "human-reviewed-identity-audio-r4",
+      "assemblyAtoms": [
+        "D1-A1-LEGACY-ESTABLISH",
+        "D1-OPEN-B-APPROACH",
+        "D1-OPEN-C-WELCOME"
+      ],
+      "assemblyNotes": [
+        "Open-C tail repair still requires final human motion review."
+      ],
+      "identityReference": "frontend/public/media/portraits/jiangmi.jpg",
+      "identityCast": [
+        "jiangmi"
+      ],
+      "identityScope": "single",
+      "generationPromptFile": "media/production/identity-audio-r4/prompts/D1-A1-island-hotel-establish--jiangmi-r4.txt",
+      "generationModel": "seedance-2.0-mini",
+      "audio": {
+        "hasAudio": true,
+        "mode": "native-first-play",
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 2,
+        "qaVerdict": "passed"
+      },
+      "qaVerdict": "passed",
+      "qaEvidence": "media/production/identity-audio-r4/audio-content-qa-r4.json",
+      "visualQaEvidence": "media/production/identity-audio-r4/visual-content-qa-r4.json"
+    },
+    {
+      "id": "D1-A2-villa-entry",
+      "kind": "day1-event-cinematic",
+      "path": "/media/video/D1-A2-villa-entry.mp4",
+      "poster": "/media/posters/D1-A2-villa-entry.jpg",
+      "sha256": "b50de2ad34adc2678bf240b60e763c71d93804f890ae621c95dd2bcd8650ddb7",
+      "posterSha256": "0c306339d90d2f6fca8a9f962aa8fa406acd9a1a0c9e51bb64aa61ff4d6c4972",
+      "duration": 15.0,
+      "trigger": "node.villa-arrival.committed",
+      "status": "approved-runtime",
+      "visualQa": "human-reviewed-identity-audio-r4",
+      "assemblyAtoms": [
+        "D1-ARRIVAL-A-APPROACH",
+        "D1-ARRIVAL-B-THRESHOLD",
+        "D1-ARRIVAL-C-GATHER"
+      ],
+      "assemblyNotes": [
+        "Three staged arrival waves; not a claim that all eight are in one frame."
+      ],
+      "identityReference": "frontend/public/media/portraits/jiangmi.jpg",
+      "identityCast": [
+        "jiangmi"
+      ],
+      "identityScope": "single",
+      "generationPromptFile": "media/production/identity-audio-r4/prompts/D1-A2-villa-entry--jiangmi-r4.txt",
+      "generationModel": "seedance-2.0-mini",
+      "audio": {
+        "hasAudio": true,
+        "mode": "native-first-play",
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 2,
+        "qaVerdict": "passed"
+      },
+      "qaVerdict": "passed",
+      "qaEvidence": "media/production/identity-audio-r4/audio-content-qa-r4.json",
+      "visualQaEvidence": "media/production/identity-audio-r4/visual-content-qa-r4.json"
+    },
+    {
+      "id": "D1-A3-cast-introductions",
+      "kind": "day1-event-cinematic",
+      "path": "/media/video/D1-A3-cast-introductions.mp4",
+      "poster": "/media/posters/D1-A3-cast-introductions.jpg",
+      "sha256": "a1f19b4a49c6fdc39ad89123aafbc8c7b48808e2f1fc7324d5cd39308b5ef7b0",
+      "posterSha256": "63fb9293e235abb2c33d5d995f2482a7470069e8f0f9b569c42897217bd2fdc8",
+      "duration": 15.0,
+      "trigger": "node.introductions.committed",
+      "status": "approved-runtime",
+      "visualQa": "human-reviewed-identity-audio-r4",
+      "assemblyAtoms": [
+        "D1-INTRO-B-RELAY",
+        "ROLLCALL-shenmo",
+        "ROLLCALL-linyu",
+        "ROLLCALL-chengye",
+        "ROLLCALL-guyan",
+        "ROLLCALL-jiangwan",
+        "ROLLCALL-jiangmi",
+        "ROLLCALL-sunnian",
+        "ROLLCALL-chensu",
+        "D1-INTRO-C-WARMTH"
+      ],
+      "assemblyNotes": [
+        "Exact-eight group relay -> actual eight-character 0.625s self-introduction roll-call -> exact-eight warm group response; this is event-specific coverage, not portrait fallback."
+      ],
+      "identityReference": "frontend/public/media/portraits/jiangmi.jpg",
+      "identityCast": [
+        "jiangmi"
+      ],
+      "identityScope": "single",
+      "generationPromptFile": "media/production/identity-audio-r4/prompts/retry1/D1-A3-cast-introductions--jiangmi-r4-retry1.txt",
+      "generationModel": "seedance-2.0-mini",
+      "audio": {
+        "hasAudio": true,
+        "mode": "native-first-play",
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 2,
+        "qaVerdict": "passed"
+      },
+      "qaVerdict": "passed",
+      "qaEvidence": "media/production/identity-audio-r4/audio-content-qa-r4.json",
+      "visualQaEvidence": "media/production/identity-audio-r4/visual-content-qa-r4.json"
+    },
+    {
+      "id": "D1-A4-icebreaker-selection",
+      "kind": "day1-event-cinematic",
+      "path": "/media/video/D1-A4-icebreaker-selection.mp4",
+      "poster": "/media/posters/D1-A4-icebreaker-selection.jpg",
+      "sha256": "3f4b2f8c978b5d4ad01e7e9f5997f07cdc541182e6dc29ade541166c43bc3e4b",
+      "posterSha256": "1541fbe59b350061c23eb507c39b44cf029d5b6832a80cdf5794487aa5efc211",
+      "duration": 15.0,
+      "trigger": "node.icebreaker-choice.committed",
+      "status": "approved-runtime",
+      "visualQa": "human-reviewed-identity-audio-r4",
+      "assemblyAtoms": [
+        "D1-ICEBREAKER-A-THREE-CARDS",
+        "D1-ICEBREAKER-B-PAIR-STEPS",
+        "D1-ICEBREAKER-C-SMALL-TASK"
+      ],
+      "assemblyNotes": [
+        "Card micro-marks remain a human visual-review item after runtime downscale."
+      ],
+      "identityReference": "media/production/identity-audio-r4/refs/jiangmi-chensu-head-identity-sheet-r2.jpg",
+      "identityCast": [
+        "jiangmi",
+        "chensu"
+      ],
+      "identityScope": "pair",
+      "generationPromptFile": "media/production/identity-audio-r4/prompts/retry1/D1-A4-icebreaker-selection--jiangmi-r4-retry1.txt",
+      "generationModel": "seedance-2.0-mini",
+      "audio": {
+        "hasAudio": true,
+        "mode": "native-first-play",
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 2,
+        "qaVerdict": "passed"
+      },
+      "qaVerdict": "passed",
+      "qaEvidence": "media/production/identity-audio-r4/audio-content-qa-r4.json",
+      "visualQaEvidence": "media/production/identity-audio-r4/visual-content-qa-r4.json"
+    },
+    {
+      "id": "D1-A5-guided-smalltalk",
+      "kind": "day1-event-cinematic",
+      "path": "/media/video/D1-A5-guided-smalltalk.mp4",
+      "poster": "/media/posters/D1-A5-guided-smalltalk.jpg",
+      "sha256": "a60dfa94608d6b524aff81756584c1813a8d16e56f606468c34e68eeac4caa78",
+      "posterSha256": "bdd53043cc3690fe1b9f8d7f5042a840fe323eb19c295b90707230abd3225f80",
+      "duration": 15.0,
+      "trigger": "node.guided-chat.committed",
+      "status": "approved-runtime",
+      "visualQa": "human-reviewed-identity-audio-r4",
+      "assemblyAtoms": [
+        "D1-GUIDED-A-SPACE",
+        "D1-GUIDED-B-GREETING",
+        "D1-GUIDED-C-SMALL-TALK"
+      ],
+      "assemblyNotes": [
+        "Guided arrival-to-small-talk causal sequence; no character portrait fallback."
+      ],
+      "identityReference": "media/production/identity-audio-r4/refs/jiangmi-chensu-head-identity-sheet-r2.jpg",
+      "identityCast": [
+        "jiangmi",
+        "chensu"
+      ],
+      "identityScope": "pair",
+      "generationPromptFile": "media/production/identity-audio-r4/prompts/retry1/D1-A5-guided-smalltalk--jiangmi-r4-retry1.txt",
+      "generationModel": "seedance-2.0-mini",
+      "audio": {
+        "hasAudio": true,
+        "mode": "native-first-play",
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 2,
+        "qaVerdict": "passed"
+      },
+      "qaVerdict": "passed",
+      "qaEvidence": "media/production/identity-audio-r4/audio-content-qa-r4.json",
+      "visualQaEvidence": "media/production/identity-audio-r4/visual-content-qa-r4.json"
+    },
+    {
+      "id": "D1-A6-first-dinner-team",
+      "kind": "day1-event-cinematic",
+      "path": "/media/video/D1-A6-first-dinner-team.mp4",
+      "poster": "/media/posters/D1-A6-first-dinner-team.jpg",
+      "sha256": "50748dffdeefe9c6dd08140c91221737531caedc64e47e1c3e1fb275cb07c2d7",
+      "posterSha256": "dbde5c5a797989a84d31bed7901f3118c95ae384920a4220b29f30ab6e311651",
+      "duration": 15.0,
+      "trigger": "node.team-up.committed",
+      "status": "approved-runtime",
+      "visualQa": "human-reviewed-identity-audio-r4",
+      "assemblyAtoms": [
+        "D1-KITCHEN-NEUTRAL-A-ASSIGN",
+        "D1-KITCHEN-NEUTRAL-B-PREP",
+        "D1-KITCHEN-NEUTRAL-C-SERVE"
+      ],
+      "assemblyNotes": [
+        "Identity-neutral two-person assignment, preparation, and shared plating."
+      ],
+      "sharedMasterId": "shared-kitchen-two-person-r3",
+      "identityReference": "media/production/identity-audio-r4/refs/jiangmi-chensu-head-identity-sheet-r2.jpg",
+      "identityCast": [
+        "jiangmi",
+        "chensu"
+      ],
+      "identityScope": "pair",
+      "generationPromptFile": "media/production/identity-audio-r4/prompts/retry1/D1-A6-first-dinner-team--jiangmi-r4-retry1.txt",
+      "generationModel": "seedance-2.0-mini",
+      "audio": {
+        "hasAudio": true,
+        "mode": "native-first-play",
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 2,
+        "qaVerdict": "passed"
+      },
+      "qaVerdict": "passed",
+      "qaEvidence": "media/production/identity-audio-r4/audio-content-qa-r4.json",
+      "visualQaEvidence": "media/production/identity-audio-r4/visual-content-qa-r4.json"
+    },
+    {
+      "id": "D1-A7-heart-message",
+      "kind": "day1-event-cinematic",
+      "path": "/media/video/D1-A7-heart-message.mp4",
+      "poster": "/media/posters/D1-A7-heart-message.jpg",
+      "sha256": "d46ccfb52f18264ab69d2889a463304d151990ad0c635b3292dc6d204353ac77",
+      "posterSha256": "1ed0c26313d4634e9b7c2355e44f064c4c31b9be66becad8af33c80a5d356ba9",
+      "duration": 15.0,
+      "trigger": "node.anonymous-letter.committed",
+      "status": "approved-runtime",
+      "visualQa": "human-reviewed-identity-audio-r4",
+      "assemblyAtoms": [
+        "D1-SMS-NEUTRAL-A-PICKUP",
+        "D1-SMS-NEUTRAL-C-SEND"
+      ],
+      "assemblyNotes": [
+        "Rejected pseudo-UI compose atom is excluded; clean pickup and send actions remain."
+      ],
+      "sharedMasterId": "shared-first-anonymous-message-r3",
+      "identityReference": "frontend/public/media/portraits/jiangmi.jpg",
+      "identityCast": [
+        "jiangmi"
+      ],
+      "identityScope": "single",
+      "generationPromptFile": "media/production/identity-audio-r4/prompts/retry1/D1-A7-heart-message--jiangmi-r4-retry1.txt",
+      "generationModel": "seedance-2.0-mini",
+      "audio": {
+        "hasAudio": true,
+        "mode": "native-first-play",
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 2,
+        "qaVerdict": "passed"
+      },
+      "qaVerdict": "passed",
+      "qaEvidence": "media/production/identity-audio-r4/audio-content-qa-r4.json",
+      "visualQaEvidence": "media/production/identity-audio-r4/visual-content-qa-r4.json"
+    },
+    {
+      "id": "D2-A1-memory-callback",
+      "kind": "day1-event-cinematic",
+      "path": "/media/video/D2-A1-memory-callback.mp4",
+      "poster": "/media/posters/D2-A1-memory-callback.jpg",
+      "sha256": "5cb06dccfb5bafcb6251ba5a7cf7ae3c34faf4e6faa4797d0099518b732ed42a",
+      "posterSha256": "52c49797ca0d8928f0196e7a5db2af26f7bb4d1efe5e646d56b29405f3b7daf7",
+      "duration": 15.0,
+      "trigger": "node.callback.committed",
+      "status": "approved-runtime",
+      "visualQa": "human-reviewed-identity-audio-r4",
+      "assemblyAtoms": [
+        "D1-ECHO-A-DAWN",
+        "D1-ECHO-B-CHAIR",
+        "D1-ECHO-C-OPEN"
+      ],
+      "assemblyNotes": [
+        "Complete letter plus small key is an intentional callback prop; provisional visual status retained."
+      ],
+      "identityReference": "media/production/identity-audio-r4/refs/jiangmi-chensu-head-identity-sheet-r2.jpg",
+      "identityCast": [
+        "jiangmi",
+        "chensu"
+      ],
+      "identityScope": "pair",
+      "generationPromptFile": "media/production/identity-audio-r4/prompts/retry1/D2-A1-memory-callback--jiangmi-r4-retry1.txt",
+      "generationModel": "seedance-2.0-mini",
+      "audio": {
+        "hasAudio": true,
+        "mode": "native-first-play",
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 2,
+        "qaVerdict": "passed"
+      },
+      "qaVerdict": "passed",
+      "qaEvidence": "media/production/identity-audio-r4/audio-content-qa-r4.json",
+      "visualQaEvidence": "media/production/identity-audio-r4/visual-content-qa-r4.json"
+    },
+    {
+      "id": "EV-KITCHEN-two-person-shift",
+      "kind": "story-event-cinematic",
+      "path": "/media/video/EV-KITCHEN-two-person-shift.mp4",
+      "poster": "/media/posters/EV-KITCHEN-two-person-shift.jpg",
+      "sha256": "8a6ea6a038fcf295b93acd12a1413e21a30f0836ae47336f7e760344878d7035",
+      "posterSha256": "785b2c213451ff073c07548d92a296d5b02b1a1ecfd19ef522e1b3d31e46afba",
+      "duration": 15.0,
+      "trigger": "story.kitchen.two-person-shift.committed",
+      "status": "approved-runtime",
+      "visualQa": "human-reviewed-identity-audio-r4",
+      "assemblyAtoms": [
+        "BYTE-COPY-D1-A6-first-dinner-team"
+      ],
+      "assemblyNotes": [
+        "Byte-for-byte runtime copy of the declared exact-behavior canonical master."
+      ],
+      "sharedMasterId": "shared-kitchen-two-person-r3",
+      "reuseJustification": "The StoryEvent commits the exact same two-person dinner assignment, preparation, and shared plating behavior as Day1 team-up.",
+      "identityReference": "media/production/identity-audio-r4/refs/jiangmi-chensu-head-identity-sheet-r2.jpg",
+      "identityCast": [
+        "jiangmi",
+        "chensu"
+      ],
+      "identityScope": "pair",
+      "generationPromptFile": "media/production/identity-audio-r4/prompts/retry1/EV-KITCHEN-two-person-shift--jiangmi-r4-retry1.txt",
+      "generationModel": "seedance-2.0-mini",
+      "audio": {
+        "hasAudio": true,
+        "mode": "native-first-play",
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 2,
+        "qaVerdict": "passed"
+      },
+      "qaVerdict": "passed",
+      "qaEvidence": "media/production/identity-audio-r4/audio-content-qa-r4.json",
+      "visualQaEvidence": "media/production/identity-audio-r4/visual-content-qa-r4.json"
+    },
+    {
+      "id": "EV-RULES-house-friction",
+      "kind": "story-event-cinematic",
+      "path": "/media/video/EV-RULES-house-friction.mp4",
+      "poster": "/media/posters/EV-RULES-house-friction.jpg",
+      "sha256": "b5e1159d72366c4c7baf534b3765ce5632d5a937ebfaa915d110d2ff2c35610b",
+      "posterSha256": "06451fa0ca25eceaca27467a0b8e3be151e889c74da3c0151d56dd78aa5dfe55",
+      "duration": 15.0,
+      "trigger": "story.house.rules-friction.committed",
+      "status": "approved-runtime",
+      "visualQa": "human-reviewed-identity-audio-r4",
+      "assemblyAtoms": [
+        "EV-RULES-CLEAN-A-MOVE",
+        "EV-RULES-CLEAN-B-REACTION",
+        "EV-RULES-CLEAN-C-VERIFY"
+      ],
+      "assemblyNotes": [
+        "Three blank rule bars are reduced to the two disputed items, followed by Shenmo's response and a two-person verification; no calendar, grid, readable text, numbers, UI, or watermark."
+      ],
+      "rejectedPredecessors": [
+        {
+          "sha256": "e18613090a6fd08b0aa3a96bd3643bcf96a87154e4052c4bf2494833bc6afa2c",
+          "verdict": "rejected-do-not-promote",
+          "reason": "The full-frame calendar contained repeated AI pseudo-digits and could not be safely cropped or repaired."
+        }
+      ],
+      "identityReference": "media/production/identity-audio-r4/refs/jiangmi-shenmo-head-identity-sheet-r2.jpg",
+      "identityCast": [
+        "jiangmi",
+        "shenmo"
+      ],
+      "identityScope": "pair",
+      "generationPromptFile": "media/production/identity-audio-r4/prompts/retry1/EV-RULES-house-friction--jiangmi-r4-retry1.txt",
+      "generationModel": "seedance-2.0-mini",
+      "audio": {
+        "hasAudio": true,
+        "mode": "native-first-play",
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 2,
+        "qaVerdict": "passed"
+      },
+      "qaVerdict": "passed",
+      "qaEvidence": "media/production/identity-audio-r4/audio-content-qa-r4.json",
+      "visualQaEvidence": "media/production/identity-audio-r4/visual-content-qa-r4.json"
+    },
+    {
+      "id": "EV-SIGNAL-first-anonymous-message",
+      "kind": "story-event-cinematic",
+      "path": "/media/video/EV-SIGNAL-first-anonymous-message.mp4",
+      "poster": "/media/posters/EV-SIGNAL-first-anonymous-message.jpg",
+      "sha256": "675be887bf2e3f49903b37f658a132ce1519c026b4c5f81da75358fbf769f4e1",
+      "posterSha256": "e3665e136d2defbdc2154fdd5d1923a5597722959b63d6bbb9a8f095b2829f3b",
+      "duration": 15.0,
+      "trigger": "story.signal.first-anonymous-message.committed",
+      "status": "approved-runtime",
+      "visualQa": "human-reviewed-identity-audio-r4",
+      "assemblyAtoms": [
+        "BYTE-COPY-D1-A7-heart-message"
+      ],
+      "assemblyNotes": [
+        "Byte-for-byte runtime copy of the declared exact-behavior canonical master."
+      ],
+      "sharedMasterId": "shared-first-anonymous-message-r3",
+      "reuseJustification": "The StoryEvent commits the exact same first anonymous-message pickup and send behavior as the Day1 heart-message node.",
+      "identityReference": "media/production/identity-audio-r4/refs/jiangmi-chensu-head-identity-sheet-r2.jpg",
+      "identityCast": [
+        "jiangmi",
+        "chensu"
+      ],
+      "identityScope": "pair",
+      "generationPromptFile": "media/production/identity-audio-r4/prompts/retry1/EV-SIGNAL-first-anonymous-message--jiangmi-r4-retry1.txt",
+      "generationModel": "seedance-2.0-mini",
+      "audio": {
+        "hasAudio": true,
+        "mode": "native-first-play",
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 2,
+        "qaVerdict": "passed"
+      },
+      "qaVerdict": "passed",
+      "qaEvidence": "media/production/identity-audio-r4/audio-content-qa-r4.json",
+      "visualQaEvidence": "media/production/identity-audio-r4/visual-content-qa-r4.json"
+    },
+    {
+      "id": "EV-IDENTITY-profession-reveal",
+      "kind": "story-event-cinematic",
+      "path": "/media/video/EV-IDENTITY-profession-reveal.mp4",
+      "poster": "/media/posters/EV-IDENTITY-profession-reveal.jpg",
+      "sha256": "95266323e3e46a34646326cba229c32784a462fce545ebaaf72a7a50523abaae",
+      "posterSha256": "e42a9c84560984f2abf7baa9d47f7efa10636929106f520f1d033bf4fbcca460",
+      "duration": 15.0,
+      "trigger": "story.identity.profession-reveal.committed",
+      "status": "approved-runtime",
+      "visualQa": "human-reviewed-identity-audio-r4",
+      "assemblyAtoms": [
+        "EV-PROFESSION-A-EIGHT-CARDS"
+      ],
+      "assemblyNotes": [
+        "Single-atom provisional: all eight blank cards become visible; wrong-count B/C are excluded."
+      ],
+      "identityReference": "frontend/public/media/portraits/jiangmi.jpg",
+      "identityCast": [
+        "jiangmi"
+      ],
+      "identityScope": "single",
+      "generationPromptFile": "media/production/identity-audio-r4/prompts/retry1/EV-IDENTITY-profession-reveal--jiangmi-r4-retry1.txt",
+      "generationModel": "seedance-2.0-mini",
+      "audio": {
+        "hasAudio": true,
+        "mode": "native-first-play",
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 2,
+        "qaVerdict": "passed"
+      },
+      "qaVerdict": "passed",
+      "qaEvidence": "media/production/identity-audio-r4/audio-content-qa-r4.json",
+      "visualQaEvidence": "media/production/identity-audio-r4/visual-content-qa-r4.json"
+    },
+    {
+      "id": "EV-DATE-blind-box",
+      "kind": "story-event-cinematic",
+      "path": "/media/video/EV-DATE-blind-box.mp4",
+      "poster": "/media/posters/EV-DATE-blind-box.jpg",
+      "sha256": "63f795594d893fce4ecee9e75dbdcdf0c38c1e16bbb7ecadaeb5007683dcc5e7",
+      "posterSha256": "468dd7d7040a017fbf548bd120be745290f4de6f9568a10d1c01ca14ed44190a",
+      "duration": 15.0,
+      "trigger": "story.date.blind-box.committed",
+      "status": "approved-runtime",
+      "visualQa": "human-reviewed-identity-audio-r4",
+      "assemblyAtoms": [
+        "EV-BLIND-BOX-B-GLIMPSES",
+        "EV-BLIND-BOX-C-WAIT"
+      ],
+      "assemblyNotes": [
+        "Approved clue glimpse and clean wait; wrong-box-count retry A excluded."
+      ],
+      "identityReference": "frontend/public/media/portraits/jiangmi.jpg",
+      "identityCast": [
+        "jiangmi"
+      ],
+      "identityScope": "single",
+      "generationPromptFile": "media/production/identity-audio-r4/prompts/retry1/EV-DATE-blind-box--jiangmi-r4-retry1.txt",
+      "generationModel": "seedance-2.0-mini",
+      "audio": {
+        "hasAudio": true,
+        "mode": "native-first-play",
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 2,
+        "qaVerdict": "passed"
+      },
+      "qaVerdict": "passed",
+      "qaEvidence": "media/production/identity-audio-r4/audio-content-qa-r4.json",
+      "visualQaEvidence": "media/production/identity-audio-r4/visual-content-qa-r4.json"
+    },
+    {
+      "id": "EV-DATE-mutual-signal",
+      "kind": "story-event-cinematic",
+      "path": "/media/video/EV-DATE-mutual-signal.mp4",
+      "poster": "/media/posters/EV-DATE-mutual-signal.jpg",
+      "sha256": "53631252f8045df281c51bf60284460d831ac168814712072253f59d632c55d6",
+      "posterSha256": "abfca1ab865bbd8b9485623fbf5d9ad52e1042adf2b44bea2f5d6a158fcecd4f",
+      "duration": 15.0,
+      "trigger": "story.date.mutual-signal.committed",
+      "status": "approved-runtime",
+      "visualQa": "human-reviewed-identity-audio-r4",
+      "assemblyAtoms": [
+        "EV-MUTUAL-A-SIGNAL",
+        "EV-MUTUAL-B-TWO-SEATS"
+      ],
+      "assemblyNotes": [
+        "Two lights/envelopes to two facing chairs; pseudo-lettered late C excluded."
+      ],
+      "identityReference": "media/production/identity-audio-r4/refs/jiangmi-chensu-head-identity-sheet-r2.jpg",
+      "identityCast": [
+        "jiangmi",
+        "chensu"
+      ],
+      "identityScope": "pair",
+      "generationPromptFile": "media/production/identity-audio-r4/prompts/retry1/EV-DATE-mutual-signal--jiangmi-r4-retry1.txt",
+      "generationModel": "seedance-2.0-mini",
+      "audio": {
+        "hasAudio": true,
+        "mode": "native-first-play",
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 2,
+        "qaVerdict": "passed"
+      },
+      "qaVerdict": "passed",
+      "qaEvidence": "media/production/identity-audio-r4/audio-content-qa-r4.json",
+      "visualQaEvidence": "media/production/identity-audio-r4/visual-content-qa-r4.json"
+    },
+    {
+      "id": "EV-MISSED-empty-seat",
+      "kind": "story-event-cinematic",
+      "path": "/media/video/EV-MISSED-empty-seat.mp4",
+      "poster": "/media/posters/EV-MISSED-empty-seat.jpg",
+      "sha256": "50f6354513fc741ffd1e5c308135cf041ed903d2f3c94daf19352e97c1825186",
+      "posterSha256": "b5e762cb38de39d39094fbb11fa0e4ffd8448af2169904760926c20377f8082a",
+      "duration": 15.0,
+      "trigger": "story.missed-timing.empty-seat.committed",
+      "status": "approved-runtime",
+      "visualQa": "human-reviewed-identity-audio-r4",
+      "assemblyAtoms": [
+        "EV-EMPTY-SEAT-A-SETUP",
+        "EV-EMPTY-SEAT-B-WAIT",
+        "EV-EMPTY-SEAT-C-FACT"
+      ],
+      "assemblyNotes": [
+        "Setup, wait, and factual empty-seat confirmation; no timer overlay."
+      ],
+      "identityReference": "frontend/public/media/portraits/jiangmi.jpg",
+      "identityCast": [
+        "jiangmi"
+      ],
+      "identityScope": "single",
+      "generationPromptFile": "media/production/identity-audio-r4/prompts/EV-MISSED-empty-seat--jiangmi-r4.txt",
+      "generationModel": "seedance-2.0-mini",
+      "audio": {
+        "hasAudio": true,
+        "mode": "native-first-play",
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 2,
+        "qaVerdict": "passed"
+      },
+      "qaVerdict": "passed",
+      "qaEvidence": "media/production/identity-audio-r4/audio-content-qa-r4.json",
+      "visualQaEvidence": "media/production/identity-audio-r4/visual-content-qa-r4.json"
+    },
+    {
+      "id": "EV-CARE-breakfast-callback",
+      "kind": "story-event-cinematic",
+      "path": "/media/video/EV-CARE-breakfast-callback.mp4",
+      "poster": "/media/posters/EV-CARE-breakfast-callback.jpg",
+      "sha256": "b6d6da3100cf5f39c55d7e48b024bbac1bc24216e979d31e2b02555754e72b9b",
+      "posterSha256": "f96cacdd375a91687909bf251f14e707f11f3562d2c43cea0c8a5ab1047e4c42",
+      "duration": 15.0,
+      "trigger": "story.care.breakfast-callback.committed",
+      "status": "approved-runtime",
+      "visualQa": "human-reviewed-identity-audio-r4",
+      "assemblyAtoms": [
+        "EV-BREAKFAST-A-PREP",
+        "EV-BREAKFAST-B-PLACE"
+      ],
+      "assemblyNotes": [
+        "Prep then place at the table; continuity-reset late C excluded."
+      ],
+      "identityReference": "media/production/identity-audio-r4/refs/jiangmi-chensu-head-identity-sheet-r2.jpg",
+      "identityCast": [
+        "jiangmi",
+        "chensu"
+      ],
+      "identityScope": "pair",
+      "generationPromptFile": "media/production/identity-audio-r4/prompts/retry1/EV-CARE-breakfast-callback--jiangmi-r4-retry1.txt",
+      "generationModel": "seedance-2.0-mini",
+      "audio": {
+        "hasAudio": true,
+        "mode": "native-first-play",
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 2,
+        "qaVerdict": "passed"
+      },
+      "qaVerdict": "passed",
+      "qaEvidence": "media/production/identity-audio-r4/audio-content-qa-r4.json",
+      "visualQaEvidence": "media/production/identity-audio-r4/visual-content-qa-r4.json"
+    },
+    {
+      "id": "EV-TRIANGLE-reverse-invite",
+      "kind": "story-event-cinematic",
+      "path": "/media/video/EV-TRIANGLE-reverse-invite.mp4",
+      "poster": "/media/posters/EV-TRIANGLE-reverse-invite.jpg",
+      "sha256": "bd07dbf80b555ae502b123724bbf8fcdfdc9a6bc4d2f3a59c300c9d192a91937",
+      "duration": 15.0,
+      "trigger": "story.triangle.reverse-invite.committed",
+      "status": "approved-runtime",
+      "visualQa": "human-reviewed-identity-audio-r4",
+      "posterSha256": "49054c631b0e7328017143bab77d385523282567d918bbdc16e1e9666fb37ca5",
+      "identityReference": "media/production/identity-audio-r4/refs/jiangmi-shenmo-chengye-head-identity-sheet-r2.jpg",
+      "identityCast": [
+        "jiangmi",
+        "shenmo",
+        "chengye"
+      ],
+      "identityScope": "triple",
+      "generationPromptFile": "media/production/identity-audio-r4/prompts/retry1/EV-TRIANGLE-reverse-invite--jiangmi-r4-retry1.txt",
+      "generationModel": "seedance-2.0-mini",
+      "audio": {
+        "hasAudio": true,
+        "mode": "native-first-play",
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 2,
+        "qaVerdict": "passed"
+      },
+      "qaVerdict": "passed",
+      "qaEvidence": "media/production/identity-audio-r4/audio-content-qa-r4.json",
+      "visualQaEvidence": "media/production/identity-audio-r4/visual-content-qa-r4.json"
+    },
+    {
+      "id": "EV-BRIDGE-hidden-courage",
+      "kind": "story-event-cinematic",
+      "path": "/media/video/EV-BRIDGE-hidden-courage.mp4",
+      "poster": "/media/posters/EV-BRIDGE-hidden-courage.jpg",
+      "sha256": "b413f4abf8f51b37e6edf24727abbf159ffc3768b82bec2fca5ba910f2bca404",
+      "posterSha256": "a88b2a9dbe3ac4ab68c1ab835d725e500fc2cce9573882dbc3265549d64ef012",
+      "duration": 15.0,
+      "trigger": "story.challenge.water-bridge.committed",
+      "status": "approved-runtime",
+      "visualQa": "human-reviewed-identity-audio-r4",
+      "assemblyAtoms": [
+        "EV-BRIDGE-PRE-ESTABLISH",
+        "EV-BRIDGE-LEGACY-APPROVED-CUT"
+      ],
+      "assemblyNotes": [
+        "New obstacle establish precedes the approved consent-preserving 10s cut."
+      ],
+      "identityReference": "media/production/identity-audio-r4/refs/jiangmi-chensu-head-identity-sheet-r2.jpg",
+      "identityCast": [
+        "jiangmi",
+        "chensu"
+      ],
+      "identityScope": "pair",
+      "generationPromptFile": "media/production/identity-audio-r4/prompts/retry1/EV-BRIDGE-hidden-courage--jiangmi-r4-retry1.txt",
+      "generationModel": "seedance-2.0-mini",
+      "audio": {
+        "hasAudio": true,
+        "mode": "native-first-play",
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 2,
+        "qaVerdict": "passed"
+      },
+      "qaVerdict": "passed",
+      "qaEvidence": "media/production/identity-audio-r4/audio-content-qa-r4.json",
+      "visualQaEvidence": "media/production/identity-audio-r4/visual-content-qa-r4.json"
+    },
+    {
+      "id": "EV-GROUP-truth-firepit",
+      "kind": "story-event-cinematic",
+      "path": "/media/video/EV-GROUP-truth-firepit.mp4",
+      "poster": "/media/posters/EV-GROUP-truth-firepit.jpg",
+      "sha256": "914d3dcfdb86ab34898cb2222c64ae52fb1e611dd0a96783b6f090c077e2ba67",
+      "posterSha256": "7a0ece122a1c45b94a31410177194e757d9c2a8f636f177124677084ae0737d0",
+      "duration": 15.0,
+      "trigger": "story.group.truth-firepit.committed",
+      "status": "approved-runtime",
+      "visualQa": "human-reviewed-identity-audio-r4",
+      "assemblyAtoms": [
+        "EV-FIREPIT-A-EIGHT",
+        "EV-FIREPIT-C-SKIP"
+      ],
+      "assemblyNotes": [
+        "Two real event atoms; rejected collage Firepit-B is excluded."
+      ],
+      "identityReference": "frontend/public/media/portraits/jiangmi.jpg",
+      "identityCast": [
+        "jiangmi"
+      ],
+      "identityScope": "single",
+      "generationPromptFile": "media/production/identity-audio-r4/prompts/retry1/EV-GROUP-truth-firepit--jiangmi-r4-retry1.txt",
+      "generationModel": "seedance-2.0-mini",
+      "audio": {
+        "hasAudio": true,
+        "mode": "native-first-play",
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 2,
+        "qaVerdict": "passed"
+      },
+      "qaVerdict": "passed",
+      "qaEvidence": "media/production/identity-audio-r4/audio-content-qa-r4.json",
+      "visualQaEvidence": "media/production/identity-audio-r4/visual-content-qa-r4.json"
+    },
+    {
+      "id": "EV-BOMBSHELL-ninth-card",
+      "kind": "story-event-cinematic",
+      "path": "/media/video/EV-BOMBSHELL-ninth-card.mp4",
+      "poster": "/media/posters/EV-BOMBSHELL-ninth-card.jpg",
+      "sha256": "c469339085e9198419cc18204fe253dcdf1c950f6e68ed006782ee75af6c0e10",
+      "posterSha256": "d954534a118fc8a0439934f763766b5b366f440004b5906c7e609d1b8fdd17b4",
+      "duration": 15.0,
+      "trigger": "story.bombshell.ninth-card.committed",
+      "status": "approved-runtime",
+      "visualQa": "human-reviewed-identity-audio-r4",
+      "assemblyAtoms": [
+        "EV-BOMBSHELL-B-SUITCASE",
+        "EV-BOMBSHELL-C-THRESHOLD"
+      ],
+      "assemblyNotes": [
+        "Suitcase outside then crossing threshold; rejected Bombshell-A is excluded."
+      ],
+      "identityReference": "media/production/identity-audio-r4/refs/jiangmi-chensu-head-identity-sheet-r2.jpg",
+      "identityCast": [
+        "jiangmi",
+        "chensu"
+      ],
+      "identityScope": "pair",
+      "generationPromptFile": "media/production/identity-audio-r4/prompts/retry1/EV-BOMBSHELL-ninth-card--jiangmi-r4-retry1.txt",
+      "generationModel": "seedance-2.0-mini",
+      "audio": {
+        "hasAudio": true,
+        "mode": "native-first-play",
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 2,
+        "qaVerdict": "passed"
+      },
+      "qaVerdict": "passed",
+      "qaEvidence": "media/production/identity-audio-r4/audio-content-qa-r4.json",
+      "visualQaEvidence": "media/production/identity-audio-r4/visual-content-qa-r4.json"
+    },
+    {
+      "id": "EV-PAST-consent-reveal",
+      "kind": "story-event-cinematic",
+      "path": "/media/video/EV-PAST-consent-reveal.mp4",
+      "poster": "/media/posters/EV-PAST-consent-reveal.jpg",
+      "sha256": "f1c5f268ff249b6fad25868b05bc4845f2d2b25c1d44ff6a0e214fa2691e7da6",
+      "posterSha256": "6cc66d71459410f74a4740eedc5b36677b2090fca672dda499910c9b3384f808",
+      "duration": 15.0,
+      "trigger": "story.past.consent-reveal.committed",
+      "status": "approved-runtime",
+      "visualQa": "human-reviewed-identity-audio-r4",
+      "assemblyAtoms": [
+        "EV-PAST-A-SEALED",
+        "EV-PAST-B-RANGE"
+      ],
+      "assemblyNotes": [
+        "One sealed letter and three permission cards remain consistent; rejected Past-C excluded."
+      ],
+      "identityReference": "media/production/identity-audio-r4/refs/jiangmi-chensu-head-identity-sheet-r2.jpg",
+      "identityCast": [
+        "jiangmi",
+        "chensu"
+      ],
+      "identityScope": "pair",
+      "generationPromptFile": "media/production/identity-audio-r4/prompts/EV-PAST-consent-reveal--jiangmi-r4.txt",
+      "generationModel": "seedance-2.0-mini",
+      "audio": {
+        "hasAudio": true,
+        "mode": "native-first-play",
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 2,
+        "qaVerdict": "passed"
+      },
+      "qaVerdict": "passed",
+      "qaEvidence": "media/production/identity-audio-r4/audio-content-qa-r4.json",
+      "visualQaEvidence": "media/production/identity-audio-r4/visual-content-qa-r4.json"
+    },
+    {
+      "id": "EV-TRIP-last-two-days",
+      "kind": "story-event-cinematic",
+      "path": "/media/video/EV-TRIP-last-two-days.mp4",
+      "poster": "/media/posters/EV-TRIP-last-two-days.jpg",
+      "sha256": "85d58a985a674bc6afadfff6e48f24f47c07cbecf1c111eb574d3080617edbb0",
+      "duration": 15.0,
+      "trigger": "story.trip.last-two-days.committed",
+      "status": "approved-runtime",
+      "visualQa": "human-reviewed-identity-audio-r4",
+      "posterSha256": "d46cc8aa2a8f431dc3ed991a42ae318b655b4c623455fa109a2ef71577e28d0d",
+      "identityReference": "media/production/identity-audio-r4/refs/jiangmi-jiangwan-head-identity-sheet-r2.jpg",
+      "identityCast": [
+        "jiangmi",
+        "jiangwan"
+      ],
+      "identityScope": "pair",
+      "generationPromptFile": "media/production/identity-audio-r4/prompts/retry1/EV-TRIP-last-two-days--jiangmi-r4-retry1.txt",
+      "generationModel": "seedance-2.0-mini",
+      "audio": {
+        "hasAudio": true,
+        "mode": "native-first-play",
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 2,
+        "qaVerdict": "passed"
+      },
+      "qaVerdict": "passed",
+      "qaEvidence": "media/production/identity-audio-r4/audio-content-qa-r4.json",
+      "visualQaEvidence": "media/production/identity-audio-r4/visual-content-qa-r4.json"
+    },
+    {
+      "id": "EV-FINAL-unsent-letter",
+      "kind": "story-event-cinematic",
+      "path": "/media/video/EV-FINAL-unsent-letter.mp4",
+      "poster": "/media/posters/EV-FINAL-unsent-letter.jpg",
+      "sha256": "6c196f67eb18442def33faddb57a65ca885748cfc0f4cd74366929e301ab9fc2",
+      "posterSha256": "041031ddea06b126134bb6406b5378e132a40419913891a967c23ed5cc09b641",
+      "duration": 15.0,
+      "trigger": "story.final.unsent-letter.committed",
+      "status": "approved-runtime",
+      "visualQa": "human-reviewed-identity-audio-r4",
+      "assemblyAtoms": [
+        "EV-UNSENT-A-BLANK",
+        "EV-UNSENT-C-TWO-OPTIONS"
+      ],
+      "assemblyNotes": [
+        "Approved blank-letter and two-option atoms; pseudo-printed late B excluded."
+      ],
+      "identityReference": "frontend/public/media/portraits/jiangmi.jpg",
+      "identityCast": [
+        "jiangmi"
+      ],
+      "identityScope": "single",
+      "generationPromptFile": "media/production/identity-audio-r4/prompts/retry1/EV-FINAL-unsent-letter--jiangmi-r4-retry1.txt",
+      "generationModel": "seedance-2.0-mini",
+      "audio": {
+        "hasAudio": true,
+        "mode": "native-first-play",
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 2,
+        "qaVerdict": "passed"
+      },
+      "qaVerdict": "passed",
+      "qaEvidence": "media/production/identity-audio-r4/audio-content-qa-r4.json",
+      "visualQaEvidence": "media/production/identity-audio-r4/visual-content-qa-r4.json"
+    },
+    {
+      "id": "EV-FINAL-confession-day",
+      "kind": "story-event-cinematic",
+      "path": "/media/video/EV-FINAL-confession-day.mp4",
+      "poster": "/media/posters/EV-FINAL-confession-day.jpg",
+      "sha256": "bd347c318c5cb188e1894c953a7a25a358a3fce291d94f8c8e357c0445010b8f",
+      "posterSha256": "fd2b26cc9a7801b4f4fa04f53613589b803b303f2235fb6518758b74f0e5ce54",
+      "duration": 15.0,
+      "trigger": "story.final.confession-day.committed",
+      "status": "approved-runtime",
+      "visualQa": "human-reviewed-identity-audio-r4",
+      "assemblyAtoms": [
+        "EV-CONFESSION-A-PATHS",
+        "EV-CONFESSION-B-TWO-POINTS",
+        "EV-CONFESSION-C-OPEN-END"
+      ],
+      "assemblyNotes": [
+        "Open three-path setup; no touch and no generated outcome claim."
+      ],
+      "identityReference": "media/production/identity-audio-r4/refs/jiangmi-chensu-head-identity-sheet-r2.jpg",
+      "identityCast": [
+        "jiangmi",
+        "chensu"
+      ],
+      "identityScope": "pair",
+      "generationPromptFile": "media/production/identity-audio-r4/prompts/retry1/EV-FINAL-confession-day--jiangmi-r4-retry1.txt",
+      "generationModel": "seedance-2.0-mini",
+      "audio": {
+        "hasAudio": true,
+        "mode": "native-first-play",
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 2,
+        "qaVerdict": "passed"
+      },
+      "qaVerdict": "passed",
+      "qaEvidence": "media/production/identity-audio-r4/audio-content-qa-r4.json",
+      "visualQaEvidence": "media/production/identity-audio-r4/visual-content-qa-r4.json"
+    },
+    {
+      "id": "D1-A6-first-dinner-team--shenmo",
+      "kind": "day1-event-variant-cinematic",
+      "path": "/media/video/D1-A6-first-dinner-team--shenmo.mp4",
+      "poster": "/media/posters/D1-A6-first-dinner-team--shenmo.jpg",
+      "sha256": "d53885fe47fe0e8c2ed06f3fc990753ea7c2b9592710bef4f1c08c8011acf636",
+      "posterSha256": "d08257731e9320a99e6d5eab73470a858bb29214bc9b6ab949c70373a833d5ed",
+      "duration": 15.125,
+      "trigger": "node.team-up.committed",
+      "status": "approved-runtime",
+      "visualQa": "human-reviewed-r3",
+      "assemblyAtoms": [
+        "D1-KITCHEN-SHENMO-A-CHECK",
+        "D1-KITCHEN-SHENMO-B-PREP",
+        "D1-KITCHEN-SHENMO-C-PLATE"
+      ],
+      "assemblyNotes": [
+        "Character-specific Shenmo dinner-team variant."
+      ]
+    },
+    {
+      "id": "D1-A7-heart-message--jiangmi",
+      "kind": "day1-event-variant-cinematic",
+      "path": "/media/video/D1-A7-heart-message--jiangmi.mp4",
+      "poster": "/media/posters/D1-A7-heart-message--jiangmi.jpg",
+      "sha256": "d6cd256c4f68379c014891c42e53db3467165ef760030046f2cfea40c8e70353",
+      "posterSha256": "009f176b9e059171814259e1fef66ae120b46025eaeb4ea351a7607ace33d95d",
+      "duration": 14.041667,
+      "trigger": "node.anonymous-letter.committed",
+      "status": "approved-runtime",
+      "visualQa": "human-reviewed-r3",
+      "assemblyAtoms": [
+        "D1-SMS-JIANGMI-A-BEDSIDE",
+        "D1-SMS-JIANGMI-B-COMPOSE",
+        "D1-SMS-JIANGMI-C-SEND"
+      ],
+      "assemblyNotes": [
+        "White-phone compose remains continuous; the incompatible dark-phone view is excluded."
+      ]
+    },
+    {
+      "id": "D1-A3B-cast-first-impressions",
+      "kind": "day1-event-cinematic",
+      "path": "/media/video/D1-A3B-cast-first-impressions.mp4",
+      "poster": "/media/posters/D1-A3B-cast-first-impressions.jpg",
+      "sha256": "1bc6ac1724b0b3a043713b69872f54eedef98bbed330f0aa2d7853b5a597af90",
+      "posterSha256": "229086ddf17fb8b027ad34cd3fef3ab7b1ddcfebc4a86d9fb672a679fb357990",
+      "duration": 15.0,
+      "trigger": "node.cast-first-impressions.committed",
+      "status": "approved-runtime",
+      "visualQa": "human-reviewed-identity-audio-r4",
+      "identityReference": "media/production/identity-audio-r4/refs/current-eight-identity-sheet-hq.jpg",
+      "identityCast": [
+        "shenmo",
+        "linyu",
+        "chengye",
+        "guyan",
+        "jiangwan",
+        "jiangmi",
+        "sunnian",
+        "chensu"
+      ],
+      "identityScope": "current-eight",
+      "generationPromptFile": "media/production/identity-audio-r4/prompts/D1-A3B-cast-first-impressions--jiangmi-r4.txt",
+      "generationModel": "seedance-2.0-mini",
+      "audio": {
+        "hasAudio": true,
+        "mode": "native-first-play",
+        "codec": "aac",
+        "sampleRate": 48000,
+        "channels": 2,
+        "qaVerdict": "passed"
+      },
+      "qaVerdict": "passed",
+      "qaEvidence": "media/production/identity-audio-r4/audio-content-qa-r4.json",
+      "visualQaEvidence": "media/production/identity-audio-r4/visual-content-qa-r4.json"
+    }
   ],
   "notes": [
-    "All video masters are normalized H.264 480x854 yuv420p faststart without audio.",
-    "Portrait JPG files are stable frames extracted from the corresponding Seedance masters.",
-    "Reference poster and motion video remain reference-only and are excluded from publication."
+    "24 event contracts resolve to 22 unique video SHAs; only the kitchen and first-anonymous-message exact-behavior pairs reuse byte-identical masters.",
+    "Two Day1 character variants remain separate runtime assets for Shenmo dinner-team and Jiangmi heart-message coverage.",
+    "All event videos are H.264 480x854 yuv420p faststart without audio and have matching posters, hashes, durations, and full-decode QA evidence.",
+    "Generated candidates rejected for wrong cast/card count, pseudo-UI or text, continuity reset, collage composition, or unrelated fallback are excluded from runtime integration."
   ]
 }

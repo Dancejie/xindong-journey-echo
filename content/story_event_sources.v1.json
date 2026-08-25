@@ -1,0 +1,87 @@
+{
+  "version": "1.0.0",
+  "researchedAt": "2026-08-24",
+  "principle": "只抽取公开节目机制与叙事功能，不复制具体嘉宾、台词、剪辑或结局。",
+  "sources": [
+    {
+      "id": "source.love-is-blind.pods",
+      "title": "Love Is Blind: Everything You Need to Know About the Pods",
+      "publisher": "Netflix Tudum",
+      "url": "https://www.netflix.com/tudum/articles/love-is-blind-pods",
+      "evidence": ["先听声音、不见外貌的约会机制", "十天内多轮对话", "承诺后才首次见面"],
+      "designUse": ["遮蔽身份的深聊任务", "信息逐层公开", "承诺与现实印象的校验"]
+    },
+    {
+      "id": "source.singles-inferno.s5",
+      "title": "Single's Inferno Season 5",
+      "publisher": "Netflix Tudum",
+      "url": "https://www.netflix.com/tudum/articles/singles-inferno-season-5-release-date-news",
+      "evidence": ["资源受限的共同生活", "配对成功获得单独约会", "投票胜者选择约会对象", "新嘉宾即时入场"],
+      "designUse": ["协作任务", "配对奖励", "公开选择压力", "鲶鱼入场"]
+    },
+    {
+      "id": "source.exchange.official",
+      "title": "EXchange",
+      "publisher": "CJ ENM",
+      "url": "https://tvn.tving.com/en/featured-contents/exchange/",
+      "evidence": ["前任共同生活", "旧关系与新连接并存", "留恋和嫉妒成为选择压力"],
+      "designUse": ["经本人同意的过往披露", "旧记忆回收", "复合或放下的分岔"]
+    },
+    {
+      "id": "source.love-island.presspack",
+      "title": "Love Island 2023 Press Pack",
+      "publisher": "ITV",
+      "url": "https://www.itv.com/presscentre/presscentre/media-packs/love-island-2023-press-pack",
+      "evidence": ["约会与配对", "新嘉宾与重新配对", "短信通知", "火坑集会和挑战"],
+      "designUse": ["节目短信作为事件入口", "反向邀约", "重组选边", "围炉局"]
+    },
+    {
+      "id": "source.love-island.ten-years",
+      "title": "ITV2 to celebrate ten years of Love Island",
+      "publisher": "ITV",
+      "url": "https://www.itv.com/presscentre/presscentre/media-releases/itv2-celebrate-ten-years-love-island-one-anniversary-special",
+      "evidence": ["重组选择", "新嘉宾冲击", "恋爱线的长期回顾"],
+      "designUse": ["稳定关系后的扰动", "回顾式告白前夜"]
+    },
+    {
+      "id": "source.heart-signal.s2",
+      "title": "心动的信号 第2季",
+      "publisher": "WeTV",
+      "url": "https://wetv.vip/zh-cn/play/hhzxy3f28dr3kjl/p0031urpag8",
+      "evidence": ["职业年龄公开", "新男女嘉宾入场", "随机约会", "旅行约会与最终选择"],
+      "designUse": ["身份反差", "盲选约会", "旅行任务", "收官选择"]
+    },
+    {
+      "id": "source.heart-signal.s3",
+      "title": "心动的信号 第3季",
+      "publisher": "WeTV",
+      "url": "https://wetv.vip/zh-cn/play/46pracr32h8aeqe",
+      "evidence": ["八位单身嘉宾共同生活", "心动信号连线", "初见、职业公开、单独约会与最终告白"],
+      "designUse": ["小屋日程骨架", "匿名信号", "公开信息节点", "告白日"]
+    },
+    {
+      "id": "source.heart-signal.s6",
+      "title": "心动的信号 第6季",
+      "publisher": "WeTV",
+      "url": "https://wetv.vip/zh-cn/play/i7tpzoaio3pldnp/i0047laos7z-%E7%AC%AC6%E6%9C%9F%E4%B8%8B%EF%BC%9A%E6%B0%B4%E4%B8%8B%E7%BA%A6%E4%BC%9A_%E6%B5%AA%E6%BC%AB%E6%BB%A1%E5%88%86",
+      "evidence": ["新嘉宾", "小屋夜聊", "特权约会", "双向选择约会", "信件与主题约会"],
+      "designUse": ["夜聊任务", "特权卡", "双向确认", "信件回调"]
+    },
+    {
+      "id": "source.heart-signal.s8",
+      "title": "心动的信号 第8季",
+      "publisher": "WeTV",
+      "url": "https://wetv.vip/zh-cn/play/y0aaj0mx2egqfvh/x4101ernk95",
+      "evidence": ["好友开放日", "错过约会", "双人旅行", "深夜私聊与早餐互动"],
+      "designUse": ["社交圈验证", "错过与修复", "旅行前夜", "生活化回声"]
+    },
+    {
+      "id": "source.authentic-performance.study",
+      "title": "Authentic performance in a Chinese dating show",
+      "publisher": "Chinese University of Hong Kong",
+      "url": "https://www.com.cuhk.edu.hk/publication/dc-journal-2020-an.pdf",
+      "evidence": ["真人秀通过格式、模拟与叙事形成受管理的现实", "观众通过预期和推演理解关系发展"],
+      "designUse": ["事件制造可选择的压力而不是强迫结果", "保留行为证据与反悔出口"]
+    }
+  ]
+}

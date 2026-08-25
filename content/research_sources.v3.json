@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "contentVersion": "3.0.0-local-research",
+  "notes": [
+    "原始人物设定DOCX已重新定位并完成文本核对。",
+    "人物事实、运行时改编、MBTI偏好和文学风味分层保存；后两者不能覆盖人物事实。",
+    "文学微引文只作为作者研究锚点，DeepSeek不得复制或仿写原句。"
+  ],
+  "sources": [
+    {
+      "id": "source.original-design-docx",
+      "label": "《心动之旅：恋综模拟器》游戏系统设计档案（MBTI角色版）",
+      "locator": "user-supplied-docx",
+      "evidenceLevel": "verified-local-source",
+      "rightsUse": "authoring-source",
+      "note": "核对节目规则、预设人物、年龄职业、公开人设、私人压力和秘密时间线。"
+    },
+    {
+      "id": "source.mbti-type-dynamics",
+      "label": "Myers & Briggs Foundation: Type Dynamics Processes",
+      "locator": "https://www.myersbriggs.org/unique-features-of-myers-briggs/type-dynamics-processes/",
+      "evidenceLevel": "verified",
+      "rightsUse": "research-reference",
+      "note": "用于把类型偏好转写为输入过滤、决策和压力失真；不作为诊断。"
+    },
+    {
+      "id": "source.runtime-v1",
+      "label": "《心动之旅》当前线上人物设定 v1",
+      "locator": "backend/game_content.py@1.1.0",
+      "evidenceLevel": "adaptation",
+      "rightsUse": "canon-provisional",
+      "note": "保留姓名、MBTI、公开面具、恐惧、记忆种子、声音与边界。"
+    },
+    {
+      "id": "source.mbti-foundation-types",
+      "label": "Myers & Briggs Foundation: The 16 MBTI Personality Types",
+      "locator": "https://www.myersbriggs.org/my-mbti-personality-type/the-16-mbti-personality-types/home.htm",
+      "evidenceLevel": "verified",
+      "rightsUse": "research-reference",
+      "note": "用于八种类型的偏好层，不把类型描述直接当作人物事实。"
+    },
+    {
+      "id": "source.monte-cristo",
+      "label": "Alexandre Dumas, The Count of Monte Cristo",
+      "locator": "https://www.gutenberg.org/ebooks/1184",
+      "evidenceLevel": "verified",
+      "rightsUse": "public-domain-reference",
+      "note": "沈墨：长期布局、克制表面与高压下保持形式感。"
+    },
+    {
+      "id": "source.study-in-scarlet",
+      "label": "Arthur Conan Doyle, A Study in Scarlet",
+      "locator": "https://www.gutenberg.org/ebooks/244",
+      "evidenceLevel": "verified",
+      "rightsUse": "public-domain-reference",
+      "note": "顾言：从细节建立假设、解释推理链；林屿：陪伴者的具体观察与克制追问。"
+    },
+    {
+      "id": "source.jane-eyre",
+      "label": "Charlotte Bronte, Jane Eyre",
+      "locator": "https://www.gutenberg.org/ebooks/1260",
+      "evidenceLevel": "verified",
+      "rightsUse": "public-domain-reference",
+      "note": "江晚：洞察动机但坚持主体边界，受压时用直接真话而非迎合。"
+    },
+    {
+      "id": "source.little-women",
+      "label": "Louisa May Alcott, Little Women",
+      "locator": "https://www.gutenberg.org/ebooks/514",
+      "evidenceLevel": "verified",
+      "rightsUse": "public-domain-reference",
+      "note": "林屿与苏念：具体照顾、家庭秩序、被忽略的自我需要；姜米：Jo 的活力与行动性。"
+    },
+    {
+      "id": "source.anne-green-gables",
+      "label": "L. M. Montgomery, Anne of Green Gables",
+      "locator": "https://www.gutenberg.org/ebooks/45",
+      "evidenceLevel": "verified",
+      "rightsUse": "public-domain-reference",
+      "note": "姜米：联想、即兴、语言活力，以及冲动之后愿意修复。"
+    },
+    {
+      "id": "source.three-musketeers",
+      "label": "Alexandre Dumas, The Three Musketeers",
+      "locator": "https://www.gutenberg.org/ebooks/1257",
+      "evidenceLevel": "verified",
+      "rightsUse": "public-domain-reference",
+      "note": "程野：当场决断、用行动结盟、接受挑战但重视体面。"
+    },
+    {
+      "id": "source.mysterious-island",
+      "label": "Jules Verne, The Mysterious Island",
+      "locator": "https://www.gutenberg.org/ebooks/8993",
+      "evidenceLevel": "verified",
+      "rightsUse": "public-domain-reference",
+      "note": "陈叙：先定位实际问题、动手解决，以行动承担关系成本。"
+    }
+  ]
+}

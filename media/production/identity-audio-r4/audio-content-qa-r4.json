@@ -1,0 +1,3168 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-08-25T15:30:05.647657+08:00",
+  "scope": "25 closed Jiangmi event-video candidates; audio content and quick technical QA only",
+  "approvalBoundary": "本报告不授予 runtime 批准；P0/P1 修复后必须对最终母版重跑同一门禁。",
+  "policy": {
+    "verdicts": {
+      "passed": "内容证据与事件一致，且当前技术门槛通过",
+      "p1": "可修复/证据不足；不得直接视为运行批准",
+      "p0": "明确内容违约或误导；必须换轨/重建"
+    },
+    "loudnessTargetIntegratedLufs": [
+      -24,
+      -14
+    ],
+    "truePeakMaximumDbfs": -1.0,
+    "runtimeAudioTarget": "AAC, 48000 Hz, stereo",
+    "asrDecisionRule": "medium 中文 VAD 为主，small 中文 no-VAD 仅用于发现可疑语音；small 单独出现的循环短语或“字幕by索兰娅”不视为真实对白。",
+    "contentClassifierDecisionRule": "AudioSet 仅提供声类证据；低置信或缺少事件特征时标 p1，不因 ASR 空白自动通过。",
+    "stableStateOutTailMaximumSeconds": 1.2
+  },
+  "methodology": {
+    "asrModels": [
+      "faster-whisper small, zh, beam=5, no VAD",
+      "faster-whisper medium, zh, beam=5, VAD(min_silence=300ms,speech_pad=200ms)"
+    ],
+    "audioEventModel": "MIT/ast-finetuned-audioset-10-10-0.4593; head and tail windows",
+    "technical": [
+      "ffprobe stream/spec",
+      "ffmpeg full decode",
+      "EBU R128 integrated loudness + true peak",
+      "silencedetect -45 dB/0.35 s",
+      "last 2.5 s freezedetect",
+      "48 kHz float PCM clipping and adjacent-sample abruptness"
+    ]
+  },
+  "summary": {
+    "total": 25,
+    "passed": 25,
+    "p1": 0,
+    "p0": 0,
+    "contentP0": [],
+    "contentP1": [],
+    "lowIntegratedLoudness": [],
+    "truePeakAboveLimit": [],
+    "sourceSampleRateNeeds48kTranscode": [],
+    "streamFailures": [],
+    "decodeFailures": [],
+    "clippingOrAbruptnessFailures": [],
+    "tailFreezeWarnings": []
+  },
+  "items": [
+    {
+      "id": "D1-A1-island-hotel-establish",
+      "candidateKind": "runtime-master-candidate",
+      "path": "media/production/identity-audio-r4/.work-runtime-masters-r4/D1-A1-island-hotel-establish--jiangmi-identity-audio-r4-master.mp4",
+      "sha256": "2274200e00d2a98c76fb763b7de35fba82113a622291cddf51b76142cf840d89",
+      "verdict": "passed",
+      "contentVerdict": "passed",
+      "technicalVerdict": "passed",
+      "contentEvidence": {
+        "dialogueDetected": [
+          "就是这里吗"
+        ],
+        "smallNoVadTranscript": "就是这里吗",
+        "mediumVadTranscript": "就是这里吗",
+        "backgroundAndActions": "海浪、风与户外自然底噪；Speech 只对应短问话。",
+        "sceneConsistency": "consistent",
+        "prohibitedNarrationOrMisleadingContent": [],
+        "notes": "双模型/事件声分类支持上述短口语；未发现旁白、伪提示或误导性台词。",
+        "audioSetWindows": [
+          {
+            "window": "head",
+            "topLabels": [
+              {
+                "label": "Pink noise",
+                "score": 0.4783
+              },
+              {
+                "label": "Speech",
+                "score": 0.3739
+              },
+              {
+                "label": "Outside, rural or natural",
+                "score": 0.0459
+              },
+              {
+                "label": "Waves, surf",
+                "score": 0.0333
+              },
+              {
+                "label": "Vehicle",
+                "score": 0.0321
+              }
+            ]
+          },
+          {
+            "window": "tail",
+            "topLabels": [
+              {
+                "label": "Speech",
+                "score": 0.4935
+              },
+              {
+                "label": "Pink noise",
+                "score": 0.1317
+              },
+              {
+                "label": "Outside, rural or natural",
+                "score": 0.0605
+              },
+              {
+                "label": "Rustle",
+                "score": 0.04
+              },
+              {
+                "label": "Inside, small room",
+                "score": 0.034
+              }
+            ]
+          }
+        ]
+      },
+      "technicalEvidence": {
+        "durationSeconds": 15.0,
+        "sizeBytes": 1256460,
+        "video": {
+          "codec": "h264",
+          "width": 480,
+          "height": 854,
+          "frameRate": "24/1",
+          "pixelFormat": "yuv420p"
+        },
+        "audio": {
+          "codec": "aac",
+          "sampleRateHz": 48000,
+          "channels": 2,
+          "channelLayout": "stereo"
+        },
+        "streamCount": {
+          "videoCount": 1,
+          "audioCount": 1,
+          "passed": true
+        },
+        "fullDecode": {
+          "passed": true,
+          "errors": null
+        },
+        "integratedLufs": -17.9,
+        "truePeakDbfs": -2.3,
+        "silenceDetect": {
+          "thresholdDb": -45,
+          "minimumSeconds": 0.35,
+          "starts": [],
+          "ends": []
+        },
+        "tailFreeze": {
+          "windowSeconds": 2.5,
+          "rmsDb": -27.050881,
+          "peakDb": -2.712774,
+          "freezeEvents": [],
+          "freezePassed": true
+        },
+        "audioAbruptness": {
+          "samplePeak": 0.762362,
+          "clippedSampleCount": 0,
+          "maxAdjacentSampleDelta": 0.413054,
+          "maxDeltaTimestampSeconds": 4.67023,
+          "p99_99Delta": 0.193637,
+          "maxToP99_99Ratio": 2.133,
+          "passed": true
+        },
+        "technicalNotes": []
+      }
+    },
+    {
+      "id": "D1-A2-villa-entry",
+      "candidateKind": "runtime-master-candidate",
+      "path": "media/production/identity-audio-r4/.work-runtime-masters-r4/D1-A2-villa-entry--jiangmi-identity-audio-r4-master.mp4",
+      "sha256": "b50de2ad34adc2678bf240b60e763c71d93804f890ae621c95dd2bcd8650ddb7",
+      "verdict": "passed",
+      "contentVerdict": "passed",
+      "technicalVerdict": "passed",
+      "contentEvidence": {
+        "dialogueDetected": [
+          "你好",
+          "我自己来就好",
+          "谢谢"
+        ],
+        "smallNoVadTranscript": "我自己来就好 谢谢",
+        "mediumVadTranscript": "你好 我自己来就好 谢谢",
+        "backgroundAndActions": "室内空间、门声、海浪与自然问候。",
+        "sceneConsistency": "consistent",
+        "prohibitedNarrationOrMisleadingContent": [],
+        "notes": "双模型/事件声分类支持上述短口语；未发现旁白、伪提示或误导性台词。",
+        "audioSetWindows": [
+          {
+            "window": "head",
+            "topLabels": [
+              {
+                "label": "Speech",
+                "score": 0.6654
+              },
+              {
+                "label": "Pink noise",
+                "score": 0.4451
+              },
+              {
+                "label": "Inside, small room",
+                "score": 0.0545
+              },
+              {
+                "label": "Outside, rural or natural",
+                "score": 0.0274
+              },
+              {
+                "label": "Door",
+                "score": 0.0265
+              }
+            ]
+          },
+          {
+            "window": "tail",
+            "topLabels": [
+              {
+                "label": "Pink noise",
+                "score": 0.6144
+              },
+              {
+                "label": "Speech",
+                "score": 0.457
+              },
+              {
+                "label": "Waves, surf",
+                "score": 0.0935
+              },
+              {
+                "label": "Outside, rural or natural",
+                "score": 0.0689
+              },
+              {
+                "label": "Ocean",
+                "score": 0.0531
+              }
+            ]
+          }
+        ]
+      },
+      "technicalEvidence": {
+        "durationSeconds": 15.0,
+        "sizeBytes": 1276499,
+        "video": {
+          "codec": "h264",
+          "width": 480,
+          "height": 854,
+          "frameRate": "24/1",
+          "pixelFormat": "yuv420p"
+        },
+        "audio": {
+          "codec": "aac",
+          "sampleRateHz": 48000,
+          "channels": 2,
+          "channelLayout": "stereo"
+        },
+        "streamCount": {
+          "videoCount": 1,
+          "audioCount": 1,
+          "passed": true
+        },
+        "fullDecode": {
+          "passed": true,
+          "errors": null
+        },
+        "integratedLufs": -17.5,
+        "truePeakDbfs": -2.1,
+        "silenceDetect": {
+          "thresholdDb": -45,
+          "minimumSeconds": 0.35,
+          "starts": [],
+          "ends": []
+        },
+        "tailFreeze": {
+          "windowSeconds": 2.5,
+          "rmsDb": -30.880143,
+          "peakDb": -2.751625,
+          "freezeEvents": [],
+          "freezePassed": true
+        },
+        "audioAbruptness": {
+          "samplePeak": 0.779664,
+          "clippedSampleCount": 0,
+          "maxAdjacentSampleDelta": 0.377628,
+          "maxDeltaTimestampSeconds": 0.24708,
+          "p99_99Delta": 0.20181,
+          "maxToP99_99Ratio": 1.871,
+          "passed": true
+        },
+        "technicalNotes": []
+      }
+    },
+    {
+      "id": "D1-A3-cast-introductions",
+      "candidateKind": "audio-salvage-candidate",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/D1-A3-cast-introductions--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "a1f19b4a49c6fdc39ad89123aafbc8c7b48808e2f1fc7324d5cd39308b5ef7b0",
+      "verdict": "passed",
+      "contentVerdict": "passed",
+      "technicalVerdict": "passed",
+      "contentEvidence": {
+        "dialogueDetected": [],
+        "smallNoVadTranscript": "祝大家生日快樂 祝大家生日快樂 祝大家生日快樂 祝大家生日快樂 祝大家生日快樂 祝大家生日快樂 祝大家生日快樂 祝大家生日快樂 祝大家生日快樂 祝大家生日快樂",
+        "mediumVadTranscript": "",
+        "backgroundAndActions": "室内粉/白噪底、不可辨 speech-like 人声纹理；尾段有杯碟/轻碰。",
+        "sceneConsistency": "consistent",
+        "prohibitedNarrationOrMisleadingContent": [],
+        "notes": "medium-VAD 无任何可辨语音；small-no-VAD 的循环“祝大家生日快乐”未被 medium 复现，按滤波后声纹幻听处理。AudioSet 仍检出 speech-like 纹理，但没有可理解内容，符合本事件“不可辨寒暄/无旁白”要求。",
+        "audioSetWindows": [
+          {
+            "window": "head",
+            "topLabels": [
+              {
+                "label": "Pink noise",
+                "score": 0.495
+              },
+              {
+                "label": "Speech",
+                "score": 0.4819
+              },
+              {
+                "label": "White noise",
+                "score": 0.2014
+              },
+              {
+                "label": "Static",
+                "score": 0.0599
+              },
+              {
+                "label": "Inside, small room",
+                "score": 0.0477
+              }
+            ]
+          },
+          {
+            "window": "tail",
+            "topLabels": [
+              {
+                "label": "Speech",
+                "score": 0.4198
+              },
+              {
+                "label": "Pink noise",
+                "score": 0.1675
+              },
+              {
+                "label": "Dishes, pots, and pans",
+                "score": 0.0865
+              },
+              {
+                "label": "Inside, small room",
+                "score": 0.0662
+              },
+              {
+                "label": "White noise",
+                "score": 0.064
+              }
+            ]
+          }
+        ]
+      },
+      "technicalEvidence": {
+        "durationSeconds": 15.0,
+        "sizeBytes": 3697106,
+        "video": {
+          "codec": "h264",
+          "width": 480,
+          "height": 854,
+          "frameRate": "24/1",
+          "pixelFormat": "yuv420p"
+        },
+        "audio": {
+          "codec": "aac",
+          "sampleRateHz": 48000,
+          "channels": 2,
+          "channelLayout": "stereo"
+        },
+        "streamCount": {
+          "videoCount": 1,
+          "audioCount": 1,
+          "passed": true
+        },
+        "fullDecode": {
+          "passed": true,
+          "errors": null
+        },
+        "integratedLufs": -19.2,
+        "truePeakDbfs": -1.9,
+        "silenceDetect": {
+          "thresholdDb": -45,
+          "minimumSeconds": 0.35,
+          "starts": [
+            14.642958
+          ],
+          "ends": [
+            [
+              15.018667,
+              0.375708
+            ]
+          ]
+        },
+        "tailFreeze": {
+          "windowSeconds": 2.5,
+          "freezeEvents": [],
+          "freezePassed": true
+        },
+        "audioAbruptness": {
+          "samplePeak": 0.79688,
+          "clippedSampleCount": 0,
+          "maxAdjacentSampleDelta": 0.462063,
+          "maxDeltaTimestampSeconds": 11.9405,
+          "p99_99Delta": 0.238603,
+          "maxToP99_99Ratio": 1.937,
+          "passed": true
+        },
+        "technicalNotes": []
+      }
+    },
+    {
+      "id": "D1-A3B-cast-first-impressions",
+      "candidateKind": "audio-salvage-candidate",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/D1-A3B-cast-first-impressions--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "1bc6ac1724b0b3a043713b69872f54eedef98bbed330f0aa2d7853b5a597af90",
+      "verdict": "passed",
+      "contentVerdict": "passed",
+      "technicalVerdict": "passed",
+      "contentEvidence": {
+        "dialogueDetected": [],
+        "smallNoVadTranscript": "祝大家生日快樂 祝大家生日快樂 祝大家生日快樂 祝大家生日快樂 祝大家生日快樂 祝大家生日快樂 祝大家生日快樂 祝大家生日快樂 祝大家生日快樂 祝大家生日快樂",
+        "mediumVadTranscript": "",
+        "backgroundAndActions": "室内粉/白噪底、不可辨 speech-like 群体声纹；尾段有杯碟/玻璃轻碰。",
+        "sceneConsistency": "consistent",
+        "prohibitedNarrationOrMisleadingContent": [],
+        "notes": "medium-VAD 无任何可辨语音；small-no-VAD 的循环“祝大家生日快乐”未被 medium 复现，按滤波后声纹幻听处理。修复轨不再出现错误姓名/重复台词，保留自然客厅声纹与杯声；依用户允许的寒暄/环境音标准通过。",
+        "audioSetWindows": [
+          {
+            "window": "head",
+            "topLabels": [
+              {
+                "label": "Pink noise",
+                "score": 0.495
+              },
+              {
+                "label": "Speech",
+                "score": 0.4819
+              },
+              {
+                "label": "White noise",
+                "score": 0.2014
+              },
+              {
+                "label": "Static",
+                "score": 0.0599
+              },
+              {
+                "label": "Inside, small room",
+                "score": 0.0477
+              }
+            ]
+          },
+          {
+            "window": "tail",
+            "topLabels": [
+              {
+                "label": "Speech",
+                "score": 0.4198
+              },
+              {
+                "label": "Pink noise",
+                "score": 0.1675
+              },
+              {
+                "label": "Dishes, pots, and pans",
+                "score": 0.0865
+              },
+              {
+                "label": "Inside, small room",
+                "score": 0.0662
+              },
+              {
+                "label": "White noise",
+                "score": 0.064
+              }
+            ]
+          }
+        ]
+      },
+      "technicalEvidence": {
+        "durationSeconds": 15.0,
+        "sizeBytes": 1330912,
+        "video": {
+          "codec": "h264",
+          "width": 480,
+          "height": 854,
+          "frameRate": "24/1",
+          "pixelFormat": "yuv420p"
+        },
+        "audio": {
+          "codec": "aac",
+          "sampleRateHz": 48000,
+          "channels": 2,
+          "channelLayout": "stereo"
+        },
+        "streamCount": {
+          "videoCount": 1,
+          "audioCount": 1,
+          "passed": true
+        },
+        "fullDecode": {
+          "passed": true,
+          "errors": null
+        },
+        "integratedLufs": -19.2,
+        "truePeakDbfs": -1.9,
+        "silenceDetect": {
+          "thresholdDb": -45,
+          "minimumSeconds": 0.35,
+          "starts": [
+            14.642958
+          ],
+          "ends": [
+            [
+              15.018667,
+              0.375708
+            ]
+          ]
+        },
+        "tailFreeze": {
+          "windowSeconds": 2.5,
+          "freezeEvents": [],
+          "freezePassed": true
+        },
+        "audioAbruptness": {
+          "samplePeak": 0.79688,
+          "clippedSampleCount": 0,
+          "maxAdjacentSampleDelta": 0.462063,
+          "maxDeltaTimestampSeconds": 11.9405,
+          "p99_99Delta": 0.238603,
+          "maxToP99_99Ratio": 1.937,
+          "passed": true
+        },
+        "technicalNotes": []
+      }
+    },
+    {
+      "id": "D1-A4-icebreaker-selection",
+      "candidateKind": "audio-salvage-candidate",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/D1-A4-icebreaker-selection--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "3f4b2f8c978b5d4ad01e7e9f5997f07cdc541182e6dc29ade541166c43bc3e4b",
+      "verdict": "passed",
+      "contentVerdict": "passed",
+      "technicalVerdict": "passed",
+      "contentEvidence": {
+        "dialogueDetected": [],
+        "smallNoVadTranscript": "放入冰淇淋 放入冰淇淋 放入冰淇淋 放入冰淇淋 放入冰淇淋 放入冰淇淋 放入冰淇淋 冰淇淋 放入冰淇淋 放入冰淇淋 放入冰淇淋 放入冰淇淋 放入冰淇淋 放入冰淇淋",
+        "mediumVadTranscript": "",
+        "backgroundAndActions": "海浪/海洋与室内轻放声；medium-VAD无可辨对白，海景别墅语境一致。",
+        "sceneConsistency": "consistent",
+        "prohibitedNarrationOrMisleadingContent": [],
+        "notes": "响度与48k已收口。Speech分类未被medium-VAD复现为可辨台词；没有旁白/伪提示。",
+        "audioSetWindows": [
+          {
+            "window": "head",
+            "topLabels": [
+              {
+                "label": "Speech",
+                "score": 0.5171
+              },
+              {
+                "label": "Waves, surf",
+                "score": 0.2344
+              },
+              {
+                "label": "Ocean",
+                "score": 0.2014
+              },
+              {
+                "label": "Pink noise",
+                "score": 0.1327
+              },
+              {
+                "label": "Boat, Water vehicle",
+                "score": 0.0532
+              }
+            ]
+          },
+          {
+            "window": "tail",
+            "topLabels": [
+              {
+                "label": "Speech",
+                "score": 0.1407
+              },
+              {
+                "label": "Waves, surf",
+                "score": 0.0728
+              },
+              {
+                "label": "Hiccup",
+                "score": 0.0503
+              },
+              {
+                "label": "Ocean",
+                "score": 0.0488
+              },
+              {
+                "label": "Pink noise",
+                "score": 0.0386
+              }
+            ]
+          }
+        ]
+      },
+      "technicalEvidence": {
+        "durationSeconds": 15.0,
+        "sizeBytes": 1426542,
+        "video": {
+          "codec": "h264",
+          "width": 480,
+          "height": 854,
+          "frameRate": "24/1",
+          "pixelFormat": "yuv420p",
+          "frameCount": 360
+        },
+        "audio": {
+          "codec": "aac",
+          "sampleRateHz": 48000,
+          "channels": 2,
+          "channelLayout": "stereo"
+        },
+        "streamCount": {
+          "videoCount": 1,
+          "audioCount": 1,
+          "passed": true
+        },
+        "fullDecode": {
+          "passed": true,
+          "errors": null
+        },
+        "integratedLufs": -18.4,
+        "truePeakDbfs": -3.2,
+        "silenceDetect": {
+          "thresholdDb": -45,
+          "minimumSeconds": 0.35,
+          "starts": [],
+          "ends": []
+        },
+        "tailFreeze": {
+          "windowSeconds": 2.5,
+          "freezeEvents": [],
+          "policyStableTailMaxSeconds": 1.2,
+          "freezePassed": true,
+          "notes": "最后稳定尾帧是允许的 StateOut，门禁只拒绝超过1.2秒或伴随回跳/动作重复。"
+        },
+        "audioAbruptness": {
+          "samplePeak": 0.694812,
+          "clippedSampleCount": 0,
+          "maxAdjacentSampleDelta": 0.244028,
+          "maxDeltaTimestampSeconds": 6.10202,
+          "p99_99Delta": 0.095579,
+          "maxToP99_99Ratio": 2.553,
+          "passed": true
+        },
+        "technicalNotes": []
+      }
+    },
+    {
+      "id": "D1-A5-guided-smalltalk",
+      "candidateKind": "audio-salvage-candidate",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/D1-A5-guided-smalltalk--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "a60dfa94608d6b524aff81756584c1813a8d16e56f606468c34e68eeac4caa78",
+      "verdict": "passed",
+      "contentVerdict": "passed",
+      "technicalVerdict": "passed",
+      "contentEvidence": {
+        "dialogueDetected": [],
+        "smallNoVadTranscript": "我好想你 我好想你 我好想你 我好想你 我好想你 我好想你 我好想你 我好想你 我好想你 我好想你 我好想你 我好想你 我好想你 我好想你",
+        "mediumVadTranscript": "",
+        "backgroundAndActions": "尾段明确海浪/户外自然底噪，前段是轻呼吸/底噪；medium-VAD无可辨对白。",
+        "sceneConsistency": "consistent",
+        "prohibitedNarrationOrMisleadingContent": [],
+        "notes": "响度与48k已收口；尾段海浪证据明确。杯底可很轻，视觉和海风已足以支撑事件，无矛盾音。",
+        "audioSetWindows": [
+          {
+            "window": "head",
+            "topLabels": [
+              {
+                "label": "Sneeze",
+                "score": 0.1757
+              },
+              {
+                "label": "Pink noise",
+                "score": 0.1618
+              },
+              {
+                "label": "Speech",
+                "score": 0.0649
+              },
+              {
+                "label": "White noise",
+                "score": 0.0497
+              },
+              {
+                "label": "Snort",
+                "score": 0.0399
+              }
+            ]
+          },
+          {
+            "window": "tail",
+            "topLabels": [
+              {
+                "label": "Vehicle",
+                "score": 0.3487
+              },
+              {
+                "label": "Waves, surf",
+                "score": 0.2004
+              },
+              {
+                "label": "Speech",
+                "score": 0.1923
+              },
+              {
+                "label": "Ship",
+                "score": 0.1651
+              },
+              {
+                "label": "Car",
+                "score": 0.1552
+              }
+            ]
+          }
+        ]
+      },
+      "technicalEvidence": {
+        "durationSeconds": 15.0,
+        "sizeBytes": 1296810,
+        "video": {
+          "codec": "h264",
+          "width": 480,
+          "height": 854,
+          "frameRate": "24/1",
+          "pixelFormat": "yuv420p",
+          "frameCount": 360
+        },
+        "audio": {
+          "codec": "aac",
+          "sampleRateHz": 48000,
+          "channels": 2,
+          "channelLayout": "stereo"
+        },
+        "streamCount": {
+          "videoCount": 1,
+          "audioCount": 1,
+          "passed": true
+        },
+        "fullDecode": {
+          "passed": true,
+          "errors": null
+        },
+        "integratedLufs": -19.3,
+        "truePeakDbfs": -2.5,
+        "silenceDetect": {
+          "thresholdDb": -45,
+          "minimumSeconds": 0.35,
+          "starts": [],
+          "ends": []
+        },
+        "tailFreeze": {
+          "windowSeconds": 2.5,
+          "freezeEvents": [],
+          "policyStableTailMaxSeconds": 1.2,
+          "freezePassed": true,
+          "notes": "最后稳定尾帧是允许的 StateOut，门禁只拒绝超过1.2秒或伴随回跳/动作重复。"
+        },
+        "audioAbruptness": {
+          "samplePeak": 0.728411,
+          "clippedSampleCount": 0,
+          "maxAdjacentSampleDelta": 0.404406,
+          "maxDeltaTimestampSeconds": 2.80565,
+          "p99_99Delta": 0.250278,
+          "maxToP99_99Ratio": 1.616,
+          "passed": true
+        },
+        "technicalNotes": []
+      }
+    },
+    {
+      "id": "D1-A6-first-dinner-team",
+      "candidateKind": "parallel-complex-salvage-candidate",
+      "path": "media/production/identity-audio-r4/.work-salvage-r4-review/D1-A6-first-dinner-team--jiangmi-salvage-r4.mp4",
+      "sha256": "50748dffdeefe9c6dd08140c91221737531caedc64e47e1c3e1fb275cb07c2d7",
+      "verdict": "passed",
+      "contentVerdict": "passed",
+      "technicalVerdict": "passed",
+      "contentEvidence": {
+        "dialogueDetected": [],
+        "smallNoVadTranscript": "洋葱 青菜 青菜 洋葱 青菜 洋葱 洋葱 洋葱 洋葱 洋葱 洋葱 洋葱 洋葱 洋葱",
+        "mediumVadTranscript": "",
+        "backgroundAndActions": "水、滴水、液体与室内声；与备餐动作一致。",
+        "sceneConsistency": "consistent",
+        "prohibitedNarrationOrMisleadingContent": [],
+        "notes": "medium-VAD 未检出可辨对白；small-no-VAD 的重复短语或“字幕by索兰娅”等按低电平幻听处理，因为未被 medium-VAD 复现且 Speech 标签不构成清晰语句。未发现旁白、伪提示或误导性台词。",
+        "audioSetWindows": [
+          {
+            "window": "head",
+            "topLabels": [
+              {
+                "label": "Drip",
+                "score": 0.1338
+              },
+              {
+                "label": "Speech",
+                "score": 0.0532
+              },
+              {
+                "label": "Water",
+                "score": 0.0493
+              },
+              {
+                "label": "Liquid",
+                "score": 0.0471
+              },
+              {
+                "label": "Inside, small room",
+                "score": 0.035
+              }
+            ]
+          },
+          {
+            "window": "tail",
+            "topLabels": [
+              {
+                "label": "Drip",
+                "score": 0.3868
+              },
+              {
+                "label": "Squish",
+                "score": 0.1049
+              },
+              {
+                "label": "Water",
+                "score": 0.0497
+              },
+              {
+                "label": "Liquid",
+                "score": 0.0428
+              },
+              {
+                "label": "Plop",
+                "score": 0.0369
+              }
+            ]
+          }
+        ]
+      },
+      "technicalEvidence": {
+        "durationSeconds": 15.0,
+        "sizeBytes": 2205630,
+        "video": {
+          "codec": "h264",
+          "width": 480,
+          "height": 854,
+          "frameRate": "24/1",
+          "pixelFormat": "yuv420p"
+        },
+        "audio": {
+          "codec": "aac",
+          "sampleRateHz": 48000,
+          "channels": 2,
+          "channelLayout": "stereo"
+        },
+        "streamCount": {
+          "videoCount": 1,
+          "audioCount": 1,
+          "passed": true
+        },
+        "fullDecode": {
+          "passed": true,
+          "errors": null
+        },
+        "integratedLufs": -17.6,
+        "truePeakDbfs": -1.1,
+        "silenceDetect": {
+          "thresholdDb": -45,
+          "minimumSeconds": 0.35,
+          "starts": [
+            13.5845
+          ],
+          "ends": [
+            [
+              15.018667,
+              1.434167
+            ]
+          ]
+        },
+        "tailFreeze": {
+          "windowSeconds": 2.5,
+          "freezeEvents": [
+            {
+              "start": 1.041667,
+              "duration": 0.5
+            }
+          ],
+          "freezePassed": true
+        },
+        "audioAbruptness": {
+          "samplePeak": 0.879639,
+          "clippedSampleCount": 0,
+          "maxAdjacentSampleDelta": 0.570739,
+          "maxDeltaTimestampSeconds": 2.46331,
+          "p99_99Delta": 0.380392,
+          "maxToP99_99Ratio": 1.5,
+          "passed": true
+        },
+        "technicalNotes": []
+      }
+    },
+    {
+      "id": "D1-A7-heart-message",
+      "candidateKind": "audio-salvage-candidate",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/D1-A7-heart-message--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "d46ccfb52f18264ab69d2889a463304d151990ad0c635b3292dc6d204353ac77",
+      "verdict": "passed",
+      "contentVerdict": "passed",
+      "technicalVerdict": "passed",
+      "contentEvidence": {
+        "dialogueDetected": [],
+        "smallNoVadTranscript": "字幕by索兰娅",
+        "mediumVadTranscript": "",
+        "backgroundAndActions": "海浪/海洋/风与窗纱/呼吸底噪；尾段有一次轻触/触感 Foley。",
+        "sceneConsistency": "consistent",
+        "prohibitedNarrationOrMisleadingContent": [],
+        "notes": "medium-VAD 无可辨语音；AudioSet 头尾前12类均无 Music，原先高置信配乐已完全移除。海浪/海洋/风与卧室海边场景一致。",
+        "audioSetWindows": [
+          {
+            "window": "head",
+            "topLabels": [
+              {
+                "label": "Pink noise",
+                "score": 0.408
+              },
+              {
+                "label": "Waves, surf",
+                "score": 0.0516
+              },
+              {
+                "label": "Outside, rural or natural",
+                "score": 0.0393
+              },
+              {
+                "label": "Ocean",
+                "score": 0.0324
+              },
+              {
+                "label": "Wind",
+                "score": 0.0159
+              }
+            ]
+          },
+          {
+            "window": "tail",
+            "topLabels": [
+              {
+                "label": "Gasp",
+                "score": 0.0324
+              },
+              {
+                "label": "Speech",
+                "score": 0.0308
+              },
+              {
+                "label": "Inside, small room",
+                "score": 0.0297
+              },
+              {
+                "label": "Sigh",
+                "score": 0.027
+              },
+              {
+                "label": "Pink noise",
+                "score": 0.0232
+              }
+            ]
+          }
+        ]
+      },
+      "technicalEvidence": {
+        "durationSeconds": 15.0,
+        "sizeBytes": 2740932,
+        "video": {
+          "codec": "h264",
+          "width": 480,
+          "height": 854,
+          "frameRate": "24/1",
+          "pixelFormat": "yuv420p"
+        },
+        "audio": {
+          "codec": "aac",
+          "sampleRateHz": 48000,
+          "channels": 2,
+          "channelLayout": "stereo"
+        },
+        "streamCount": {
+          "videoCount": 1,
+          "audioCount": 1,
+          "passed": true
+        },
+        "fullDecode": {
+          "passed": true,
+          "errors": null
+        },
+        "integratedLufs": -18.3,
+        "truePeakDbfs": -2.1,
+        "silenceDetect": {
+          "thresholdDb": -45,
+          "minimumSeconds": 0.35,
+          "starts": [],
+          "ends": []
+        },
+        "tailFreeze": {
+          "windowSeconds": 2.5,
+          "freezeEvents": [],
+          "freezePassed": true
+        },
+        "audioAbruptness": {
+          "samplePeak": 0.780515,
+          "clippedSampleCount": 0,
+          "maxAdjacentSampleDelta": 0.448337,
+          "maxDeltaTimestampSeconds": 12.63771,
+          "p99_99Delta": 0.250136,
+          "maxToP99_99Ratio": 1.792,
+          "passed": true
+        },
+        "technicalNotes": []
+      }
+    },
+    {
+      "id": "D2-A1-memory-callback",
+      "candidateKind": "audio-salvage-candidate",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/D2-A1-memory-callback--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "5cb06dccfb5bafcb6251ba5a7cf7ae3c34faf4e6faa4797d0099518b732ed42a",
+      "verdict": "passed",
+      "contentVerdict": "passed",
+      "technicalVerdict": "passed",
+      "contentEvidence": {
+        "dialogueDetected": [],
+        "smallNoVadTranscript": "下午餐 下午餐 下午餐 下午餐 下午餐 下午餐 下午餐 下午餐 下午餐 下午餐 下午餐 下午餐 下午餐",
+        "mediumVadTranscript": "",
+        "backgroundAndActions": "杯碟/玻璃轻碰与室内声；medium-VAD无可辨对白。",
+        "sceneConsistency": "consistent",
+        "prohibitedNarrationOrMisleadingContent": [],
+        "notes": "杯碟/玻璃动作声与早餐记忆回收场景一致，无可辨误导内容。",
+        "audioSetWindows": [
+          {
+            "window": "head",
+            "topLabels": [
+              {
+                "label": "Chink, clink",
+                "score": 0.0952
+              },
+              {
+                "label": "Hammer",
+                "score": 0.0588
+              },
+              {
+                "label": "Glass",
+                "score": 0.0496
+              },
+              {
+                "label": "Pink noise",
+                "score": 0.0411
+              },
+              {
+                "label": "White noise",
+                "score": 0.0269
+              }
+            ]
+          },
+          {
+            "window": "tail",
+            "topLabels": [
+              {
+                "label": "Chink, clink",
+                "score": 0.1656
+              },
+              {
+                "label": "Pink noise",
+                "score": 0.0635
+              },
+              {
+                "label": "Glass",
+                "score": 0.0569
+              },
+              {
+                "label": "White noise",
+                "score": 0.0383
+              },
+              {
+                "label": "Dishes, pots, and pans",
+                "score": 0.0346
+              }
+            ]
+          }
+        ]
+      },
+      "technicalEvidence": {
+        "durationSeconds": 15.0,
+        "sizeBytes": 1345752,
+        "video": {
+          "codec": "h264",
+          "width": 480,
+          "height": 854,
+          "frameRate": "24/1",
+          "pixelFormat": "yuv420p",
+          "frameCount": 360
+        },
+        "audio": {
+          "codec": "aac",
+          "sampleRateHz": 48000,
+          "channels": 2,
+          "channelLayout": "stereo"
+        },
+        "streamCount": {
+          "videoCount": 1,
+          "audioCount": 1,
+          "passed": true
+        },
+        "fullDecode": {
+          "passed": true,
+          "errors": null
+        },
+        "integratedLufs": -20.9,
+        "truePeakDbfs": -3.4,
+        "silenceDetect": {
+          "thresholdDb": -45,
+          "minimumSeconds": 0.35,
+          "starts": [],
+          "ends": []
+        },
+        "tailFreeze": {
+          "windowSeconds": 2.5,
+          "freezeEvents": [],
+          "policyStableTailMaxSeconds": 1.2,
+          "freezePassed": true,
+          "notes": "最后稳定尾帧是允许的 StateOut，门禁只拒绝超过1.2秒或伴随回跳/动作重复。"
+        },
+        "audioAbruptness": {
+          "samplePeak": 0.672186,
+          "clippedSampleCount": 0,
+          "maxAdjacentSampleDelta": 0.494932,
+          "maxDeltaTimestampSeconds": 9.90696,
+          "p99_99Delta": 0.263482,
+          "maxToP99_99Ratio": 1.878,
+          "passed": true
+        },
+        "technicalNotes": []
+      }
+    },
+    {
+      "id": "EV-KITCHEN-two-person-shift",
+      "candidateKind": "audio-salvage-candidate",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/EV-KITCHEN-two-person-shift--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "8a6ea6a038fcf295b93acd12a1413e21a30f0836ae47336f7e760344878d7035",
+      "verdict": "passed",
+      "contentVerdict": "passed",
+      "technicalVerdict": "passed",
+      "contentEvidence": {
+        "dialogueDetected": [
+          "名字样短呼：medium“加密”，结合原small“加米”与画面身份，可能为“姜米”"
+        ],
+        "smallNoVadTranscript": "加米",
+        "mediumVadTranscript": "加密",
+        "backgroundAndActions": "水、滴水、液体与室内厨房声；有一句名字样短呼。",
+        "sceneConsistency": "consistent",
+        "prohibitedNarrationOrMisleadingContent": [],
+        "notes": "medium仅识别“加密”，结合small旧结果“加米”和画面身份，按“姜米”名字样短呼处理；水/液体声明确，不构成误导台词。",
+        "audioSetWindows": [
+          {
+            "window": "head",
+            "topLabels": [
+              {
+                "label": "Speech",
+                "score": 0.8928
+              },
+              {
+                "label": "Drip",
+                "score": 0.5939
+              },
+              {
+                "label": "Inside, small room",
+                "score": 0.3021
+              },
+              {
+                "label": "Liquid",
+                "score": 0.2528
+              },
+              {
+                "label": "Water",
+                "score": 0.1519
+              }
+            ]
+          },
+          {
+            "window": "tail",
+            "topLabels": [
+              {
+                "label": "Drip",
+                "score": 0.6621
+              },
+              {
+                "label": "Liquid",
+                "score": 0.3284
+              },
+              {
+                "label": "Squish",
+                "score": 0.1377
+              },
+              {
+                "label": "Inside, small room",
+                "score": 0.1346
+              },
+              {
+                "label": "Fill (with liquid)",
+                "score": 0.1196
+              }
+            ]
+          }
+        ]
+      },
+      "technicalEvidence": {
+        "durationSeconds": 15.0,
+        "sizeBytes": 1292457,
+        "video": {
+          "codec": "h264",
+          "width": 480,
+          "height": 854,
+          "frameRate": "24/1",
+          "pixelFormat": "yuv420p",
+          "frameCount": 360
+        },
+        "audio": {
+          "codec": "aac",
+          "sampleRateHz": 48000,
+          "channels": 2,
+          "channelLayout": "stereo"
+        },
+        "streamCount": {
+          "videoCount": 1,
+          "audioCount": 1,
+          "passed": true
+        },
+        "fullDecode": {
+          "passed": true,
+          "errors": null
+        },
+        "integratedLufs": -23.1,
+        "truePeakDbfs": -3.1,
+        "silenceDetect": {
+          "thresholdDb": -45,
+          "minimumSeconds": 0.35,
+          "starts": [],
+          "ends": []
+        },
+        "tailFreeze": {
+          "windowSeconds": 2.5,
+          "freezeEvents": [],
+          "policyStableTailMaxSeconds": 1.2,
+          "freezePassed": true,
+          "notes": "最后稳定尾帧是允许的 StateOut，门禁只拒绝超过1.2秒或伴随回跳/动作重复。"
+        },
+        "audioAbruptness": {
+          "samplePeak": 0.696848,
+          "clippedSampleCount": 0,
+          "maxAdjacentSampleDelta": 0.332444,
+          "maxDeltaTimestampSeconds": 11.58685,
+          "p99_99Delta": 0.164886,
+          "maxToP99_99Ratio": 2.016,
+          "passed": true
+        },
+        "technicalNotes": []
+      }
+    },
+    {
+      "id": "EV-SIGNAL-first-anonymous-message",
+      "candidateKind": "audio-salvage-candidate",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/EV-SIGNAL-first-anonymous-message--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "675be887bf2e3f49903b37f658a132ce1519c026b4c5f81da75358fbf769f4e1",
+      "verdict": "passed",
+      "contentVerdict": "passed",
+      "technicalVerdict": "passed",
+      "contentEvidence": {
+        "dialogueDetected": [],
+        "smallNoVadTranscript": "你怎麼還在那邊? 你怎麼還在那邊? 你怎麼還在那邊? 你怎麼還在那邊? 你怎麼還在那邊? 你怎麼還在那邊? 你怎麼還在那邊? 你怎麼還在那邊? 你怎麼還在那邊? 你怎麼還在那邊? 你怎麼還在那邊? 你怎麼還在那邊? 你怎…",
+        "mediumVadTranscript": "",
+        "backgroundAndActions": "敲击/轻触/木质表面与室内底噪；medium-VAD无可辨对白。",
+        "sceneConsistency": "consistent",
+        "prohibitedNarrationOrMisleadingContent": [],
+        "notes": "手机/桌面轻触类瞬态明确，无可辨对白或伪提示。",
+        "audioSetWindows": [
+          {
+            "window": "head",
+            "topLabels": [
+              {
+                "label": "Knock",
+                "score": 0.4007
+              },
+              {
+                "label": "Pink noise",
+                "score": 0.0886
+              },
+              {
+                "label": "Wood",
+                "score": 0.0447
+              },
+              {
+                "label": "Chop",
+                "score": 0.0435
+              },
+              {
+                "label": "White noise",
+                "score": 0.0407
+              }
+            ]
+          },
+          {
+            "window": "tail",
+            "topLabels": [
+              {
+                "label": "Knock",
+                "score": 0.2536
+              },
+              {
+                "label": "Wood",
+                "score": 0.0479
+              },
+              {
+                "label": "Hammer",
+                "score": 0.0413
+              },
+              {
+                "label": "Chop",
+                "score": 0.0302
+              },
+              {
+                "label": "Tap",
+                "score": 0.0274
+              }
+            ]
+          }
+        ]
+      },
+      "technicalEvidence": {
+        "durationSeconds": 15.0,
+        "sizeBytes": 1236785,
+        "video": {
+          "codec": "h264",
+          "width": 480,
+          "height": 854,
+          "frameRate": "24/1",
+          "pixelFormat": "yuv420p",
+          "frameCount": 360
+        },
+        "audio": {
+          "codec": "aac",
+          "sampleRateHz": 48000,
+          "channels": 2,
+          "channelLayout": "stereo"
+        },
+        "streamCount": {
+          "videoCount": 1,
+          "audioCount": 1,
+          "passed": true
+        },
+        "fullDecode": {
+          "passed": true,
+          "errors": null
+        },
+        "integratedLufs": -18.4,
+        "truePeakDbfs": -3.1,
+        "silenceDetect": {
+          "thresholdDb": -45,
+          "minimumSeconds": 0.35,
+          "starts": [],
+          "ends": []
+        },
+        "tailFreeze": {
+          "windowSeconds": 2.5,
+          "freezeEvents": [],
+          "policyStableTailMaxSeconds": 1.2,
+          "freezePassed": true,
+          "notes": "最后稳定尾帧是允许的 StateOut，门禁只拒绝超过1.2秒或伴随回跳/动作重复。"
+        },
+        "audioAbruptness": {
+          "samplePeak": 0.694687,
+          "clippedSampleCount": 0,
+          "maxAdjacentSampleDelta": 0.206449,
+          "maxDeltaTimestampSeconds": 1.6704,
+          "p99_99Delta": 0.0826,
+          "maxToP99_99Ratio": 2.499,
+          "passed": true
+        },
+        "technicalNotes": []
+      }
+    },
+    {
+      "id": "EV-DATE-blind-box",
+      "candidateKind": "audio-salvage-candidate",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/EV-DATE-blind-box--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "63f795594d893fce4ecee9e75dbdcdf0c38c1e16bbb7ecadaeb5007683dcc5e7",
+      "verdict": "passed",
+      "contentVerdict": "passed",
+      "technicalVerdict": "passed",
+      "contentEvidence": {
+        "dialogueDetected": [],
+        "smallNoVadTranscript": "小小姐 小小姐 小小姐 小小姐 小小姐 小小姐 小小姐 小小姐 小小姐 小小姐 小小姐 小小姐 小小姐 小小姐 小小姐 小小姐 小小姐 小小姐 小小姐 小小姐 小小姐 小小姐 小小姐 小小姐 小小姐 小小姐 小小姐 小小…",
+        "mediumVadTranscript": "",
+        "backgroundAndActions": "自然环境/鸟声与不可辨人声纹理；medium-VAD无可辨对白，视觉已承担陶艺选择动作。",
+        "sceneConsistency": "consistent",
+        "prohibitedNarrationOrMisleadingContent": [],
+        "notes": "medium-VAD无台词；鸟声/自然环境不与户外约会盲盒矛盾，陶艺动作由画面清楚呈现。低置信Music 0.074仅单窗，未达到配乐告警。",
+        "audioSetWindows": [
+          {
+            "window": "head",
+            "topLabels": [
+              {
+                "label": "Speech",
+                "score": 0.2832
+              },
+              {
+                "label": "Music",
+                "score": 0.0741
+              },
+              {
+                "label": "Pink noise",
+                "score": 0.061
+              },
+              {
+                "label": "Animal",
+                "score": 0.0499
+              },
+              {
+                "label": "Hubbub, speech noise, speech babble",
+                "score": 0.0436
+              }
+            ]
+          },
+          {
+            "window": "tail",
+            "topLabels": [
+              {
+                "label": "Speech",
+                "score": 0.1985
+              },
+              {
+                "label": "Animal",
+                "score": 0.0835
+              },
+              {
+                "label": "Crow",
+                "score": 0.0794
+              },
+              {
+                "label": "Caw",
+                "score": 0.0686
+              },
+              {
+                "label": "Pink noise",
+                "score": 0.06
+              }
+            ]
+          }
+        ]
+      },
+      "technicalEvidence": {
+        "durationSeconds": 15.0,
+        "sizeBytes": 1444017,
+        "video": {
+          "codec": "h264",
+          "width": 480,
+          "height": 854,
+          "frameRate": "24/1",
+          "pixelFormat": "yuv420p",
+          "frameCount": 360
+        },
+        "audio": {
+          "codec": "aac",
+          "sampleRateHz": 48000,
+          "channels": 2,
+          "channelLayout": "stereo"
+        },
+        "streamCount": {
+          "videoCount": 1,
+          "audioCount": 1,
+          "passed": true
+        },
+        "fullDecode": {
+          "passed": true,
+          "errors": null
+        },
+        "integratedLufs": -16.8,
+        "truePeakDbfs": -2.7,
+        "silenceDetect": {
+          "thresholdDb": -45,
+          "minimumSeconds": 0.35,
+          "starts": [],
+          "ends": []
+        },
+        "tailFreeze": {
+          "windowSeconds": 2.5,
+          "freezeEvents": [],
+          "policyStableTailMaxSeconds": 1.2,
+          "freezePassed": true,
+          "notes": "最后稳定尾帧是允许的 StateOut，门禁只拒绝超过1.2秒或伴随回跳/动作重复。"
+        },
+        "audioAbruptness": {
+          "samplePeak": 0.730331,
+          "clippedSampleCount": 0,
+          "maxAdjacentSampleDelta": 0.404333,
+          "maxDeltaTimestampSeconds": 7.28927,
+          "p99_99Delta": 0.254296,
+          "maxToP99_99Ratio": 1.59,
+          "passed": true
+        },
+        "technicalNotes": []
+      }
+    },
+    {
+      "id": "EV-DATE-mutual-signal",
+      "candidateKind": "audio-salvage-candidate",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/EV-DATE-mutual-signal--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "53631252f8045df281c51bf60284460d831ac168814712072253f59d632c55d6",
+      "verdict": "passed",
+      "contentVerdict": "passed",
+      "technicalVerdict": "passed",
+      "contentEvidence": {
+        "dialogueDetected": [],
+        "smallNoVadTranscript": "今天也很感謝大家收看 謝謝大家收看 我們下次再見",
+        "mediumVadTranscript": "",
+        "backgroundAndActions": "杯底轻响、海浪/海洋与户外自然底噪；medium-VAD无可辨对白。",
+        "sceneConsistency": "consistent",
+        "prohibitedNarrationOrMisleadingContent": [],
+        "notes": "medium-VAD无台词；杯声和海浪与继续交谈场景一致。低置信Music 0.034不视为可听配乐。",
+        "audioSetWindows": [
+          {
+            "window": "head",
+            "topLabels": [
+              {
+                "label": "Speech",
+                "score": 0.3976
+              },
+              {
+                "label": "Chink, clink",
+                "score": 0.2214
+              },
+              {
+                "label": "Pink noise",
+                "score": 0.091
+              },
+              {
+                "label": "Outside, rural or natural",
+                "score": 0.0339
+              },
+              {
+                "label": "Music",
+                "score": 0.0337
+              }
+            ]
+          },
+          {
+            "window": "tail",
+            "topLabels": [
+              {
+                "label": "Pink noise",
+                "score": 0.3727
+              },
+              {
+                "label": "Speech",
+                "score": 0.2569
+              },
+              {
+                "label": "Waves, surf",
+                "score": 0.0989
+              },
+              {
+                "label": "Ocean",
+                "score": 0.0658
+              },
+              {
+                "label": "Outside, rural or natural",
+                "score": 0.0519
+              }
+            ]
+          }
+        ]
+      },
+      "technicalEvidence": {
+        "durationSeconds": 15.0,
+        "sizeBytes": 1293058,
+        "video": {
+          "codec": "h264",
+          "width": 480,
+          "height": 854,
+          "frameRate": "24/1",
+          "pixelFormat": "yuv420p",
+          "frameCount": 360
+        },
+        "audio": {
+          "codec": "aac",
+          "sampleRateHz": 48000,
+          "channels": 2,
+          "channelLayout": "stereo"
+        },
+        "streamCount": {
+          "videoCount": 1,
+          "audioCount": 1,
+          "passed": true
+        },
+        "fullDecode": {
+          "passed": true,
+          "errors": null
+        },
+        "integratedLufs": -21.4,
+        "truePeakDbfs": -2.8,
+        "silenceDetect": {
+          "thresholdDb": -45,
+          "minimumSeconds": 0.35,
+          "starts": [],
+          "ends": []
+        },
+        "tailFreeze": {
+          "windowSeconds": 2.5,
+          "freezeEvents": [
+            {
+              "start": 1.916667,
+              "duration": 0.541667
+            }
+          ],
+          "policyStableTailMaxSeconds": 1.2,
+          "freezePassed": true,
+          "notes": "最后稳定尾帧是允许的 StateOut，门禁只拒绝超过1.2秒或伴随回跳/动作重复。"
+        },
+        "audioAbruptness": {
+          "samplePeak": 0.710887,
+          "clippedSampleCount": 0,
+          "maxAdjacentSampleDelta": 0.428939,
+          "maxDeltaTimestampSeconds": 3.36652,
+          "p99_99Delta": 0.214658,
+          "maxToP99_99Ratio": 1.998,
+          "passed": true
+        },
+        "technicalNotes": []
+      }
+    },
+    {
+      "id": "EV-CARE-breakfast-callback",
+      "candidateKind": "audio-salvage-candidate",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/EV-CARE-breakfast-callback--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "b6d6da3100cf5f39c55d7e48b024bbac1bc24216e979d31e2b02555754e72b9b",
+      "verdict": "passed",
+      "contentVerdict": "passed",
+      "technicalVerdict": "passed",
+      "contentEvidence": {
+        "dialogueDetected": [
+          "嗯"
+        ],
+        "smallNoVadTranscript": "今天晚上的午餐 今天晚上的午餐 今天晚上的晚餐 今天晚上的晚餐 今天晚上的晚餐 今天晚上的晚餐 今天晚上的晚餐 今天晚上的晚餐 今天晚上的晚餐 今天晚上的晚餐 今天晚上的晚餐 今天晚上的晚餐 今天晚上的晚餐 今天晚上的晚…",
+        "mediumVadTranscript": "嗯",
+        "backgroundAndActions": "敲门/门、轻触及杯碟室内声；仅检出自然“嗯”。",
+        "sceneConsistency": "consistent",
+        "prohibitedNarrationOrMisleadingContent": [],
+        "notes": "自然“嗯”与敲门/杯碟声符合早餐回收场景，无旁白或伪提示。",
+        "audioSetWindows": [
+          {
+            "window": "head",
+            "topLabels": [
+              {
+                "label": "Knock",
+                "score": 0.6203
+              },
+              {
+                "label": "Door",
+                "score": 0.364
+              },
+              {
+                "label": "Sliding door",
+                "score": 0.1232
+              },
+              {
+                "label": "Inside, small room",
+                "score": 0.0433
+              },
+              {
+                "label": "Tap",
+                "score": 0.0431
+              }
+            ]
+          },
+          {
+            "window": "tail",
+            "topLabels": [
+              {
+                "label": "Pink noise",
+                "score": 0.1007
+              },
+              {
+                "label": "White noise",
+                "score": 0.0596
+              },
+              {
+                "label": "Inside, small room",
+                "score": 0.0565
+              },
+              {
+                "label": "Glass",
+                "score": 0.0518
+              },
+              {
+                "label": "Noise",
+                "score": 0.0402
+              }
+            ]
+          }
+        ]
+      },
+      "technicalEvidence": {
+        "durationSeconds": 15.0,
+        "sizeBytes": 1237037,
+        "video": {
+          "codec": "h264",
+          "width": 480,
+          "height": 854,
+          "frameRate": "24/1",
+          "pixelFormat": "yuv420p",
+          "frameCount": 360
+        },
+        "audio": {
+          "codec": "aac",
+          "sampleRateHz": 48000,
+          "channels": 2,
+          "channelLayout": "stereo"
+        },
+        "streamCount": {
+          "videoCount": 1,
+          "audioCount": 1,
+          "passed": true
+        },
+        "fullDecode": {
+          "passed": true,
+          "errors": null
+        },
+        "integratedLufs": -21.6,
+        "truePeakDbfs": -3.1,
+        "silenceDetect": {
+          "thresholdDb": -45,
+          "minimumSeconds": 0.35,
+          "starts": [],
+          "ends": []
+        },
+        "tailFreeze": {
+          "windowSeconds": 2.5,
+          "freezeEvents": [],
+          "policyStableTailMaxSeconds": 1.2,
+          "freezePassed": true,
+          "notes": "最后稳定尾帧是允许的 StateOut，门禁只拒绝超过1.2秒或伴随回跳/动作重复。"
+        },
+        "audioAbruptness": {
+          "samplePeak": 0.697799,
+          "clippedSampleCount": 0,
+          "maxAdjacentSampleDelta": 0.643865,
+          "maxDeltaTimestampSeconds": 10.33273,
+          "p99_99Delta": 0.224325,
+          "maxToP99_99Ratio": 2.87,
+          "passed": true
+        },
+        "technicalNotes": []
+      }
+    },
+    {
+      "id": "EV-BOMBSHELL-ninth-card",
+      "candidateKind": "audio-salvage-candidate",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/EV-BOMBSHELL-ninth-card--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "c469339085e9198419cc18204fe253dcdf1c950f6e68ed006782ee75af6c0e10",
+      "verdict": "passed",
+      "contentVerdict": "passed",
+      "technicalVerdict": "passed",
+      "contentEvidence": {
+        "dialogueDetected": [],
+        "smallNoVadTranscript": "中文字幕",
+        "mediumVadTranscript": "",
+        "backgroundAndActions": "明确门铃/叮咚、门与室内声；medium-VAD无可辨对白。",
+        "sceneConsistency": "consistent",
+        "prohibitedNarrationOrMisleadingContent": [],
+        "notes": "门铃/叮咚为事件关键声，medium-VAD无台词。低置信Music 0.061仅头窗，不视为可听配乐。",
+        "audioSetWindows": [
+          {
+            "window": "head",
+            "topLabels": [
+              {
+                "label": "Doorbell",
+                "score": 0.5876
+              },
+              {
+                "label": "Ding-dong",
+                "score": 0.2482
+              },
+              {
+                "label": "Speech",
+                "score": 0.1967
+              },
+              {
+                "label": "Music",
+                "score": 0.0607
+              },
+              {
+                "label": "Inside, small room",
+                "score": 0.0347
+              }
+            ]
+          },
+          {
+            "window": "tail",
+            "topLabels": [
+              {
+                "label": "Typewriter",
+                "score": 0.0856
+              },
+              {
+                "label": "Mechanical fan",
+                "score": 0.0739
+              },
+              {
+                "label": "Door",
+                "score": 0.0386
+              },
+              {
+                "label": "Air conditioning",
+                "score": 0.0385
+              },
+              {
+                "label": "Inside, small room",
+                "score": 0.0339
+              }
+            ]
+          }
+        ]
+      },
+      "technicalEvidence": {
+        "durationSeconds": 15.0,
+        "sizeBytes": 1214373,
+        "video": {
+          "codec": "h264",
+          "width": 480,
+          "height": 854,
+          "frameRate": "24/1",
+          "pixelFormat": "yuv420p",
+          "frameCount": 360
+        },
+        "audio": {
+          "codec": "aac",
+          "sampleRateHz": 48000,
+          "channels": 2,
+          "channelLayout": "stereo"
+        },
+        "streamCount": {
+          "videoCount": 1,
+          "audioCount": 1,
+          "passed": true
+        },
+        "fullDecode": {
+          "passed": true,
+          "errors": null
+        },
+        "integratedLufs": -18.2,
+        "truePeakDbfs": -2.2,
+        "silenceDetect": {
+          "thresholdDb": -45,
+          "minimumSeconds": 0.35,
+          "starts": [],
+          "ends": []
+        },
+        "tailFreeze": {
+          "windowSeconds": 2.5,
+          "freezeEvents": [],
+          "policyStableTailMaxSeconds": 1.2,
+          "freezePassed": true,
+          "notes": "最后稳定尾帧是允许的 StateOut，门禁只拒绝超过1.2秒或伴随回跳/动作重复。"
+        },
+        "audioAbruptness": {
+          "samplePeak": 0.77381,
+          "clippedSampleCount": 0,
+          "maxAdjacentSampleDelta": 0.511672,
+          "maxDeltaTimestampSeconds": 5.0404,
+          "p99_99Delta": 0.216565,
+          "maxToP99_99Ratio": 2.363,
+          "passed": true
+        },
+        "technicalNotes": []
+      }
+    },
+    {
+      "id": "EV-IDENTITY-profession-reveal",
+      "candidateKind": "audio-salvage-candidate",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/EV-IDENTITY-profession-reveal--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "95266323e3e46a34646326cba229c32784a462fce545ebaaf72a7a50523abaae",
+      "verdict": "passed",
+      "contentVerdict": "passed",
+      "technicalVerdict": "passed",
+      "contentEvidence": {
+        "dialogueDetected": [],
+        "smallNoVadTranscript": "好",
+        "mediumVadTranscript": "",
+        "backgroundAndActions": "纸/衣料样 rustle、叹息/呼吸与室内底噪；medium-VAD无可辨对白。",
+        "sceneConsistency": "consistent",
+        "prohibitedNarrationOrMisleadingContent": [],
+        "notes": "medium-VAD无台词；rustle/呼吸与翻卡后反应合理，卡纸不需要被分类器高置信命中。",
+        "audioSetWindows": [
+          {
+            "window": "head",
+            "topLabels": [
+              {
+                "label": "Pink noise",
+                "score": 0.2062
+              },
+              {
+                "label": "Speech",
+                "score": 0.076
+              },
+              {
+                "label": "White noise",
+                "score": 0.0721
+              },
+              {
+                "label": "Rustle",
+                "score": 0.0334
+              },
+              {
+                "label": "Snort",
+                "score": 0.0284
+              }
+            ]
+          },
+          {
+            "window": "tail",
+            "topLabels": [
+              {
+                "label": "Sigh",
+                "score": 0.0681
+              },
+              {
+                "label": "Gasp",
+                "score": 0.0541
+              },
+              {
+                "label": "Pink noise",
+                "score": 0.0493
+              },
+              {
+                "label": "Breathing",
+                "score": 0.0486
+              },
+              {
+                "label": "Snort",
+                "score": 0.0326
+              }
+            ]
+          }
+        ]
+      },
+      "technicalEvidence": {
+        "durationSeconds": 15.0,
+        "sizeBytes": 1308401,
+        "video": {
+          "codec": "h264",
+          "width": 480,
+          "height": 854,
+          "frameRate": "24/1",
+          "pixelFormat": "yuv420p",
+          "frameCount": 360
+        },
+        "audio": {
+          "codec": "aac",
+          "sampleRateHz": 48000,
+          "channels": 2,
+          "channelLayout": "stereo"
+        },
+        "streamCount": {
+          "videoCount": 1,
+          "audioCount": 1,
+          "passed": true
+        },
+        "fullDecode": {
+          "passed": true,
+          "errors": null
+        },
+        "integratedLufs": -16.9,
+        "truePeakDbfs": -3.2,
+        "silenceDetect": {
+          "thresholdDb": -45,
+          "minimumSeconds": 0.35,
+          "starts": [],
+          "ends": []
+        },
+        "tailFreeze": {
+          "windowSeconds": 2.5,
+          "freezeEvents": [],
+          "policyStableTailMaxSeconds": 1.2,
+          "freezePassed": true,
+          "notes": "最后稳定尾帧是允许的 StateOut，门禁只拒绝超过1.2秒或伴随回跳/动作重复。"
+        },
+        "audioAbruptness": {
+          "samplePeak": 0.684151,
+          "clippedSampleCount": 0,
+          "maxAdjacentSampleDelta": 0.449283,
+          "maxDeltaTimestampSeconds": 11.61965,
+          "p99_99Delta": 0.233111,
+          "maxToP99_99Ratio": 1.927,
+          "passed": true
+        },
+        "technicalNotes": []
+      }
+    },
+    {
+      "id": "EV-RULES-house-friction",
+      "candidateKind": "audio-salvage-candidate",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/EV-RULES-house-friction--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "b5e1159d72366c4c7baf534b3765ce5632d5a937ebfaa915d110d2ff2c35610b",
+      "verdict": "passed",
+      "contentVerdict": "passed",
+      "technicalVerdict": "passed",
+      "contentEvidence": {
+        "dialogueDetected": [],
+        "smallNoVadTranscript": "字幕by索兰娅",
+        "mediumVadTranscript": "",
+        "backgroundAndActions": "低置信宽带环境与轻触声；medium-VAD无可辨对白，视觉清楚呈现卡片移动。",
+        "sceneConsistency": "consistent",
+        "prohibitedNarrationOrMisleadingContent": [],
+        "notes": "medium-VAD无台词；卡片移动由视觉明确，轻动作声可被宽带分类器误标为车辆/喷气。最高Music 0.048，未达到配乐告警，无冲突内容。",
+        "audioSetWindows": [
+          {
+            "window": "head",
+            "topLabels": [
+              {
+                "label": "Vehicle",
+                "score": 0.1513
+              },
+              {
+                "label": "Air brake",
+                "score": 0.0671
+              },
+              {
+                "label": "Bus",
+                "score": 0.0568
+              },
+              {
+                "label": "Music",
+                "score": 0.0483
+              },
+              {
+                "label": "Car",
+                "score": 0.0473
+              }
+            ]
+          },
+          {
+            "window": "tail",
+            "topLabels": [
+              {
+                "label": "Speech",
+                "score": 0.0986
+              },
+              {
+                "label": "White noise",
+                "score": 0.0838
+              },
+              {
+                "label": "Pink noise",
+                "score": 0.0775
+              },
+              {
+                "label": "Spray",
+                "score": 0.0528
+              },
+              {
+                "label": "Coin (dropping)",
+                "score": 0.0523
+              }
+            ]
+          }
+        ]
+      },
+      "technicalEvidence": {
+        "durationSeconds": 15.0,
+        "sizeBytes": 1268847,
+        "video": {
+          "codec": "h264",
+          "width": 480,
+          "height": 854,
+          "frameRate": "24/1",
+          "pixelFormat": "yuv420p",
+          "frameCount": 360
+        },
+        "audio": {
+          "codec": "aac",
+          "sampleRateHz": 48000,
+          "channels": 2,
+          "channelLayout": "stereo"
+        },
+        "streamCount": {
+          "videoCount": 1,
+          "audioCount": 1,
+          "passed": true
+        },
+        "fullDecode": {
+          "passed": true,
+          "errors": null
+        },
+        "integratedLufs": -18.0,
+        "truePeakDbfs": -2.5,
+        "silenceDetect": {
+          "thresholdDb": -45,
+          "minimumSeconds": 0.35,
+          "starts": [],
+          "ends": []
+        },
+        "tailFreeze": {
+          "windowSeconds": 2.5,
+          "freezeEvents": [],
+          "policyStableTailMaxSeconds": 1.2,
+          "freezePassed": true,
+          "notes": "最后稳定尾帧是允许的 StateOut，门禁只拒绝超过1.2秒或伴随回跳/动作重复。"
+        },
+        "audioAbruptness": {
+          "samplePeak": 0.739883,
+          "clippedSampleCount": 0,
+          "maxAdjacentSampleDelta": 0.373703,
+          "maxDeltaTimestampSeconds": 13.84969,
+          "p99_99Delta": 0.242518,
+          "maxToP99_99Ratio": 1.541,
+          "passed": true
+        },
+        "technicalNotes": []
+      }
+    },
+    {
+      "id": "EV-BRIDGE-hidden-courage",
+      "candidateKind": "parallel-complex-salvage-candidate",
+      "path": "media/production/identity-audio-r4/.work-salvage-r4-bridge-trip/EV-BRIDGE-hidden-courage--jiangmi-r4-local-salvage-candidate.mp4",
+      "sha256": "b413f4abf8f51b37e6edf24727abbf159ffc3768b82bec2fca5ba910f2bca404",
+      "verdict": "passed",
+      "contentVerdict": "passed",
+      "technicalVerdict": "passed",
+      "contentEvidence": {
+        "dialogueDetected": [],
+        "smallNoVadTranscript": "字幕by索兰娅",
+        "mediumVadTranscript": "",
+        "backgroundAndActions": "水流、海浪/海洋与风；和过水事件一致。",
+        "sceneConsistency": "consistent",
+        "prohibitedNarrationOrMisleadingContent": [],
+        "notes": "medium-VAD 未检出可辨对白；small-no-VAD 的重复短语或“字幕by索兰娅”等按低电平幻听处理，因为未被 medium-VAD 复现且 Speech 标签不构成清晰语句。未发现旁白、伪提示或误导性台词。",
+        "audioSetWindows": [
+          {
+            "window": "head",
+            "topLabels": [
+              {
+                "label": "Speech",
+                "score": 0.4008
+              },
+              {
+                "label": "Stream",
+                "score": 0.1152
+              },
+              {
+                "label": "Waves, surf",
+                "score": 0.0838
+              },
+              {
+                "label": "Pink noise",
+                "score": 0.0606
+              },
+              {
+                "label": "Ocean",
+                "score": 0.0565
+              }
+            ]
+          },
+          {
+            "window": "tail",
+            "topLabels": [
+              {
+                "label": "Waves, surf",
+                "score": 0.1114
+              },
+              {
+                "label": "Boat, Water vehicle",
+                "score": 0.0994
+              },
+              {
+                "label": "Ocean",
+                "score": 0.0731
+              },
+              {
+                "label": "Wind",
+                "score": 0.0693
+              },
+              {
+                "label": "Wind noise (microphone)",
+                "score": 0.0691
+              }
+            ]
+          }
+        ]
+      },
+      "technicalEvidence": {
+        "durationSeconds": 15.0,
+        "sizeBytes": 1400016,
+        "video": {
+          "codec": "h264",
+          "width": 480,
+          "height": 854,
+          "frameRate": "24/1",
+          "pixelFormat": "yuv420p"
+        },
+        "audio": {
+          "codec": "aac",
+          "sampleRateHz": 48000,
+          "channels": 2,
+          "channelLayout": "stereo"
+        },
+        "streamCount": {
+          "videoCount": 1,
+          "audioCount": 1,
+          "passed": true
+        },
+        "fullDecode": {
+          "passed": true,
+          "errors": null
+        },
+        "integratedLufs": -17.8,
+        "truePeakDbfs": -1.7,
+        "silenceDetect": {
+          "thresholdDb": -45,
+          "minimumSeconds": 0.35,
+          "starts": [],
+          "ends": []
+        },
+        "tailFreeze": {
+          "windowSeconds": 2.5,
+          "freezeEvents": [],
+          "freezePassed": true
+        },
+        "audioAbruptness": {
+          "samplePeak": 0.81961,
+          "clippedSampleCount": 0,
+          "maxAdjacentSampleDelta": 0.411873,
+          "maxDeltaTimestampSeconds": 6.59421,
+          "p99_99Delta": 0.194946,
+          "maxToP99_99Ratio": 2.113,
+          "passed": true
+        },
+        "technicalNotes": []
+      }
+    },
+    {
+      "id": "EV-GROUP-truth-firepit",
+      "candidateKind": "audio-salvage-candidate",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/EV-GROUP-truth-firepit--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "914d3dcfdb86ab34898cb2222c64ae52fb1e611dd0a96783b6f090c077e2ba67",
+      "verdict": "passed",
+      "contentVerdict": "passed",
+      "technicalVerdict": "passed",
+      "contentEvidence": {
+        "dialogueDetected": [],
+        "smallNoVadTranscript": "",
+        "mediumVadTranscript": "",
+        "backgroundAndActions": "户外宽带环境、摩擦与群体场景底噪；medium-VAD无可辨对白。",
+        "sceneConsistency": "consistent",
+        "prohibitedNarrationOrMisleadingContent": [],
+        "notes": "medium-VAD无台词；原轨未检出Music，机械响度收口后单窗Music 0.125/尾窗0.050，且无节拍/语音证据，按分类器增益敏感误报处理。户外宽带底噪与围炉场景不矛盾。",
+        "audioSetWindows": [
+          {
+            "window": "head",
+            "topLabels": [
+              {
+                "label": "Vehicle",
+                "score": 0.1375
+              },
+              {
+                "label": "Music",
+                "score": 0.1253
+              },
+              {
+                "label": "Pink noise",
+                "score": 0.0399
+              },
+              {
+                "label": "Fixed-wing aircraft, airplane",
+                "score": 0.0359
+              },
+              {
+                "label": "Outside, rural or natural",
+                "score": 0.035
+              }
+            ]
+          },
+          {
+            "window": "tail",
+            "topLabels": [
+              {
+                "label": "Vehicle",
+                "score": 0.1469
+              },
+              {
+                "label": "Pink noise",
+                "score": 0.1297
+              },
+              {
+                "label": "Noise",
+                "score": 0.1019
+              },
+              {
+                "label": "White noise",
+                "score": 0.0581
+              },
+              {
+                "label": "Music",
+                "score": 0.0504
+              }
+            ]
+          }
+        ]
+      },
+      "technicalEvidence": {
+        "durationSeconds": 15.0,
+        "sizeBytes": 1283800,
+        "video": {
+          "codec": "h264",
+          "width": 480,
+          "height": 854,
+          "frameRate": "24/1",
+          "pixelFormat": "yuv420p",
+          "frameCount": 360
+        },
+        "audio": {
+          "codec": "aac",
+          "sampleRateHz": 48000,
+          "channels": 2,
+          "channelLayout": "stereo"
+        },
+        "streamCount": {
+          "videoCount": 1,
+          "audioCount": 1,
+          "passed": true
+        },
+        "fullDecode": {
+          "passed": true,
+          "errors": null
+        },
+        "integratedLufs": -15.5,
+        "truePeakDbfs": -3.5,
+        "silenceDetect": {
+          "thresholdDb": -45,
+          "minimumSeconds": 0.35,
+          "starts": [],
+          "ends": []
+        },
+        "tailFreeze": {
+          "windowSeconds": 2.5,
+          "freezeEvents": [],
+          "policyStableTailMaxSeconds": 1.2,
+          "freezePassed": true,
+          "notes": "最后稳定尾帧是允许的 StateOut，门禁只拒绝超过1.2秒或伴随回跳/动作重复。"
+        },
+        "audioAbruptness": {
+          "samplePeak": 0.664409,
+          "clippedSampleCount": 0,
+          "maxAdjacentSampleDelta": 0.566746,
+          "maxDeltaTimestampSeconds": 6.71819,
+          "p99_99Delta": 0.220338,
+          "maxToP99_99Ratio": 2.572,
+          "passed": true
+        },
+        "technicalNotes": []
+      }
+    },
+    {
+      "id": "EV-TRIP-last-two-days",
+      "candidateKind": "parallel-complex-salvage-candidate",
+      "path": "media/production/identity-audio-r4/.work-salvage-r4-bridge-trip/EV-TRIP-last-two-days--jiangmi-r4-local-salvage-candidate.mp4",
+      "sha256": "85d58a985a674bc6afadfff6e48f24f47c07cbecf1c111eb574d3080617edbb0",
+      "verdict": "passed",
+      "contentVerdict": "passed",
+      "technicalVerdict": "passed",
+      "contentEvidence": {
+        "dialogueDetected": [],
+        "smallNoVadTranscript": "字幕by索兰娅",
+        "mediumVadTranscript": "",
+        "backgroundAndActions": "车辆/摩托车、户外、鸟鸣与风；和旅行事件一致。",
+        "sceneConsistency": "consistent",
+        "prohibitedNarrationOrMisleadingContent": [],
+        "notes": "medium-VAD 未检出可辨对白；small-no-VAD 的重复短语或“字幕by索兰娅”等按低电平幻听处理，因为未被 medium-VAD 复现且 Speech 标签不构成清晰语句。未发现旁白、伪提示或误导性台词。",
+        "audioSetWindows": [
+          {
+            "window": "head",
+            "topLabels": [
+              {
+                "label": "Vehicle",
+                "score": 0.2194
+              },
+              {
+                "label": "Outside, rural or natural",
+                "score": 0.1813
+              },
+              {
+                "label": "Bird",
+                "score": 0.1324
+              },
+              {
+                "label": "Environmental noise",
+                "score": 0.1088
+              },
+              {
+                "label": "Car",
+                "score": 0.0925
+              }
+            ]
+          },
+          {
+            "window": "tail",
+            "topLabels": [
+              {
+                "label": "Pink noise",
+                "score": 0.5102
+              },
+              {
+                "label": "Outside, rural or natural",
+                "score": 0.2064
+              },
+              {
+                "label": "Vehicle",
+                "score": 0.1123
+              },
+              {
+                "label": "Environmental noise",
+                "score": 0.0827
+              },
+              {
+                "label": "Outside, urban or manmade",
+                "score": 0.0633
+              }
+            ]
+          }
+        ]
+      },
+      "technicalEvidence": {
+        "durationSeconds": 15.0,
+        "sizeBytes": 2365339,
+        "video": {
+          "codec": "h264",
+          "width": 480,
+          "height": 854,
+          "frameRate": "24/1",
+          "pixelFormat": "yuv420p"
+        },
+        "audio": {
+          "codec": "aac",
+          "sampleRateHz": 48000,
+          "channels": 2,
+          "channelLayout": "stereo"
+        },
+        "streamCount": {
+          "videoCount": 1,
+          "audioCount": 1,
+          "passed": true
+        },
+        "fullDecode": {
+          "passed": true,
+          "errors": null
+        },
+        "integratedLufs": -19.2,
+        "truePeakDbfs": -1.2,
+        "silenceDetect": {
+          "thresholdDb": -45,
+          "minimumSeconds": 0.35,
+          "starts": [],
+          "ends": []
+        },
+        "tailFreeze": {
+          "windowSeconds": 2.5,
+          "freezeEvents": [],
+          "freezePassed": true
+        },
+        "audioAbruptness": {
+          "samplePeak": 0.868791,
+          "clippedSampleCount": 0,
+          "maxAdjacentSampleDelta": 0.908597,
+          "maxDeltaTimestampSeconds": 4.7776,
+          "p99_99Delta": 0.399542,
+          "maxToP99_99Ratio": 2.274,
+          "passed": true
+        },
+        "technicalNotes": []
+      }
+    },
+    {
+      "id": "EV-TRIANGLE-reverse-invite",
+      "candidateKind": "audio-salvage-candidate",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/EV-TRIANGLE-reverse-invite--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "bd07dbf80b555ae502b123724bbf8fcdfdc9a6bc4d2f3a59c300c9d192a91937",
+      "verdict": "passed",
+      "contentVerdict": "passed",
+      "technicalVerdict": "passed",
+      "contentEvidence": {
+        "dialogueDetected": [],
+        "smallNoVadTranscript": "字幕by索兰娅",
+        "mediumVadTranscript": "",
+        "backgroundAndActions": "风/摩擦样 hiss/spray 与不可辨 speech-like 纹理；medium-VAD无可辨对白，视觉清楚呈现两张卡等待。",
+        "sceneConsistency": "consistent",
+        "prohibitedNarrationOrMisleadingContent": [],
+        "notes": "medium-VAD无台词；hiss/spray可由海风/衣料摩擦触发，视觉明确两张卡，无误导语音或伪提示。",
+        "audioSetWindows": [
+          {
+            "window": "head",
+            "topLabels": [
+              {
+                "label": "Speech",
+                "score": 0.3881
+              },
+              {
+                "label": "Spray",
+                "score": 0.3355
+              },
+              {
+                "label": "Snake",
+                "score": 0.1148
+              },
+              {
+                "label": "Vehicle",
+                "score": 0.1017
+              },
+              {
+                "label": "Hiss",
+                "score": 0.0691
+              }
+            ]
+          },
+          {
+            "window": "tail",
+            "topLabels": [
+              {
+                "label": "Pink noise",
+                "score": 0.1644
+              },
+              {
+                "label": "Speech",
+                "score": 0.1438
+              },
+              {
+                "label": "White noise",
+                "score": 0.0911
+              },
+              {
+                "label": "Spray",
+                "score": 0.0632
+              },
+              {
+                "label": "Snake",
+                "score": 0.0624
+              }
+            ]
+          }
+        ]
+      },
+      "technicalEvidence": {
+        "durationSeconds": 15.0,
+        "sizeBytes": 1314823,
+        "video": {
+          "codec": "h264",
+          "width": 480,
+          "height": 854,
+          "frameRate": "24/1",
+          "pixelFormat": "yuv420p",
+          "frameCount": 360
+        },
+        "audio": {
+          "codec": "aac",
+          "sampleRateHz": 48000,
+          "channels": 2,
+          "channelLayout": "stereo"
+        },
+        "streamCount": {
+          "videoCount": 1,
+          "audioCount": 1,
+          "passed": true
+        },
+        "fullDecode": {
+          "passed": true,
+          "errors": null
+        },
+        "integratedLufs": -17.4,
+        "truePeakDbfs": -3.4,
+        "silenceDetect": {
+          "thresholdDb": -45,
+          "minimumSeconds": 0.35,
+          "starts": [],
+          "ends": []
+        },
+        "tailFreeze": {
+          "windowSeconds": 2.5,
+          "freezeEvents": [],
+          "policyStableTailMaxSeconds": 1.2,
+          "freezePassed": true,
+          "notes": "最后稳定尾帧是允许的 StateOut，门禁只拒绝超过1.2秒或伴随回跳/动作重复。"
+        },
+        "audioAbruptness": {
+          "samplePeak": 0.672132,
+          "clippedSampleCount": 0,
+          "maxAdjacentSampleDelta": 0.388613,
+          "maxDeltaTimestampSeconds": 0.28931,
+          "p99_99Delta": 0.271453,
+          "maxToP99_99Ratio": 1.432,
+          "passed": true
+        },
+        "technicalNotes": []
+      }
+    },
+    {
+      "id": "EV-MISSED-empty-seat",
+      "candidateKind": "runtime-master-candidate",
+      "path": "media/production/identity-audio-r4/.work-runtime-masters-r4/EV-MISSED-empty-seat--jiangmi-identity-audio-r4-master.mp4",
+      "sha256": "50f6354513fc741ffd1e5c308135cf041ed903d2f3c94daf19352e97c1825186",
+      "verdict": "passed",
+      "contentVerdict": "passed",
+      "technicalVerdict": "passed",
+      "contentEvidence": {
+        "dialogueDetected": [
+          "我再等五分钟"
+        ],
+        "smallNoVadTranscript": "我再等五分钟 再不等我了",
+        "mediumVadTranscript": "我再等五分钟",
+        "backgroundAndActions": "海浪/户外底噪、呼吸与叹息。",
+        "sceneConsistency": "consistent",
+        "prohibitedNarrationOrMisleadingContent": [],
+        "notes": "双模型/事件声分类支持上述短口语；未发现旁白、伪提示或误导性台词。",
+        "audioSetWindows": [
+          {
+            "window": "head",
+            "topLabels": [
+              {
+                "label": "Pink noise",
+                "score": 0.4531
+              },
+              {
+                "label": "Speech",
+                "score": 0.4252
+              },
+              {
+                "label": "Sigh",
+                "score": 0.0653
+              },
+              {
+                "label": "Waves, surf",
+                "score": 0.043
+              },
+              {
+                "label": "Outside, rural or natural",
+                "score": 0.0402
+              }
+            ]
+          },
+          {
+            "window": "tail",
+            "topLabels": [
+              {
+                "label": "Speech",
+                "score": 0.4062
+              },
+              {
+                "label": "Sigh",
+                "score": 0.2858
+              },
+              {
+                "label": "Pink noise",
+                "score": 0.0948
+              },
+              {
+                "label": "Gasp",
+                "score": 0.0357
+              },
+              {
+                "label": "Rustle",
+                "score": 0.0214
+              }
+            ]
+          }
+        ]
+      },
+      "technicalEvidence": {
+        "durationSeconds": 15.0,
+        "sizeBytes": 1305732,
+        "video": {
+          "codec": "h264",
+          "width": 480,
+          "height": 854,
+          "frameRate": "24/1",
+          "pixelFormat": "yuv420p"
+        },
+        "audio": {
+          "codec": "aac",
+          "sampleRateHz": 48000,
+          "channels": 2,
+          "channelLayout": "stereo"
+        },
+        "streamCount": {
+          "videoCount": 1,
+          "audioCount": 1,
+          "passed": true
+        },
+        "fullDecode": {
+          "passed": true,
+          "errors": null
+        },
+        "integratedLufs": -18.0,
+        "truePeakDbfs": -2.9,
+        "silenceDetect": {
+          "thresholdDb": -45,
+          "minimumSeconds": 0.35,
+          "starts": [],
+          "ends": []
+        },
+        "tailFreeze": {
+          "windowSeconds": 2.5,
+          "rmsDb": -30.844487,
+          "peakDb": -2.923591,
+          "freezeEvents": [],
+          "freezePassed": true
+        },
+        "audioAbruptness": {
+          "samplePeak": 0.714324,
+          "clippedSampleCount": 0,
+          "maxAdjacentSampleDelta": 0.346324,
+          "maxDeltaTimestampSeconds": 9.78683,
+          "p99_99Delta": 0.167078,
+          "maxToP99_99Ratio": 2.073,
+          "passed": true
+        },
+        "technicalNotes": []
+      }
+    },
+    {
+      "id": "EV-PAST-consent-reveal",
+      "candidateKind": "audio-salvage-candidate",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/EV-PAST-consent-reveal--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "f1c5f268ff249b6fad25868b05bc4845f2d2b25c1d44ff6a0e214fa2691e7da6",
+      "verdict": "passed",
+      "contentVerdict": "passed",
+      "technicalVerdict": "passed",
+      "contentEvidence": {
+        "dialogueDetected": [
+          "但先别问名字",
+          "也别替我解释",
+          "好",
+          "只听你愿意说的",
+          "我可以讲"
+        ],
+        "smallNoVadTranscript": "也别替我解释 好 只听你愿意说的 我可以讲",
+        "mediumVadTranscript": "但先别问名字 也别替我解释 好 只听你愿意说的 我可以讲",
+        "backgroundAndActions": "室内/户外底噪、纸张/卡片摩擦与清楚短对白。",
+        "sceneConsistency": "consistent",
+        "prohibitedNarrationOrMisleadingContent": [],
+        "notes": "medium稳定检出边界对话“但先别问名字…只听你愿意说的…我可以讲”，与剧情一致。尾帧稳定1.125s超过原0.8s最低稳定要求但无回跳/重复，按≤1.2s稳定尾帧合理取舍通过。",
+        "audioSetWindows": [
+          {
+            "window": "head",
+            "topLabels": [
+              {
+                "label": "Pink noise",
+                "score": 0.5483
+              },
+              {
+                "label": "Speech",
+                "score": 0.4557
+              },
+              {
+                "label": "Outside, rural or natural",
+                "score": 0.094
+              },
+              {
+                "label": "Inside, small room",
+                "score": 0.0923
+              },
+              {
+                "label": "White noise",
+                "score": 0.0465
+              }
+            ]
+          },
+          {
+            "window": "tail",
+            "topLabels": [
+              {
+                "label": "Speech",
+                "score": 0.6356
+              },
+              {
+                "label": "Zipper (clothing)",
+                "score": 0.0951
+              },
+              {
+                "label": "Inside, small room",
+                "score": 0.0874
+              },
+              {
+                "label": "Shuffling cards",
+                "score": 0.037
+              },
+              {
+                "label": "Writing",
+                "score": 0.0359
+              }
+            ]
+          }
+        ]
+      },
+      "technicalEvidence": {
+        "durationSeconds": 15.0,
+        "sizeBytes": 1219894,
+        "video": {
+          "codec": "h264",
+          "width": 480,
+          "height": 854,
+          "frameRate": "24/1",
+          "pixelFormat": "yuv420p",
+          "frameCount": 360
+        },
+        "audio": {
+          "codec": "aac",
+          "sampleRateHz": 48000,
+          "channels": 2,
+          "channelLayout": "stereo"
+        },
+        "streamCount": {
+          "videoCount": 1,
+          "audioCount": 1,
+          "passed": true
+        },
+        "fullDecode": {
+          "passed": true,
+          "errors": null
+        },
+        "integratedLufs": -16.3,
+        "truePeakDbfs": -3.4,
+        "silenceDetect": {
+          "thresholdDb": -45,
+          "minimumSeconds": 0.35,
+          "starts": [],
+          "ends": []
+        },
+        "tailFreeze": {
+          "windowSeconds": 2.5,
+          "freezeEvents": [
+            {
+              "start": 1.25,
+              "duration": 1.125
+            }
+          ],
+          "policyStableTailMaxSeconds": 1.2,
+          "freezePassed": true,
+          "notes": "最后稳定尾帧是允许的 StateOut，门禁只拒绝超过1.2秒或伴随回跳/动作重复。"
+        },
+        "audioAbruptness": {
+          "samplePeak": 0.678944,
+          "clippedSampleCount": 0,
+          "maxAdjacentSampleDelta": 0.304691,
+          "maxDeltaTimestampSeconds": 12.97237,
+          "p99_99Delta": 0.181338,
+          "maxToP99_99Ratio": 1.68,
+          "passed": true
+        },
+        "technicalNotes": []
+      }
+    },
+    {
+      "id": "EV-FINAL-unsent-letter",
+      "candidateKind": "audio-salvage-candidate",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/EV-FINAL-unsent-letter--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "6c196f67eb18442def33faddb57a65ca885748cfc0f4cd74366929e301ab9fc2",
+      "verdict": "passed",
+      "contentVerdict": "passed",
+      "technicalVerdict": "passed",
+      "contentEvidence": {
+        "dialogueDetected": [],
+        "smallNoVadTranscript": "字幕by索兰娅",
+        "mediumVadTranscript": "",
+        "backgroundAndActions": "海浪/海洋/风、纸张摩擦与呼吸；medium-VAD无可辨对白。",
+        "sceneConsistency": "consistent",
+        "prohibitedNarrationOrMisleadingContent": [],
+        "notes": "海浪/纸张/呼吸与未寄出信场景一致，medium-VAD无可辨对白。",
+        "audioSetWindows": [
+          {
+            "window": "head",
+            "topLabels": [
+              {
+                "label": "Pink noise",
+                "score": 0.3239
+              },
+              {
+                "label": "Waves, surf",
+                "score": 0.0531
+              },
+              {
+                "label": "Ocean",
+                "score": 0.047
+              },
+              {
+                "label": "Outside, rural or natural",
+                "score": 0.0315
+              },
+              {
+                "label": "Speech",
+                "score": 0.0278
+              }
+            ]
+          },
+          {
+            "window": "tail",
+            "topLabels": [
+              {
+                "label": "Speech",
+                "score": 0.0462
+              },
+              {
+                "label": "Snort",
+                "score": 0.0455
+              },
+              {
+                "label": "Breathing",
+                "score": 0.0374
+              },
+              {
+                "label": "Inside, small room",
+                "score": 0.037
+              },
+              {
+                "label": "Spray",
+                "score": 0.0326
+              }
+            ]
+          }
+        ]
+      },
+      "technicalEvidence": {
+        "durationSeconds": 15.0,
+        "sizeBytes": 1364310,
+        "video": {
+          "codec": "h264",
+          "width": 480,
+          "height": 854,
+          "frameRate": "24/1",
+          "pixelFormat": "yuv420p",
+          "frameCount": 360
+        },
+        "audio": {
+          "codec": "aac",
+          "sampleRateHz": 48000,
+          "channels": 2,
+          "channelLayout": "stereo"
+        },
+        "streamCount": {
+          "videoCount": 1,
+          "audioCount": 1,
+          "passed": true
+        },
+        "fullDecode": {
+          "passed": true,
+          "errors": null
+        },
+        "integratedLufs": -16.8,
+        "truePeakDbfs": -2.8,
+        "silenceDetect": {
+          "thresholdDb": -45,
+          "minimumSeconds": 0.35,
+          "starts": [],
+          "ends": []
+        },
+        "tailFreeze": {
+          "windowSeconds": 2.5,
+          "freezeEvents": [],
+          "policyStableTailMaxSeconds": 1.2,
+          "freezePassed": true,
+          "notes": "最后稳定尾帧是允许的 StateOut，门禁只拒绝超过1.2秒或伴随回跳/动作重复。"
+        },
+        "audioAbruptness": {
+          "samplePeak": 0.701418,
+          "clippedSampleCount": 0,
+          "maxAdjacentSampleDelta": 0.482361,
+          "maxDeltaTimestampSeconds": 10.05692,
+          "p99_99Delta": 0.308414,
+          "maxToP99_99Ratio": 1.564,
+          "passed": true
+        },
+        "technicalNotes": []
+      }
+    },
+    {
+      "id": "EV-FINAL-confession-day",
+      "candidateKind": "audio-salvage-candidate",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/EV-FINAL-confession-day--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "bd347c318c5cb188e1894c953a7a25a358a3fce291d94f8c8e357c0445010b8f",
+      "verdict": "passed",
+      "contentVerdict": "passed",
+      "technicalVerdict": "passed",
+      "contentEvidence": {
+        "dialogueDetected": [],
+        "smallNoVadTranscript": "字幕by索兰娅",
+        "mediumVadTranscript": "",
+        "backgroundAndActions": "海浪/海洋、户外自然与衣料声；medium-VAD无可辨对白。",
+        "sceneConsistency": "consistent",
+        "prohibitedNarrationOrMisleadingContent": [],
+        "notes": "海浪/户外自然声与告白日海边场景一致，medium-VAD无可辨对白。",
+        "audioSetWindows": [
+          {
+            "window": "head",
+            "topLabels": [
+              {
+                "label": "Pink noise",
+                "score": 0.6765
+              },
+              {
+                "label": "Waves, surf",
+                "score": 0.109
+              },
+              {
+                "label": "Ocean",
+                "score": 0.0761
+              },
+              {
+                "label": "Waterfall",
+                "score": 0.0594
+              },
+              {
+                "label": "Outside, rural or natural",
+                "score": 0.0551
+              }
+            ]
+          },
+          {
+            "window": "tail",
+            "topLabels": [
+              {
+                "label": "Pink noise",
+                "score": 0.6867
+              },
+              {
+                "label": "Waves, surf",
+                "score": 0.1425
+              },
+              {
+                "label": "Ocean",
+                "score": 0.1114
+              },
+              {
+                "label": "Waterfall",
+                "score": 0.0744
+              },
+              {
+                "label": "Outside, rural or natural",
+                "score": 0.0709
+              }
+            ]
+          }
+        ]
+      },
+      "technicalEvidence": {
+        "durationSeconds": 15.0,
+        "sizeBytes": 1308161,
+        "video": {
+          "codec": "h264",
+          "width": 480,
+          "height": 854,
+          "frameRate": "24/1",
+          "pixelFormat": "yuv420p",
+          "frameCount": 360
+        },
+        "audio": {
+          "codec": "aac",
+          "sampleRateHz": 48000,
+          "channels": 2,
+          "channelLayout": "stereo"
+        },
+        "streamCount": {
+          "videoCount": 1,
+          "audioCount": 1,
+          "passed": true
+        },
+        "fullDecode": {
+          "passed": true,
+          "errors": null
+        },
+        "integratedLufs": -16.4,
+        "truePeakDbfs": -3.1,
+        "silenceDetect": {
+          "thresholdDb": -45,
+          "minimumSeconds": 0.35,
+          "starts": [],
+          "ends": []
+        },
+        "tailFreeze": {
+          "windowSeconds": 2.5,
+          "freezeEvents": [],
+          "policyStableTailMaxSeconds": 1.2,
+          "freezePassed": true,
+          "notes": "最后稳定尾帧是允许的 StateOut，门禁只拒绝超过1.2秒或伴随回跳/动作重复。"
+        },
+        "audioAbruptness": {
+          "samplePeak": 0.697607,
+          "clippedSampleCount": 0,
+          "maxAdjacentSampleDelta": 0.097402,
+          "maxDeltaTimestampSeconds": 12.49685,
+          "p99_99Delta": 0.07712,
+          "maxToP99_99Ratio": 1.263,
+          "passed": true
+        },
+        "technicalNotes": []
+      }
+    }
+  ],
+  "temporaryTooling": {
+    "venv": "<temporary-venv>",
+    "modelCache": "<temporary-model-cache>",
+    "cleanupStatus": "retained temporarily at parent request through integration; do not clean until parent releases the reusable ASR/VAD tooling",
+    "reclaimedBytes": 0
+  },
+  "revision": "repair-pass-2-clean-25",
+  "repairReview": {
+    "recheckedIds": [
+      "D1-A3-cast-introductions",
+      "D1-A3B-cast-first-impressions",
+      "D1-A7-heart-message"
+    ],
+    "source": "media/production/identity-audio-r4/.work-audio-salvage-r4",
+    "result": "3 prior P0 content tracks replaced; all three now passed content and technical gates",
+    "asr": "medium-VAD no segments for all three; small-no-VAD loops treated as hallucination only where medium did not reproduce",
+    "audioEvent": "A3/A3B retain non-intelligible room/speech texture and cup action; A7 has sea/wind/foley and no Music in top-12 labels"
+  },
+  "finalRecheck": {
+    "recheckedCandidateDirectory": "media/production/identity-audio-r4/.work-audio-salvage-r4",
+    "recheckedCount": 19,
+    "finalResult": "25/25 passed candidate audio/content/quick technical QA; still not runtime approval",
+    "repairedP0Count": 3,
+    "repairedP1Count": 16,
+    "allFinalCandidateAudio": "AAC 48000 Hz stereo",
+    "allRepairedFrames": 360,
+    "allRepairedDurationSeconds": 15,
+    "asr": "medium zh VAD rerun on all 19 repaired tracks",
+    "audioEvent": "AudioSet head/tail rerun; low confidence music labels below 0.15 were reconciled against the unchanged source and absence of medium speech/clear music; old A7 Music 0.67 was removed and separately verified",
+    "technical": "all 19 repaired tracks passed stream/decode/LUFS/true-peak/clipping/abruptness; PAST stable StateOut tail 1.125s accepted under 1.2s policy"
+  }
+}

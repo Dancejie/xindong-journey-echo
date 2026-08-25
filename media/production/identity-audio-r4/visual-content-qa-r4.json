@@ -1,0 +1,483 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-08-25",
+  "scope": "25 final candidate-map videos; identity, frame/state and visual-content evidence binding",
+  "approvalBoundary": "This report approves the listed final candidate files for the visual gate only. Audio and runtime integration remain separate gates.",
+  "candidateMap": {
+    "path": "media/production/identity-audio-r4/runtime-candidate-map-r4.json",
+    "sha256": "a0d83817d55000cdab3078c9d2bcc3332e3eacd9f502b36a5137590fec8e44ca"
+  },
+  "methodology": {
+    "upstreamEvidence": [
+      "media/production/identity-audio-r4/candidate-verdicts-r4.json",
+      "media/production/identity-audio-r4/salvage-ledger-r4.json",
+      "media/production/identity-audio-r4/salvage-final-qa-r4.json",
+      "media/production/identity-audio-r4/.work-salvage-r4-review/QA-REPORT.md",
+      "media/production/identity-audio-r4/.work-salvage-r4-bridge-trip/QA-REPORT.md",
+      "media/production/identity-audio-r4/.work-a3b-assembly-r4/technical-probe.json"
+    ],
+    "finalCandidateReview": "Every final path was reviewed across the full 15 seconds as a 15-frame 1 fps contact sheet. A3B also received a 30-frame 2 fps identity-segment review against the locked eight-person identity sheet.",
+    "reencodeReview": "All 22 final paths whose video passed through runtime/audio finalization were compared with the visually approved source using FFmpeg SSIM plus source/output frames at 0.5, 7.5 and 14.5 seconds. SSIM All range: 0.980699 to 1.000000; no visible identity, composition, text, logo, state or causality change was observed.",
+    "temporaryEvidenceRetained": false
+  },
+  "summary": {
+    "total": 25,
+    "passed": 25,
+    "p1": 0,
+    "p0": 0
+  },
+  "items": [
+    {
+      "id": "D1-A1-island-hotel-establish",
+      "path": "media/production/identity-audio-r4/.work-runtime-masters-r4/D1-A1-island-hotel-establish--jiangmi-identity-audio-r4-master.mp4",
+      "sha256": "2274200e00d2a98c76fb763b7de35fba82113a622291cddf51b76142cf840d89",
+      "verdict": "passed",
+      "identityVerdict": "passed",
+      "frameVerdict": "passed",
+      "evidence": {
+        "upstreamHumanQa": "candidate-verdicts-r4.json: 15-frame pass; Jiangmi identity stable, with no stranger face, pseudo-text, UI or state-causality break.",
+        "finalHumanQa": "Final-path full-film 1 fps review passed; island/hotel establish, luggage and Jiangmi continuity remain clear.",
+        "reencodeIntegrity": "SSIM All 0.980699; source/output frames at 0.5/7.5/14.5 seconds visually unchanged."
+      },
+      "sourceLineage": {
+        "visualQaSource": "media/production/identity-audio-r4/candidate-verdicts-r4.json",
+        "visualSourcePath": "media/production/identity-audio-r4/.work-candidates/manifest-jiangmi-mainline-20260825-114953/shots/D1-A1-island-hotel-establish--jiangmi-r4/D1-A1-island-hotel-establish--jiangmi-identity-audio-r4-candidate.mp4",
+        "finalization": "runtime master re-encode"
+      }
+    },
+    {
+      "id": "D1-A2-villa-entry",
+      "path": "media/production/identity-audio-r4/.work-runtime-masters-r4/D1-A2-villa-entry--jiangmi-identity-audio-r4-master.mp4",
+      "sha256": "b50de2ad34adc2678bf240b60e763c71d93804f890ae621c95dd2bcd8650ddb7",
+      "verdict": "passed",
+      "identityVerdict": "passed",
+      "frameVerdict": "passed",
+      "evidence": {
+        "upstreamHumanQa": "candidate-verdicts-r4.json: 15-frame pass; Jiangmi stays stable, other guests stay backs/deep blur, and luggage-entry causality holds.",
+        "finalHumanQa": "Final-path full-film 1 fps review passed; no new face, text, UI or state discontinuity appeared.",
+        "reencodeIntegrity": "SSIM All 0.981215; source/output frames at 0.5/7.5/14.5 seconds visually unchanged."
+      },
+      "sourceLineage": {
+        "visualQaSource": "media/production/identity-audio-r4/candidate-verdicts-r4.json",
+        "visualSourcePath": "media/production/identity-audio-r4/.work-candidates/manifest-jiangmi-mainline-20260825-114953/shots/D1-A2-villa-entry--jiangmi-r4/D1-A2-villa-entry--jiangmi-identity-audio-r4-candidate.mp4",
+        "finalization": "runtime master re-encode"
+      }
+    },
+    {
+      "id": "D1-A3-cast-introductions",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/D1-A3-cast-introductions--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "a1f19b4a49c6fdc39ad89123aafbc8c7b48808e2f1fc7324d5cd39308b5ef7b0",
+      "verdict": "passed",
+      "identityVerdict": "passed",
+      "frameVerdict": "passed",
+      "evidence": {
+        "upstreamHumanQa": "salvage-final-qa-r4.json: reverse angle with unanchored men removed; Jiangmi remains identifiable; no subtitle, UI, logo or pseudo-text.",
+        "finalHumanQa": "Final-path full-film 1 fps review passed; introduction performance and Jiangmi identity remain continuous.",
+        "reencodeIntegrity": "SSIM All 0.991206; source/output frames at 0.5/7.5/14.5 seconds visually unchanged."
+      },
+      "sourceLineage": {
+        "visualQaSource": "media/production/identity-audio-r4/salvage-final-qa-r4.json",
+        "visualSourcePath": "media/production/identity-audio-r4/.work-salvage-r4/D1-A3-cast-introductions--jiangmi-r4-local-salvage-candidate.mp4",
+        "finalization": "scale plus repaired audio bed"
+      }
+    },
+    {
+      "id": "D1-A3B-cast-first-impressions",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/D1-A3B-cast-first-impressions--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "1bc6ac1724b0b3a043713b69872f54eedef98bbed330f0aa2d7853b5a597af90",
+      "verdict": "passed",
+      "identityVerdict": "passed",
+      "frameVerdict": "passed",
+      "evidence": {
+        "upstreamHumanQa": "A3B assembly uses six locked character portrait sources followed by anchored Chensu and Jiangmi atoms; its technical probe passed 15 seconds/360 frames/full decode.",
+        "finalHumanQa": "Final path reviewed at both 1 fps and 2 fps. All eight named portrait segments are auditable in order against current-eight-identity-sheet-hq.jpg; no foreign face, readable text, logo or UI appears.",
+        "reencodeIntegrity": "SSIM All 1.000000 and source/output H.264 video-stream hashes are identical."
+      },
+      "sourceLineage": {
+        "visualQaSource": "media/production/identity-audio-r4/assemble-a3b.zsh",
+        "visualSourcePath": "media/production/identity-audio-r4/.work-a3b-assembly-r4/D1-A3B-cast-first-impressions--jiangmi-identity-audio-r4-assembly-candidate.mp4",
+        "identityReference": "media/production/identity-audio-r4/refs/current-eight-identity-sheet-hq.jpg",
+        "finalization": "video stream copied; repaired audio bed only"
+      }
+    },
+    {
+      "id": "D1-A4-icebreaker-selection",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/D1-A4-icebreaker-selection--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "3f4b2f8c978b5d4ad01e7e9f5997f07cdc541182e6dc29ade541166c43bc3e4b",
+      "verdict": "passed",
+      "identityVerdict": "passed",
+      "frameVerdict": "passed",
+      "evidence": {
+        "upstreamHumanQa": "salvage-ledger-r4.json cleanDirect set: retry1 accepted without local visual salvage.",
+        "finalHumanQa": "Full-film 1 fps review passed: shell/clay selection props and glass remain readable as objects; Jiangmi/partner continuity is stable; no pseudo-text or UI.",
+        "reencodeIntegrity": "SSIM All 0.986427; source/output frames at 0.5/7.5/14.5 seconds visually unchanged."
+      },
+      "sourceLineage": {
+        "visualQaSource": "media/production/identity-audio-r4/salvage-ledger-r4.json",
+        "visualSourcePath": "media/production/identity-audio-r4/.work-candidates/manifest-jiangmi-mainline-retry1-20260825-124220/shots/D1-A4-icebreaker-selection--jiangmi-r4-retry1/D1-A4-icebreaker-selection--jiangmi-identity-audio-r4-retry1-candidate.mp4",
+        "finalization": "runtime/audio normalization re-encode"
+      }
+    },
+    {
+      "id": "D1-A5-guided-smalltalk",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/D1-A5-guided-smalltalk--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "a60dfa94608d6b524aff81756584c1813a8d16e56f606468c34e68eeac4caa78",
+      "verdict": "passed",
+      "identityVerdict": "passed",
+      "frameVerdict": "passed",
+      "evidence": {
+        "upstreamHumanQa": "salvage-ledger-r4.json cleanDirect set: retry1 accepted without local visual salvage.",
+        "finalHumanQa": "Full-film 1 fps review passed: two-person small-talk blocking, faces and glass props stay stable; no garment pseudo-text or foreign face appears.",
+        "reencodeIntegrity": "SSIM All 0.986989; source/output frames at 0.5/7.5/14.5 seconds visually unchanged."
+      },
+      "sourceLineage": {
+        "visualQaSource": "media/production/identity-audio-r4/salvage-ledger-r4.json",
+        "visualSourcePath": "media/production/identity-audio-r4/.work-candidates/manifest-jiangmi-mainline-retry1-20260825-124220/shots/D1-A5-guided-smalltalk--jiangmi-r4-retry1/D1-A5-guided-smalltalk--jiangmi-identity-audio-r4-retry1-candidate.mp4",
+        "finalization": "runtime/audio normalization re-encode"
+      }
+    },
+    {
+      "id": "D1-A6-first-dinner-team",
+      "path": "media/production/identity-audio-r4/.work-salvage-r4-review/D1-A6-first-dinner-team--jiangmi-salvage-r4.mp4",
+      "sha256": "50748dffdeefe9c6dd08140c91221737531caedc64e47e1c3e1fb275cb07c2d7",
+      "verdict": "passed",
+      "identityVerdict": "passed",
+      "frameVerdict": "passed",
+      "evidence": {
+        "upstreamHumanQa": ".work-salvage-r4-review/QA-REPORT.md: branded knife and range-hood marks excluded while meal-preparation action remains intelligible; full film reviewed at 2 fps by two reviewers.",
+        "finalHumanQa": "Final-path full-film 1 fps review independently reconfirmed stable Jiangmi/partner identity, cooking continuity and absence of readable marks.",
+        "reencodeIntegrity": "Not applicable after the recorded salvage QA; this exact SHA is the reviewed final candidate."
+      },
+      "sourceLineage": {
+        "visualQaSource": "media/production/identity-audio-r4/.work-salvage-r4-review/QA-REPORT.md",
+        "visualSourcePath": "media/production/identity-audio-r4/.work-salvage-r4-review/D1-A6-first-dinner-team--jiangmi-salvage-r4.mp4",
+        "finalization": "none after full-film salvage review"
+      }
+    },
+    {
+      "id": "D1-A7-heart-message",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/D1-A7-heart-message--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "d46ccfb52f18264ab69d2889a463304d151990ad0c635b3292dc6d204353ac77",
+      "verdict": "passed",
+      "identityVerdict": "passed",
+      "frameVerdict": "passed",
+      "evidence": {
+        "upstreamHumanQa": "salvage-final-qa-r4.json: phone-front UI removed; only Jiangmi, phone back/black screen and post-send reaction remain.",
+        "finalHumanQa": "Final-path full-film 1 fps review passed; bedroom, phone and Jiangmi reaction stay continuous with no readable screen.",
+        "reencodeIntegrity": "SSIM All 0.992116; source/output frames at 0.5/7.5/14.5 seconds visually unchanged."
+      },
+      "sourceLineage": {
+        "visualQaSource": "media/production/identity-audio-r4/salvage-final-qa-r4.json",
+        "visualSourcePath": "media/production/identity-audio-r4/.work-salvage-r4/D1-A7-heart-message--jiangmi-r4-local-salvage-candidate.mp4",
+        "finalization": "scale plus repaired sea-wind/foley audio"
+      }
+    },
+    {
+      "id": "D2-A1-memory-callback",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/D2-A1-memory-callback--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "5cb06dccfb5bafcb6251ba5a7cf7ae3c34faf4e6faa4797d0099518b732ed42a",
+      "verdict": "passed",
+      "identityVerdict": "passed",
+      "frameVerdict": "passed",
+      "evidence": {
+        "upstreamHumanQa": "salvage-ledger-r4.json cleanDirect set: retry1 accepted without local visual salvage.",
+        "finalHumanQa": "Full-film 1 fps review passed: breakfast memory callback, anchored pair and hand/tea actions remain stable; no chest text appears.",
+        "reencodeIntegrity": "SSIM All 0.985714; source/output frames at 0.5/7.5/14.5 seconds visually unchanged."
+      },
+      "sourceLineage": {
+        "visualQaSource": "media/production/identity-audio-r4/salvage-ledger-r4.json",
+        "visualSourcePath": "media/production/identity-audio-r4/.work-candidates/manifest-jiangmi-mainline-retry1-20260825-124220/shots/D2-A1-memory-callback--jiangmi-r4-retry1/D2-A1-memory-callback--jiangmi-identity-audio-r4-retry1-candidate.mp4",
+        "finalization": "runtime/audio normalization re-encode"
+      }
+    },
+    {
+      "id": "EV-KITCHEN-two-person-shift",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/EV-KITCHEN-two-person-shift--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "8a6ea6a038fcf295b93acd12a1413e21a30f0836ae47336f7e760344878d7035",
+      "verdict": "passed",
+      "identityVerdict": "passed",
+      "frameVerdict": "passed",
+      "evidence": {
+        "upstreamHumanQa": "salvage-ledger-r4.json cleanDirect set: retry1 accepted without local visual salvage.",
+        "finalHumanQa": "Full-film 1 fps review passed: two-person cooking action and tasting callback remain causal; anchored faces are stable and apron/utensil labels are absent.",
+        "reencodeIntegrity": "SSIM All 0.980700; source/output frames at 0.5/7.5/14.5 seconds visually unchanged."
+      },
+      "sourceLineage": {
+        "visualQaSource": "media/production/identity-audio-r4/salvage-ledger-r4.json",
+        "visualSourcePath": "media/production/identity-audio-r4/.work-candidates/manifest-jiangmi-mainline-retry1-20260825-124220/shots/EV-KITCHEN-two-person-shift--jiangmi-r4-retry1/EV-KITCHEN-two-person-shift--jiangmi-identity-audio-r4-retry1-candidate.mp4",
+        "finalization": "runtime/audio normalization re-encode"
+      }
+    },
+    {
+      "id": "EV-RULES-house-friction",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/EV-RULES-house-friction--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "b5e1159d72366c4c7baf534b3765ce5632d5a937ebfaa915d110d2ff2c35610b",
+      "verdict": "passed",
+      "identityVerdict": "passed",
+      "frameVerdict": "passed",
+      "evidence": {
+        "upstreamHumanQa": ".work-salvage-r4-review/QA-REPORT.md: only three cards remain and the same blue card moves below the pink card; invalid four-card tail excluded; two-reviewer 2 fps pass.",
+        "finalHumanQa": "Final-path full-film 1 fps review reconfirmed three-card state causality, anchored pair and absence of text/UI.",
+        "reencodeIntegrity": "SSIM All 0.992552; source/output frames at 0.5/7.5/14.5 seconds visually unchanged."
+      },
+      "sourceLineage": {
+        "visualQaSource": "media/production/identity-audio-r4/.work-salvage-r4-review/QA-REPORT.md",
+        "visualSourcePath": "media/production/identity-audio-r4/.work-salvage-r4-review/EV-RULES-house-friction--jiangmi-salvage-r4.mp4",
+        "finalization": "runtime/audio normalization re-encode"
+      }
+    },
+    {
+      "id": "EV-SIGNAL-first-anonymous-message",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/EV-SIGNAL-first-anonymous-message--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "675be887bf2e3f49903b37f658a132ce1519c026b4c5f81da75358fbf769f4e1",
+      "verdict": "passed",
+      "identityVerdict": "passed",
+      "frameVerdict": "passed",
+      "evidence": {
+        "upstreamHumanQa": "salvage-ledger-r4.json cleanDirect set: retry1 accepted without local visual salvage.",
+        "finalHumanQa": "Full-film 1 fps review passed: phone backs/table action and anchored pair remain clear; no readable phone UI, pseudo-text or additional clear face.",
+        "reencodeIntegrity": "SSIM All 0.986351; source/output frames at 0.5/7.5/14.5 seconds visually unchanged."
+      },
+      "sourceLineage": {
+        "visualQaSource": "media/production/identity-audio-r4/salvage-ledger-r4.json",
+        "visualSourcePath": "media/production/identity-audio-r4/.work-candidates/manifest-jiangmi-mainline-retry1-20260825-124220/shots/EV-SIGNAL-first-anonymous-message--jiangmi-r4-retry1/EV-SIGNAL-first-anonymous-message--jiangmi-identity-audio-r4-retry1-candidate.mp4",
+        "finalization": "runtime/audio normalization re-encode"
+      }
+    },
+    {
+      "id": "EV-IDENTITY-profession-reveal",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/EV-IDENTITY-profession-reveal--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "95266323e3e46a34646326cba229c32784a462fce545ebaaf72a7a50523abaae",
+      "verdict": "passed",
+      "identityVerdict": "passed",
+      "frameVerdict": "passed",
+      "evidence": {
+        "upstreamHumanQa": "salvage-final-qa-r4.json: blank unreadable card, hand detail and Jiangmi reaction retained; unanchored group faces removed.",
+        "finalHumanQa": "Final-path full-film 1 fps review passed; card remains blank and Jiangmi identity/reaction remain stable.",
+        "reencodeIntegrity": "SSIM All 0.988000; source/output frames at 0.5/7.5/14.5 seconds visually unchanged."
+      },
+      "sourceLineage": {
+        "visualQaSource": "media/production/identity-audio-r4/salvage-final-qa-r4.json",
+        "visualSourcePath": "media/production/identity-audio-r4/.work-salvage-r4/EV-IDENTITY-profession-reveal--jiangmi-r4-local-salvage-candidate.mp4",
+        "finalization": "runtime/audio normalization re-encode"
+      }
+    },
+    {
+      "id": "EV-DATE-blind-box",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/EV-DATE-blind-box--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "63f795594d893fce4ecee9e75dbdcdf0c38c1e16bbb7ecadaeb5007683dcc5e7",
+      "verdict": "passed",
+      "identityVerdict": "passed",
+      "frameVerdict": "passed",
+      "evidence": {
+        "upstreamHumanQa": "salvage-ledger-r4.json cleanDirect set: retry1 accepted without local visual salvage.",
+        "finalHumanQa": "Full-film 1 fps review passed: shell/clay object selection and Jiangmi reaction remain causal; no bell substitution, text or foreign face appears.",
+        "reencodeIntegrity": "SSIM All 0.985154; source/output frames at 0.5/7.5/14.5 seconds visually unchanged."
+      },
+      "sourceLineage": {
+        "visualQaSource": "media/production/identity-audio-r4/salvage-ledger-r4.json",
+        "visualSourcePath": "media/production/identity-audio-r4/.work-candidates/manifest-jiangmi-mainline-retry1-20260825-124220/shots/EV-DATE-blind-box--jiangmi-r4-retry1/EV-DATE-blind-box--jiangmi-identity-audio-r4-retry1-candidate.mp4",
+        "finalization": "runtime/audio normalization re-encode"
+      }
+    },
+    {
+      "id": "EV-DATE-mutual-signal",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/EV-DATE-mutual-signal--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "53631252f8045df281c51bf60284460d831ac168814712072253f59d632c55d6",
+      "verdict": "passed",
+      "identityVerdict": "passed",
+      "frameVerdict": "passed",
+      "evidence": {
+        "upstreamHumanQa": "salvage-ledger-r4.json cleanDirect set: retry1 accepted without local visual salvage.",
+        "finalHumanQa": "Full-film 1 fps review passed: reciprocal looks, glass handoff and anchored Jiangmi/partner faces stay stable; no garment pseudo-text.",
+        "reencodeIntegrity": "SSIM All 0.988251; source/output frames at 0.5/7.5/14.5 seconds visually unchanged."
+      },
+      "sourceLineage": {
+        "visualQaSource": "media/production/identity-audio-r4/salvage-ledger-r4.json",
+        "visualSourcePath": "media/production/identity-audio-r4/.work-candidates/manifest-jiangmi-mainline-retry1-20260825-124220/shots/EV-DATE-mutual-signal--jiangmi-r4-retry1/EV-DATE-mutual-signal--jiangmi-identity-audio-r4-retry1-candidate.mp4",
+        "finalization": "runtime/audio normalization re-encode"
+      }
+    },
+    {
+      "id": "EV-MISSED-empty-seat",
+      "path": "media/production/identity-audio-r4/.work-runtime-masters-r4/EV-MISSED-empty-seat--jiangmi-identity-audio-r4-master.mp4",
+      "sha256": "50f6354513fc741ffd1e5c308135cf041ed903d2f3c94daf19352e97c1825186",
+      "verdict": "passed",
+      "identityVerdict": "passed",
+      "frameVerdict": "passed",
+      "evidence": {
+        "upstreamHumanQa": "candidate-verdicts-r4.json: 15-frame pass; Jiangmi stable, empty-seat event clear, phone UI unreadable and no stranger face.",
+        "finalHumanQa": "Final-path full-film 1 fps review passed; the empty-chair setup, waiting reaction and sea-side continuity remain clear.",
+        "reencodeIntegrity": "SSIM All 0.989334; source/output frames at 0.5/7.5/14.5 seconds visually unchanged."
+      },
+      "sourceLineage": {
+        "visualQaSource": "media/production/identity-audio-r4/candidate-verdicts-r4.json",
+        "visualSourcePath": "media/production/identity-audio-r4/.work-candidates/manifest-jiangmi-mainline-20260825-114953/shots/EV-MISSED-empty-seat--jiangmi-r4/EV-MISSED-empty-seat--jiangmi-identity-audio-r4-candidate.mp4",
+        "finalization": "runtime master re-encode"
+      }
+    },
+    {
+      "id": "EV-CARE-breakfast-callback",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/EV-CARE-breakfast-callback--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "b6d6da3100cf5f39c55d7e48b024bbac1bc24216e979d31e2b02555754e72b9b",
+      "verdict": "passed",
+      "identityVerdict": "passed",
+      "frameVerdict": "passed",
+      "evidence": {
+        "upstreamHumanQa": "salvage-ledger-r4.json cleanDirect set: retry1 accepted without local visual salvage.",
+        "finalHumanQa": "Full-film 1 fps review passed: breakfast setup, tea/plate hand actions and anchored pair remain stable; no system UI or garment text.",
+        "reencodeIntegrity": "SSIM All 0.987114; source/output frames at 0.5/7.5/14.5 seconds visually unchanged."
+      },
+      "sourceLineage": {
+        "visualQaSource": "media/production/identity-audio-r4/salvage-ledger-r4.json",
+        "visualSourcePath": "media/production/identity-audio-r4/.work-candidates/manifest-jiangmi-mainline-retry1-20260825-124220/shots/EV-CARE-breakfast-callback--jiangmi-r4-retry1/EV-CARE-breakfast-callback--jiangmi-identity-audio-r4-retry1-candidate.mp4",
+        "finalization": "runtime/audio normalization re-encode"
+      }
+    },
+    {
+      "id": "EV-TRIANGLE-reverse-invite",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/EV-TRIANGLE-reverse-invite--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "bd07dbf80b555ae502b123724bbf8fcdfdc9a6bc4d2f3a59c300c9d192a91937",
+      "verdict": "passed",
+      "identityVerdict": "passed",
+      "frameVerdict": "passed",
+      "evidence": {
+        "upstreamHumanQa": "salvage-final-qa-r4.json: strict anchor review passed for Jiangmi, Shenmo and Chengye; two blank cards remain separate and untouched, preserving pre-choice state.",
+        "finalHumanQa": "Final-path full-film 1 fps review passed; three identities, two-card geometry and pre-choice state remain stable with no fourth face or pseudo-text.",
+        "reencodeIntegrity": "SSIM All 0.988911; source/output frames at 0.5/7.5/14.5 seconds visually unchanged."
+      },
+      "sourceLineage": {
+        "visualQaSource": "media/production/identity-audio-r4/salvage-final-qa-r4.json",
+        "visualSourcePath": "media/production/identity-audio-r4/.work-salvage-r4/EV-TRIANGLE-reverse-invite--jiangmi-r4-local-salvage-candidate.mp4",
+        "identityReference": "media/production/identity-audio-r4/refs/jiangmi-shenmo-chengye-head-identity-sheet-r2.jpg",
+        "finalization": "runtime/audio normalization re-encode"
+      }
+    },
+    {
+      "id": "EV-BRIDGE-hidden-courage",
+      "path": "media/production/identity-audio-r4/.work-salvage-r4-bridge-trip/EV-BRIDGE-hidden-courage--jiangmi-r4-local-salvage-candidate.mp4",
+      "sha256": "b413f4abf8f51b37e6edf24727abbf159ffc3768b82bec2fca5ba910f2bca404",
+      "verdict": "passed",
+      "identityVerdict": "passed",
+      "frameVerdict": "passed",
+      "evidence": {
+        "upstreamHumanQa": ".work-salvage-r4-bridge-trip/QA-REPORT.md: full 15-frame/30-frame review passed. Jiangmi and Chensu anchors lead into consent, water entry, board bracing, then Jiangmi's autonomous step; all marked/logo frames excluded.",
+        "finalHumanQa": "Final-path full-film 1 fps review independently reconfirmed identity anchors, water/board action and logo/text exclusions.",
+        "reencodeIntegrity": "Not applicable after the recorded bridge salvage QA; this exact SHA is the reviewed final candidate."
+      },
+      "sourceLineage": {
+        "visualQaSource": "media/production/identity-audio-r4/.work-salvage-r4-bridge-trip/QA-REPORT.md",
+        "visualSourcePath": "media/production/identity-audio-r4/.work-salvage-r4-bridge-trip/EV-BRIDGE-hidden-courage--jiangmi-r4-local-salvage-candidate.mp4",
+        "finalization": "none after full-film salvage review"
+      }
+    },
+    {
+      "id": "EV-GROUP-truth-firepit",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/EV-GROUP-truth-firepit--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "914d3dcfdb86ab34898cb2222c64ae52fb1e611dd0a96783b6f090c077e2ba67",
+      "verdict": "passed",
+      "identityVerdict": "passed",
+      "frameVerdict": "passed",
+      "evidence": {
+        "upstreamHumanQa": "salvage-final-qa-r4.json: blank-card close-up followed by fire/chair/shoulder-back crops; all unanchored faces and card writing excluded.",
+        "finalHumanQa": "Final-path full-film 1 fps review passed; Jiangmi, blank card and faceless firepit atmosphere remain intact.",
+        "reencodeIntegrity": "SSIM All 0.985642; source/output frames at 0.5/7.5/14.5 seconds visually unchanged."
+      },
+      "sourceLineage": {
+        "visualQaSource": "media/production/identity-audio-r4/salvage-final-qa-r4.json",
+        "visualSourcePath": "media/production/identity-audio-r4/.work-salvage-r4/EV-GROUP-truth-firepit--jiangmi-r4-local-salvage-candidate.mp4",
+        "finalization": "runtime/audio normalization re-encode"
+      }
+    },
+    {
+      "id": "EV-BOMBSHELL-ninth-card",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/EV-BOMBSHELL-ninth-card--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "c469339085e9198419cc18204fe253dcdf1c950f6e68ed006782ee75af6c0e10",
+      "verdict": "passed",
+      "identityVerdict": "passed",
+      "frameVerdict": "passed",
+      "evidence": {
+        "upstreamHumanQa": "salvage-ledger-r4.json cleanDirect set: retry1 accepted without local visual salvage.",
+        "finalHumanQa": "Full-film 1 fps review passed: Jiangmi/group reaction, doorway and ninth-entry suitcase remain legible; background guests stay non-identifying and no subtitle/pseudo-text appears.",
+        "reencodeIntegrity": "SSIM All 0.986713; source/output frames at 0.5/7.5/14.5 seconds visually unchanged."
+      },
+      "sourceLineage": {
+        "visualQaSource": "media/production/identity-audio-r4/salvage-ledger-r4.json",
+        "visualSourcePath": "media/production/identity-audio-r4/.work-candidates/manifest-jiangmi-mainline-retry1-20260825-124220/shots/EV-BOMBSHELL-ninth-card--jiangmi-r4-retry1/EV-BOMBSHELL-ninth-card--jiangmi-identity-audio-r4-retry1-candidate.mp4",
+        "finalization": "runtime/audio normalization re-encode"
+      }
+    },
+    {
+      "id": "EV-PAST-consent-reveal",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/EV-PAST-consent-reveal--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "f1c5f268ff249b6fad25868b05bc4845f2d2b25c1d44ff6a0e214fa2691e7da6",
+      "verdict": "passed",
+      "identityVerdict": "passed",
+      "frameVerdict": "passed",
+      "evidence": {
+        "upstreamHumanQa": "candidate-verdicts-r4.json: 15-frame pass; Jiangmi and Chensu stable, letter unreadable and consent-boundary action causal.",
+        "finalHumanQa": "Final-path full-film 1 fps review passed; sealed letter, two-person exchange and consent state remain unchanged.",
+        "reencodeIntegrity": "Original generated source to final SSIM All 0.984136; intermediate master to final SSIM All 0.994116; source/output keyframes visually unchanged."
+      },
+      "sourceLineage": {
+        "visualQaSource": "media/production/identity-audio-r4/candidate-verdicts-r4.json",
+        "visualSourcePath": "media/production/identity-audio-r4/.work-candidates/manifest-jiangmi-mainline-20260825-114953/shots/EV-PAST-consent-reveal--jiangmi-r4/EV-PAST-consent-reveal--jiangmi-identity-audio-r4-candidate.mp4",
+        "finalization": "runtime master followed by audio-normalization re-encode"
+      }
+    },
+    {
+      "id": "EV-TRIP-last-two-days",
+      "path": "media/production/identity-audio-r4/.work-salvage-r4-bridge-trip/EV-TRIP-last-two-days--jiangmi-r4-local-salvage-candidate.mp4",
+      "sha256": "85d58a985a674bc6afadfff6e48f24f47c07cbecf1c111eb574d3080617edbb0",
+      "verdict": "passed",
+      "identityVerdict": "passed",
+      "frameVerdict": "passed",
+      "evidence": {
+        "upstreamHumanQa": ".work-salvage-r4-bridge-trip/QA-REPORT.md: full 15-frame/30-frame review passed. Jiangmi/Jiangwan anchors, helmeted riding and post-parking helmet removal remain causal; pseudo-brand close-ups excluded.",
+        "finalHumanQa": "Final-path full-film 1 fps review independently reconfirmed two identities, helmet safety continuity, parked arrival and absence of visible brands.",
+        "reencodeIntegrity": "Not applicable after the recorded trip salvage QA; this exact SHA is the reviewed final candidate."
+      },
+      "sourceLineage": {
+        "visualQaSource": "media/production/identity-audio-r4/.work-salvage-r4-bridge-trip/QA-REPORT.md",
+        "visualSourcePath": "media/production/identity-audio-r4/.work-salvage-r4-bridge-trip/EV-TRIP-last-two-days--jiangmi-r4-local-salvage-candidate.mp4",
+        "finalization": "none after full-film salvage review"
+      }
+    },
+    {
+      "id": "EV-FINAL-unsent-letter",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/EV-FINAL-unsent-letter--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "6c196f67eb18442def33faddb57a65ca885748cfc0f4cd74366929e301ab9fc2",
+      "verdict": "passed",
+      "identityVerdict": "passed",
+      "frameVerdict": "passed",
+      "evidence": {
+        "upstreamHumanQa": ".work-salvage-r4-review/QA-REPORT.md: chest mark removed, paper stays blank, fold/seal action and Jiangmi identity intact; full film reviewed at 2 fps by two reviewers.",
+        "finalHumanQa": "Final-path full-film 1 fps review passed; blank paper, envelope, fold/seal and Jiangmi emotional reaction remain intact.",
+        "reencodeIntegrity": "SSIM All 0.992629; source/output frames at 0.5/7.5/14.5 seconds visually unchanged."
+      },
+      "sourceLineage": {
+        "visualQaSource": "media/production/identity-audio-r4/.work-salvage-r4-review/QA-REPORT.md",
+        "visualSourcePath": "media/production/identity-audio-r4/.work-salvage-r4-review/EV-FINAL-unsent-letter--jiangmi-salvage-r4.mp4",
+        "finalization": "runtime/audio normalization re-encode"
+      }
+    },
+    {
+      "id": "EV-FINAL-confession-day",
+      "path": "media/production/identity-audio-r4/.work-audio-salvage-r4/EV-FINAL-confession-day--jiangmi-audio-salvage-r4.mp4",
+      "sha256": "bd347c318c5cb188e1894c953a7a25a358a3fce291d94f8c8e357c0445010b8f",
+      "verdict": "passed",
+      "identityVerdict": "passed",
+      "frameVerdict": "passed",
+      "evidence": {
+        "upstreamHumanQa": "salvage-final-qa-r4.json: marked front views replaced by clean head-only reciprocal looks; Jiangmi/Chensu anchors and restrained confession state retained.",
+        "finalHumanQa": "Final-path full-film 1 fps review passed; reciprocal looks, terrace blocking and back-view end remain identity-consistent with no shirt lettering.",
+        "reencodeIntegrity": "SSIM All 0.986954; source/output frames at 0.5/7.5/14.5 seconds visually unchanged."
+      },
+      "sourceLineage": {
+        "visualQaSource": "media/production/identity-audio-r4/salvage-final-qa-r4.json",
+        "visualSourcePath": "media/production/identity-audio-r4/.work-salvage-r4/EV-FINAL-confession-day--jiangmi-r4-local-salvage-candidate.mp4",
+        "finalization": "runtime/audio normalization re-encode"
+      }
+    }
+  ]
+}

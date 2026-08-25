@@ -1,0 +1,1194 @@
+{
+  "version": "1.0.0",
+  "contract": "EchoCore StoryEventTemplate v1",
+  "events": [
+    {
+      "id": "story.kitchen.two-person-shift",
+      "title": "只够两个人站下的厨房",
+      "phase": "early",
+      "arcType": "cooperation",
+      "sourceRefIds": [
+        "source.singles-inferno.s5",
+        "source.heart-signal.s3"
+      ],
+      "roles": {
+        "min": 1,
+        "max": 1
+      },
+      "eligibility": {
+        "nodeIds": [
+          "guided-chat",
+          "team-up"
+        ],
+        "minTotalMemories": 1,
+        "minDistinctCharacters": 1,
+        "participantRule": "memory-owner",
+        "minAxes": {
+          "trust": 0
+        },
+        "cooldownRevisions": 5
+      },
+      "dramaticQuestion": "在狭小空间和明确分工里，体贴会变成行动还是表演？",
+      "playerMission": {
+        "objective": "和一位聊过的嘉宾完成晚餐分工，并说清自己不愿承担的一项工作。",
+        "deadline": "DAY 1 · 晚餐前",
+        "successEvidence": "完成一项具体分工，并让对方回应你的边界。",
+        "exit": "可以交换岗位，不以肢体接触制造心动。"
+      },
+      "beats": [
+        "冰箱只剩有限食材",
+        "一人主厨一人补位",
+        "端盘前出现一次分工分歧"
+      ],
+      "onActivate": {
+        "arcDelta": {
+          "tension": 1,
+          "reciprocity": 2,
+          "uncertainty": 0
+        },
+        "flagDelta": {
+          "reciprocity": 1
+        }
+      },
+      "callbackPlan": "早餐时回收谁记住了对方的饮食偏好。",
+      "safety": [
+        "不强制暧昧肢体接触",
+        "食物偏好只来自已知记忆"
+      ],
+      "mediaPlan": {
+        "kind": "cinematic",
+        "cue": "暖光厨房、食材与手部协作",
+        "assetId": "EV-KITCHEN-two-person-shift",
+        "src": "/media/video/EV-KITCHEN-two-person-shift.mp4",
+        "poster": "/media/posters/EV-KITCHEN-two-person-shift.jpg",
+        "status": "ready",
+        "fallback": {
+          "kind": "scene-card",
+          "cue": "暖光厨房、食材与手部协作"
+        },
+        "runtimeAsset": {
+          "assetId": "EV-KITCHEN-two-person-shift",
+          "src": "/media/video/EV-KITCHEN-two-person-shift.mp4",
+          "poster": "/media/posters/EV-KITCHEN-two-person-shift.jpg",
+          "durationSeconds": 15.0
+        }
+      }
+    },
+    {
+      "id": "story.house.rules-friction",
+      "title": "被改掉的值日表",
+      "phase": "early",
+      "arcType": "friction",
+      "sourceRefIds": [
+        "source.heart-signal.s3",
+        "source.authentic-performance.study"
+      ],
+      "roles": {
+        "min": 1,
+        "max": 1
+      },
+      "eligibility": {
+        "nodeIds": [
+          "guided-chat",
+          "team-up",
+          "anonymous-letter"
+        ],
+        "minTotalMemories": 2,
+        "minDistinctCharacters": 1,
+        "participantRule": "strained",
+        "characterIds": [
+          "shenmo"
+        ],
+        "maxAxes": {
+          "trust": 2
+        },
+        "cooldownRevisions": 6
+      },
+      "dramaticQuestion": "生活规则不一致时，你们会谈清还是替对方贴标签？",
+      "playerMission": {
+        "objective": "在公开晚餐前，与当事人确认值日表是谁改的、为什么改。",
+        "deadline": "下一次集体用餐前",
+        "successEvidence": "区分事实、解释和感受，各说出一项可执行调整。",
+        "exit": "可以暂缓共同任务，但不能在本人缺席时定性。"
+      },
+      "beats": [
+        "值日表出现手写改动",
+        "玩家向当事人核实",
+        "双方给出一项可执行规则"
+      ],
+      "onActivate": {
+        "arcDelta": {
+          "tension": 2,
+          "reciprocity": 0,
+          "uncertainty": 1
+        },
+        "flagDelta": {
+          "clarity": 1
+        }
+      },
+      "callbackPlan": "下一次公共空间任务验证规则是否被遵守。",
+      "safety": [
+        "冲突只基于可验证行为",
+        "禁止公开羞辱和人格诊断"
+      ],
+      "mediaPlan": {
+        "kind": "cinematic",
+        "cue": "被改写的值日表、沈墨的反应与等待核实的规则卡",
+        "assetId": "EV-RULES-house-friction",
+        "src": "/media/video/EV-RULES-house-friction.mp4",
+        "poster": "/media/posters/EV-RULES-house-friction.jpg",
+        "status": "ready",
+        "fallback": {
+          "kind": "scene-card",
+          "cue": "被改写的值日表与等待核实的规则"
+        },
+        "runtimeAsset": {
+          "assetId": "EV-RULES-house-friction",
+          "src": "/media/video/EV-RULES-house-friction.mp4",
+          "poster": "/media/posters/EV-RULES-house-friction.jpg",
+          "durationSeconds": 15.0
+        }
+      }
+    },
+    {
+      "id": "story.signal.first-anonymous-message",
+      "title": "第一封匿名心动短信",
+      "phase": "early",
+      "arcType": "signal",
+      "sourceRefIds": [
+        "source.heart-signal.s3",
+        "source.love-island.presspack"
+      ],
+      "roles": {
+        "min": 1,
+        "max": 1
+      },
+      "eligibility": {
+        "nodeIds": [
+          "guided-chat",
+          "team-up",
+          "anonymous-letter"
+        ],
+        "minTotalMemories": 2,
+        "minDistinctCharacters": 2,
+        "participantRule": "memory-owner",
+        "cooldownRevisions": 8
+      },
+      "dramaticQuestion": "当文字匿名、后果公开，你会把信号给最心动的人还是最需要回应的人？",
+      "playerMission": {
+        "objective": "从两位以上聊过的嘉宾中选择一人，写一句只包含已发生事实的匿名短信。",
+        "deadline": "DAY 1 · 22:30",
+        "successEvidence": "短信点名一个具体行为，不许承诺未来。",
+        "exit": "可以选择不发送，但系统会记录为一次明确留白。"
+      },
+      "beats": [
+        "手机同时亮起",
+        "玩家回看两段真实互动",
+        "匿名结果只公开数量、不公开内容"
+      ],
+      "onActivate": {
+        "arcDelta": {
+          "tension": 1,
+          "reciprocity": 1,
+          "uncertainty": 2
+        },
+        "flagDelta": {
+          "relationshipFocus": 1
+        }
+      },
+      "callbackPlan": "清晨由收信人的人物卡决定是否提及被记住的行为。",
+      "safety": [
+        "不公开私人对话原文",
+        "不把无人收信包装成羞辱"
+      ],
+      "mediaPlan": {
+        "kind": "cinematic",
+        "cue": "八部手机依次亮起、匿名信箱开锁",
+        "assetId": "EV-SIGNAL-first-anonymous-message",
+        "src": "/media/video/EV-SIGNAL-first-anonymous-message.mp4",
+        "poster": "/media/posters/EV-SIGNAL-first-anonymous-message.jpg",
+        "status": "ready",
+        "fallback": {
+          "kind": "scene-card",
+          "cue": "八部手机依次亮起、匿名信箱开锁"
+        },
+        "runtimeAsset": {
+          "assetId": "EV-SIGNAL-first-anonymous-message",
+          "src": "/media/video/EV-SIGNAL-first-anonymous-message.mp4",
+          "poster": "/media/posters/EV-SIGNAL-first-anonymous-message.jpg",
+          "durationSeconds": 15.0
+        }
+      }
+    },
+    {
+      "id": "story.identity.profession-reveal",
+      "title": "职业卡翻面之后",
+      "phase": "middle",
+      "arcType": "reveal",
+      "sourceRefIds": [
+        "source.heart-signal.s2",
+        "source.heart-signal.s3"
+      ],
+      "roles": {
+        "min": 1,
+        "max": 2
+      },
+      "eligibility": {
+        "nodeIds": [
+          "team-up",
+          "anonymous-letter",
+          "callback"
+        ],
+        "minTotalMemories": 3,
+        "minDistinctCharacters": 2,
+        "participantRule": "memory-owner",
+        "cooldownRevisions": 7
+      },
+      "dramaticQuestion": "新信息会修正理解，还是只制造身份滤镜？",
+      "playerMission": {
+        "objective": "在职业卡公开后，向一位嘉宾提出一个与标签无关、可具体回答的问题。",
+        "deadline": "公开后的下一次私聊",
+        "successEvidence": "问题指向日常选择或代价，不询问收入和隐私。",
+        "exit": "允许当事人拒绝延伸披露。"
+      },
+      "beats": [
+        "职业卡逐张翻面",
+        "旧印象与新事实出现偏差",
+        "玩家选择向谁核实而非猜测"
+      ],
+      "onActivate": {
+        "arcDelta": {
+          "tension": 1,
+          "reciprocity": 0,
+          "uncertainty": 2
+        },
+        "flagDelta": {
+          "clarity": 1
+        }
+      },
+      "callbackPlan": "后续任务验证职业印象是否误导了选择。",
+      "safety": [
+        "只公开人物卡允许的公开事实",
+        "不把职业和阶层价值绑定"
+      ],
+      "mediaPlan": {
+        "kind": "reveal-card",
+        "cue": "桌面身份卡逐张翻面",
+        "assetId": "EV-IDENTITY-profession-reveal",
+        "src": "/media/video/EV-IDENTITY-profession-reveal.mp4",
+        "poster": "/media/posters/EV-IDENTITY-profession-reveal.jpg",
+        "status": "ready",
+        "fallback": {
+          "kind": "reveal-card",
+          "cue": "桌面身份卡逐张翻面"
+        },
+        "runtimeAsset": {
+          "assetId": "EV-IDENTITY-profession-reveal",
+          "src": "/media/video/EV-IDENTITY-profession-reveal.mp4",
+          "poster": "/media/posters/EV-IDENTITY-profession-reveal.jpg",
+          "durationSeconds": 15.0
+        }
+      }
+    },
+    {
+      "id": "story.date.blind-box",
+      "title": "没有名字的约会盲盒",
+      "phase": "middle",
+      "arcType": "date",
+      "sourceRefIds": [
+        "source.heart-signal.s2",
+        "source.love-is-blind.pods"
+      ],
+      "roles": {
+        "min": 1,
+        "max": 1
+      },
+      "eligibility": {
+        "nodeIds": [
+          "team-up",
+          "anonymous-letter",
+          "callback"
+        ],
+        "minTotalMemories": 3,
+        "minDistinctCharacters": 2,
+        "participantRule": "memory-owner",
+        "minAxes": {
+          "respect": 0
+        },
+        "cooldownRevisions": 8
+      },
+      "dramaticQuestion": "不知道对象是谁时，你选的是地点、价值观还是想象？",
+      "playerMission": {
+        "objective": "从三个只写行动方式的盲盒中选一个，并与匹配嘉宾完成限时任务。",
+        "deadline": "DAY 2 · 16:00",
+        "successEvidence": "结束前各说出一个原先判断错的地方。",
+        "exit": "允许拒绝高空、水下等个人不适项目并换成平替。"
+      },
+      "beats": [
+        "盲盒只显示行动规则",
+        "系统按已知边界排除不适项目",
+        "约会结尾交换一次判断修正"
+      ],
+      "onActivate": {
+        "arcDelta": {
+          "tension": 1,
+          "reciprocity": 2,
+          "uncertainty": 2
+        },
+        "flagDelta": {
+          "observation": 1
+        }
+      },
+      "callbackPlan": "下一次匿名短信回收“判断错了什么”。",
+      "safety": [
+        "边界优先于节目效果",
+        "不强制身体挑战"
+      ],
+      "mediaPlan": {
+        "kind": "montage",
+        "cue": "三只无名盲盒与地点碎片",
+        "assetId": "EV-DATE-blind-box",
+        "src": "/media/video/EV-DATE-blind-box.mp4",
+        "poster": "/media/posters/EV-DATE-blind-box.jpg",
+        "status": "ready",
+        "fallback": {
+          "kind": "scene-card",
+          "cue": "三只无名盲盒与地点碎片"
+        },
+        "runtimeAsset": {
+          "assetId": "EV-DATE-blind-box",
+          "src": "/media/video/EV-DATE-blind-box.mp4",
+          "poster": "/media/posters/EV-DATE-blind-box.jpg",
+          "durationSeconds": 15.0
+        }
+      }
+    },
+    {
+      "id": "story.date.mutual-signal",
+      "title": "双向信号后的二十分钟",
+      "phase": "middle",
+      "arcType": "mutual-romance",
+      "sourceRefIds": [
+        "source.heart-signal.s6",
+        "source.heart-signal.s3"
+      ],
+      "roles": {
+        "min": 1,
+        "max": 1
+      },
+      "eligibility": {
+        "nodeIds": [
+          "team-up",
+          "anonymous-letter",
+          "callback"
+        ],
+        "minTotalMemories": 3,
+        "minDistinctCharacters": 1,
+        "participantRule": "mutual",
+        "minAxes": {
+          "trust": 2,
+          "attraction": 2
+        },
+        "attitudes": [
+          "warm",
+          "softened",
+          "honest",
+          "moved",
+          "steady"
+        ],
+        "cooldownRevisions": 8
+      },
+      "dramaticQuestion": "双方都在靠近时，能否说出下一步而不把心动写成承诺？",
+      "playerMission": {
+        "objective": "与一位双向信号嘉宾完成20分钟无镜头感对话，各提出一个可在明天验证的邀请。",
+        "deadline": "DAY 2 · 熄灯前",
+        "successEvidence": "双方各提出一个具体、可拒绝的下一步。",
+        "exit": "任一方都可把邀请改为集体活动。"
+      },
+      "beats": [
+        "节目组通知双向信号成立",
+        "两人进入限定空间",
+        "各留下一张可验证邀请卡"
+      ],
+      "onActivate": {
+        "arcDelta": {
+          "tension": 0,
+          "reciprocity": 3,
+          "uncertainty": -1
+        },
+        "flagDelta": {
+          "reciprocity": 1
+        }
+      },
+      "callbackPlan": "次日检查邀请是否被兑现，而不是直接增加好感。",
+      "safety": [
+        "双向信号不等同于排他关系",
+        "邀请必须可拒绝"
+      ],
+      "mediaPlan": {
+        "kind": "cinematic",
+        "cue": "安静露台、两张未写完的邀请卡",
+        "assetId": "EV-DATE-mutual-signal",
+        "src": "/media/video/EV-DATE-mutual-signal.mp4",
+        "poster": "/media/posters/EV-DATE-mutual-signal.jpg",
+        "status": "ready",
+        "fallback": {
+          "kind": "scene-card",
+          "cue": "安静露台、两张未写完的邀请卡"
+        },
+        "runtimeAsset": {
+          "assetId": "EV-DATE-mutual-signal",
+          "src": "/media/video/EV-DATE-mutual-signal.mp4",
+          "poster": "/media/posters/EV-DATE-mutual-signal.jpg",
+          "durationSeconds": 15.0
+        }
+      }
+    },
+    {
+      "id": "story.missed-timing.empty-seat",
+      "title": "被留空的座位",
+      "phase": "middle",
+      "arcType": "missed-timing",
+      "sourceRefIds": [
+        "source.heart-signal.s8",
+        "source.authentic-performance.study"
+      ],
+      "roles": {
+        "min": 1,
+        "max": 1
+      },
+      "eligibility": {
+        "nodeIds": [
+          "team-up",
+          "anonymous-letter",
+          "callback"
+        ],
+        "minTotalMemories": 3,
+        "minDistinctCharacters": 1,
+        "participantRule": "uncertain",
+        "attitudes": [
+          "guarded",
+          "uncertain",
+          "careful"
+        ],
+        "cooldownRevisions": 7
+      },
+      "dramaticQuestion": "错过是拒绝、误会，还是双方都没有说清时间？",
+      "playerMission": {
+        "objective": "在当晚结束前，向对方确认一次具体事实：谁在何时等过、谁没有收到信息。",
+        "deadline": "DAY 2 · 23:00",
+        "successEvidence": "只核对时间和行动，不要求对方解释全部感受。",
+        "exit": "确认错过后可以不补约。"
+      },
+      "beats": [
+        "约会地点保留一把空椅子",
+        "两人的时间线出现缺口",
+        "玩家选择补约、解释或结束猜测"
+      ],
+      "onActivate": {
+        "arcDelta": {
+          "tension": 2,
+          "reciprocity": -1,
+          "uncertainty": 2
+        },
+        "flagDelta": {
+          "clarity": 1
+        }
+      },
+      "callbackPlan": "后续由人物卡记住玩家是否核对事实而非索要保证。",
+      "safety": [
+        "不把沉默自动解释为欲擒故纵",
+        "允许不补约"
+      ],
+      "mediaPlan": {
+        "kind": "cinematic",
+        "cue": "海边双人桌与一把空椅子",
+        "assetId": "EV-MISSED-empty-seat",
+        "src": "/media/video/EV-MISSED-empty-seat.mp4",
+        "poster": "/media/posters/EV-MISSED-empty-seat.jpg",
+        "status": "ready",
+        "fallback": {
+          "kind": "scene-card",
+          "cue": "海边双人桌与一把空椅子"
+        },
+        "runtimeAsset": {
+          "assetId": "EV-MISSED-empty-seat",
+          "src": "/media/video/EV-MISSED-empty-seat.mp4",
+          "poster": "/media/posters/EV-MISSED-empty-seat.jpg",
+          "durationSeconds": 15.0
+        }
+      }
+    },
+    {
+      "id": "story.care.breakfast-callback",
+      "title": "没有署名的早餐",
+      "phase": "middle",
+      "arcType": "quiet-care",
+      "sourceRefIds": [
+        "source.heart-signal.s8",
+        "source.heart-signal.s6"
+      ],
+      "roles": {
+        "min": 1,
+        "max": 1
+      },
+      "eligibility": {
+        "nodeIds": [
+          "team-up",
+          "anonymous-letter",
+          "callback"
+        ],
+        "minTotalMemories": 2,
+        "minDistinctCharacters": 1,
+        "participantRule": "trusted",
+        "minAxes": {
+          "trust": 2
+        },
+        "cooldownRevisions": 6
+      },
+      "dramaticQuestion": "安静照顾被看见后，会成为压力还是被准确理解？",
+      "playerMission": {
+        "objective": "找出早餐照顾来自哪段已发生的记忆，并给出不夸大的回应。",
+        "deadline": "早餐结束前",
+        "successEvidence": "回应具体行动，不替对方命名爱意。",
+        "exit": "可以只表达感谢，不接受隐含承诺。"
+      },
+      "beats": [
+        "餐盘里出现被记住的偏好",
+        "没有人主动认领",
+        "玩家决定核实还是保留安静"
+      ],
+      "onActivate": {
+        "arcDelta": {
+          "tension": 0,
+          "reciprocity": 2,
+          "uncertainty": 1
+        },
+        "flagDelta": {
+          "relationshipFocus": 1
+        }
+      },
+      "callbackPlan": "下一次私聊询问照顾是否符合边界。",
+      "safety": [
+        "只能使用已写入记忆的偏好",
+        "不把照顾兑换成感情债"
+      ],
+      "mediaPlan": {
+        "kind": "prop",
+        "cue": "清晨餐桌与一份没有署名的早餐",
+        "assetId": "EV-CARE-breakfast-callback",
+        "src": "/media/video/EV-CARE-breakfast-callback.mp4",
+        "poster": "/media/posters/EV-CARE-breakfast-callback.jpg",
+        "status": "ready",
+        "fallback": {
+          "kind": "prop-card",
+          "cue": "清晨餐桌与一份没有署名的早餐"
+        },
+        "runtimeAsset": {
+          "assetId": "EV-CARE-breakfast-callback",
+          "src": "/media/video/EV-CARE-breakfast-callback.mp4",
+          "poster": "/media/posters/EV-CARE-breakfast-callback.jpg",
+          "durationSeconds": 15.0
+        }
+      }
+    },
+    {
+      "id": "story.triangle.reverse-invite",
+      "title": "同一时刻的两张邀约卡",
+      "phase": "middle",
+      "arcType": "triangle",
+      "sourceRefIds": [
+        "source.love-island.presspack",
+        "source.heart-signal.s6"
+      ],
+      "roles": {
+        "min": 2,
+        "max": 2
+      },
+      "eligibility": {
+        "nodeIds": [
+          "team-up",
+          "anonymous-letter",
+          "callback"
+        ],
+        "minTotalMemories": 4,
+        "minDistinctCharacters": 2,
+        "participantRule": "triangle",
+        "characterIds": [
+          "shenmo",
+          "chengye"
+        ],
+        "minAxes": {
+          "attraction": 1
+        },
+        "cooldownRevisions": 9
+      },
+      "dramaticQuestion": "两张邀约同时到达时，你如何选择而不把落选者变成剧情工具？",
+      "playerMission": {
+        "objective": "在两张同档期邀约中作出选择，并分别给出一句基于事实的回应。",
+        "deadline": "收到卡片后30分钟",
+        "successEvidence": "选择一张，并对另一张明确回应而非消失。",
+        "exit": "可以两张都拒绝，但不能同时保留。"
+      },
+      "beats": [
+        "两张邀约卡同时推到玩家面前",
+        "系统只展示行动内容不比较人物价值",
+        "玩家作出有代价的单选"
+      ],
+      "onActivate": {
+        "arcDelta": {
+          "tension": 3,
+          "reciprocity": 0,
+          "uncertainty": 2
+        },
+        "flagDelta": {
+          "courage": 1
+        }
+      },
+      "callbackPlan": "两位角色分别依据各自记忆解释这次选择。",
+      "safety": [
+        "不公开羞辱未被选择者",
+        "不允许模糊占用两个邀约"
+      ],
+      "mediaPlan": {
+        "kind": "cinematic",
+        "cue": "两张邀约卡、沈墨与程野的眼神交锋、等待玩家单选",
+        "assetId": "EV-TRIANGLE-reverse-invite",
+        "src": "/media/video/EV-TRIANGLE-reverse-invite.mp4",
+        "poster": "/media/posters/EV-TRIANGLE-reverse-invite.jpg",
+        "status": "ready",
+        "fallback": {
+          "kind": "scene-card",
+          "cue": "两张邀约卡与等待单选的两位嘉宾"
+        },
+        "runtimeAsset": {
+          "assetId": "EV-TRIANGLE-reverse-invite",
+          "src": "/media/video/EV-TRIANGLE-reverse-invite.mp4",
+          "poster": "/media/posters/EV-TRIANGLE-reverse-invite.jpg",
+          "durationSeconds": 15.0
+        }
+      }
+    },
+    {
+      "id": "story.challenge.water-bridge",
+      "title": "水面上的最后一块踏板",
+      "phase": "middle",
+      "arcType": "contrast-growth",
+      "sourceRefIds": [
+        "source.heart-signal.s8",
+        "source.authentic-performance.study"
+      ],
+      "roles": {
+        "min": 2,
+        "max": 2
+      },
+      "eligibility": {
+        "nodeIds": [
+          "team-up",
+          "anonymous-letter",
+          "callback"
+        ],
+        "minTotalMemories": 2,
+        "minDistinctCharacters": 2,
+        "participantRule": "memory-owner",
+        "characterIds": [
+          "chensu",
+          "jiangmi"
+        ],
+        "cooldownRevisions": 8
+      },
+      "dramaticQuestion": "当最会点亮场面的人停在水边，最少说话的人会怎样把帮助变成可选择的行动？",
+      "playerMission": {
+        "objective": "先确认姜米是否愿意继续，再与陈叙共同选择固定踏板、递救生绳或改走安全路线。",
+        "deadline": "落日前完成或明确退出",
+        "successEvidence": "姜米亲自确认方案；陈叙只执行被同意的帮助；两人都安全抵达或共同退出。",
+        "exit": "可以改走岸边路线，不以完成挑战证明勇敢。"
+      },
+      "beats": [
+        "姜米在最后一块浮动踏板前停下",
+        "陈叙先穿救生衣下水固定踏板而不是催促",
+        "玩家确认姜米选择继续、换方案或退出"
+      ],
+      "reversalHooks": [
+        {
+          "expectation": "姜米通常负责点亮场面，大家以为她会第一个通过",
+          "allowedConstraint": "证据不足时只能写当场犹豫或请求替代方案，禁止编造创伤",
+          "counterAction": "陈叙不讲英雄台词，先穿救生衣固定踏板并递出救生绳；进一步搀扶或背负必须获得明确同意",
+          "growthDirection": "帮助不是替对方决定，勇敢也包括选择安全退出"
+        }
+      ],
+      "onActivate": {
+        "arcDelta": {
+          "tension": 2,
+          "reciprocity": 3,
+          "uncertainty": -1
+        },
+        "flagDelta": {
+          "reciprocity": 1
+        }
+      },
+      "callbackPlan": "后续私聊分别回收姜米对被尊重选择的感受，以及陈叙是否愿意解释自己的行动。",
+      "safety": [
+        "全员穿救生衣并有安全员画外待命",
+        "身体接触必须明确同意",
+        "不把害怕或退出写成失败",
+        "不凭空编造心理创伤"
+      ],
+      "mediaPlan": {
+        "kind": "cinematic",
+        "cue": "日落水上踏板、姜米停步、陈叙穿救生衣入水固定踏板并递出救生绳",
+        "assetId": "EV-BRIDGE-hidden-courage",
+        "src": "/media/video/EV-BRIDGE-hidden-courage.mp4",
+        "poster": "/media/posters/EV-BRIDGE-hidden-courage.jpg",
+        "status": "ready",
+        "fallback": {
+          "kind": "scene-card",
+          "cue": "日落水上踏板与安全替代方案"
+        },
+        "runtimeAsset": {
+          "assetId": "EV-BRIDGE-hidden-courage",
+          "src": "/media/video/EV-BRIDGE-hidden-courage.mp4",
+          "poster": "/media/posters/EV-BRIDGE-hidden-courage.jpg",
+          "durationSeconds": 15.0
+        }
+      }
+    },
+    {
+      "id": "story.group.truth-firepit",
+      "title": "围炉真心话：只回答可验证的部分",
+      "phase": "middle",
+      "arcType": "group-pressure",
+      "sourceRefIds": [
+        "source.love-island.presspack",
+        "source.authentic-performance.study"
+      ],
+      "roles": {
+        "min": 2,
+        "max": 3
+      },
+      "eligibility": {
+        "nodeIds": [
+          "anonymous-letter",
+          "callback"
+        ],
+        "minTotalMemories": 5,
+        "minDistinctCharacters": 3,
+        "participantRule": "memory-owner",
+        "cooldownRevisions": 10
+      },
+      "dramaticQuestion": "公开压力下，谁能说真话又不越过他人的隐私边界？",
+      "playerMission": {
+        "objective": "从三张问题卡中选一张，并只回答自己已经做过的选择。",
+        "deadline": "围炉结束前",
+        "successEvidence": "回答包含一个事实、一个仍不确定之处和一条边界。",
+        "exit": "每人有一次无惩罚跳过权。"
+      },
+      "beats": [
+        "问题卡放到火光中央",
+        "玩家选题而不是被随机审问",
+        "其他角色按独立记忆回应"
+      ],
+      "onActivate": {
+        "arcDelta": {
+          "tension": 3,
+          "reciprocity": 1,
+          "uncertainty": 1
+        },
+        "flagDelta": {
+          "publicImpression": 1
+        }
+      },
+      "callbackPlan": "私聊中回收谁尊重了跳过权。",
+      "safety": [
+        "不强迫公开创伤、性经历或家庭隐私",
+        "跳过不扣关系分"
+      ],
+      "mediaPlan": {
+        "kind": "cinematic",
+        "cue": "火光、问题卡与沉默的群像反应",
+        "assetId": "EV-GROUP-truth-firepit",
+        "src": "/media/video/EV-GROUP-truth-firepit.mp4",
+        "poster": "/media/posters/EV-GROUP-truth-firepit.jpg",
+        "status": "ready",
+        "fallback": {
+          "kind": "scene-card",
+          "cue": "火光、问题卡与沉默的群像反应"
+        },
+        "runtimeAsset": {
+          "assetId": "EV-GROUP-truth-firepit",
+          "src": "/media/video/EV-GROUP-truth-firepit.mp4",
+          "poster": "/media/posters/EV-GROUP-truth-firepit.jpg",
+          "durationSeconds": 15.0
+        }
+      }
+    },
+    {
+      "id": "story.bombshell.ninth-card",
+      "title": "第九张人物卡",
+      "phase": "middle",
+      "arcType": "bombshell",
+      "sourceRefIds": [
+        "source.singles-inferno.s5",
+        "source.love-island.ten-years",
+        "source.heart-signal.s2"
+      ],
+      "roles": {
+        "min": 1,
+        "max": 2
+      },
+      "eligibility": {
+        "nodeIds": [
+          "anonymous-letter",
+          "callback"
+        ],
+        "minTotalMemories": 6,
+        "minDistinctCharacters": 3,
+        "participantRule": "memory-owner",
+        "requiresCastTag": "bombshell",
+        "cooldownRevisions": 12
+      },
+      "dramaticQuestion": "新嘉宾到来时，已有关系会变得更清楚还是只剩占有欲？",
+      "playerMission": {
+        "objective": "在新嘉宾入场后的首轮任务中，保留一次旧关系确认和一次新信息核实。",
+        "deadline": "入场当晚",
+        "successEvidence": "分别完成一次不排他的对话。",
+        "exit": "不强迫任何人证明忠诚。"
+      },
+      "beats": [
+        "门铃响起并显示第九张已审核人物卡",
+        "新嘉宾选择首位任务搭档",
+        "已有关系获得一次无惩罚确认窗口"
+      ],
+      "onActivate": {
+        "arcDelta": {
+          "tension": 4,
+          "reciprocity": -1,
+          "uncertainty": 3
+        },
+        "flagDelta": {
+          "heat": 2
+        }
+      },
+      "callbackPlan": "比较新信息进入前后的明确行为，不惩罚正常探索。",
+      "safety": [
+        "只有存在完整人物卡的新嘉宾才能入场",
+        "禁止把嫉妒当作爱的证明"
+      ],
+      "mediaPlan": {
+        "kind": "entrance",
+        "cue": "门铃、行李箱轮子与未露脸入场",
+        "assetId": "EV-BOMBSHELL-ninth-card",
+        "src": "/media/video/EV-BOMBSHELL-ninth-card.mp4",
+        "poster": "/media/posters/EV-BOMBSHELL-ninth-card.jpg",
+        "status": "ready",
+        "fallback": {
+          "kind": "entrance-card",
+          "cue": "门铃、行李箱轮子与未露脸入场"
+        },
+        "runtimeAsset": {
+          "assetId": "EV-BOMBSHELL-ninth-card",
+          "src": "/media/video/EV-BOMBSHELL-ninth-card.mp4",
+          "poster": "/media/posters/EV-BOMBSHELL-ninth-card.jpg",
+          "durationSeconds": 15.0
+        }
+      }
+    },
+    {
+      "id": "story.past.consent-reveal",
+      "title": "由本人决定是否翻开的旧信",
+      "phase": "late",
+      "arcType": "past-relationship",
+      "sourceRefIds": [
+        "source.exchange.official",
+        "source.authentic-performance.study"
+      ],
+      "roles": {
+        "min": 1,
+        "max": 1
+      },
+      "eligibility": {
+        "nodeIds": [
+          "callback"
+        ],
+        "minTotalMemories": 6,
+        "minDistinctCharacters": 2,
+        "participantRule": "trusted",
+        "minAxes": {
+          "trust": 4
+        },
+        "requiredFlags": {
+          "consentedPastDisclosure": 1
+        },
+        "cooldownRevisions": 12
+      },
+      "dramaticQuestion": "过去被允许进入现在时，它是解释、负担还是一次重新选择？",
+      "playerMission": {
+        "objective": "先确认当事人愿意公开到什么程度，再问一个与当下选择有关的问题。",
+        "deadline": "告白旅行前",
+        "successEvidence": "记录可公开范围，并允许随时撤回。",
+        "exit": "拒绝公开不会影响后续约会资格。"
+      },
+      "beats": [
+        "旧信仍保持封口",
+        "当事人选择公开范围",
+        "玩家只讨论它如何影响现在"
+      ],
+      "onActivate": {
+        "arcDelta": {
+          "tension": 2,
+          "reciprocity": 2,
+          "uncertainty": 1
+        },
+        "flagDelta": {
+          "clarity": 1
+        }
+      },
+      "callbackPlan": "后续只回收当事人授权公开的摘要。",
+      "safety": [
+        "必须有显式同意标记",
+        "可撤回且不扣关系分",
+        "不展示第三方私人信息"
+      ],
+      "mediaPlan": {
+        "kind": "prop",
+        "cue": "保持封口的旧信与授权范围卡",
+        "assetId": "EV-PAST-consent-reveal",
+        "src": "/media/video/EV-PAST-consent-reveal.mp4",
+        "poster": "/media/posters/EV-PAST-consent-reveal.jpg",
+        "status": "ready",
+        "fallback": {
+          "kind": "prop-card",
+          "cue": "保持封口的旧信与授权范围卡"
+        },
+        "runtimeAsset": {
+          "assetId": "EV-PAST-consent-reveal",
+          "src": "/media/video/EV-PAST-consent-reveal.mp4",
+          "poster": "/media/posters/EV-PAST-consent-reveal.jpg",
+          "durationSeconds": 15.0
+        }
+      }
+    },
+    {
+      "id": "story.trip.last-two-days",
+      "title": "告白前的两日一夜",
+      "phase": "late",
+      "arcType": "final-trip",
+      "sourceRefIds": [
+        "source.heart-signal.s2",
+        "source.heart-signal.s8"
+      ],
+      "roles": {
+        "min": 1,
+        "max": 1
+      },
+      "eligibility": {
+        "nodeIds": [
+          "callback"
+        ],
+        "minTotalMemories": 7,
+        "minDistinctCharacters": 2,
+        "participantRule": "top-bond",
+        "characterIds": [
+          "jiangwan"
+        ],
+        "minAxes": {
+          "trust": 3,
+          "affection": 2
+        },
+        "cooldownRevisions": 12
+      },
+      "dramaticQuestion": "离开小屋的节目节奏后，这段关系还有没有真实的下一天？",
+      "playerMission": {
+        "objective": "选择一位嘉宾完成两日一夜，并讨论一个节目结束后仍成立的现实问题。",
+        "deadline": "最终告白前夜",
+        "successEvidence": "提出一个现实条件、一个仍不确定之处和一个可执行下一步。",
+        "exit": "旅行不构成最终选择，任一方可提前结束单独行程。"
+      },
+      "beats": [
+        "玩家在无排名信息下选同行者",
+        "共同解决一次旅途意外",
+        "告白前夜讨论节目外的具体生活"
+      ],
+      "onActivate": {
+        "arcDelta": {
+          "tension": 2,
+          "reciprocity": 3,
+          "uncertainty": -1
+        },
+        "flagDelta": {
+          "relationshipFocus": 2
+        }
+      },
+      "callbackPlan": "最终告白只引用旅行中双方确认过的事实。",
+      "safety": [
+        "旅行不等于排他承诺",
+        "保留单独空间与提前结束权"
+      ],
+      "mediaPlan": {
+        "kind": "cinematic",
+        "cue": "路线卡、江晚发出邀请与海边开放出发的三段式蒙太奇",
+        "assetId": "EV-TRIP-last-two-days",
+        "src": "/media/video/EV-TRIP-last-two-days.mp4",
+        "poster": "/media/posters/EV-TRIP-last-two-days.jpg",
+        "status": "ready",
+        "fallback": {
+          "kind": "scene-card",
+          "cue": "路线卡、邀请与海边开放出发"
+        },
+        "runtimeAsset": {
+          "assetId": "EV-TRIP-last-two-days",
+          "src": "/media/video/EV-TRIP-last-two-days.mp4",
+          "poster": "/media/posters/EV-TRIP-last-two-days.jpg",
+          "durationSeconds": 15.0
+        }
+      }
+    },
+    {
+      "id": "story.final.unsent-letter",
+      "title": "告白前夜：可以不寄出的信",
+      "phase": "late",
+      "arcType": "reflection",
+      "sourceRefIds": [
+        "source.heart-signal.s3",
+        "source.heart-signal.s6"
+      ],
+      "roles": {
+        "min": 1,
+        "max": 1
+      },
+      "eligibility": {
+        "nodeIds": [
+          "callback"
+        ],
+        "minTotalMemories": 8,
+        "minDistinctCharacters": 2,
+        "participantRule": "top-bond",
+        "minAxes": {
+          "trust": 3
+        },
+        "cooldownRevisions": 10
+      },
+      "dramaticQuestion": "把所有回声写在纸上后，你真正愿意承担的是哪一句？",
+      "playerMission": {
+        "objective": "写一封只包含共同事实、当前选择和一条边界的信，并决定寄出或保留。",
+        "deadline": "最终告白前夜 24:00",
+        "successEvidence": "不许借信替对方定义感受，也不许以离开威胁回应。",
+        "exit": "信可以不寄，保留也会成为玩家自己的反思记录。"
+      },
+      "beats": [
+        "系统呈现三段共同记忆摘要",
+        "玩家选择一段作为开头",
+        "寄出与保留都产生不同但非惩罚性的后果"
+      ],
+      "onActivate": {
+        "arcDelta": {
+          "tension": 1,
+          "reciprocity": 2,
+          "uncertainty": 0
+        },
+        "flagDelta": {
+          "clarity": 2
+        }
+      },
+      "callbackPlan": "告白日只回收已寄出的公开句，不泄露草稿。",
+      "safety": [
+        "未寄出内容永不进入其他角色记忆",
+        "禁止情感勒索"
+      ],
+      "mediaPlan": {
+        "kind": "cinematic",
+        "cue": "夜灯、信纸与停在发送键上的手",
+        "assetId": "EV-FINAL-unsent-letter",
+        "src": "/media/video/EV-FINAL-unsent-letter.mp4",
+        "poster": "/media/posters/EV-FINAL-unsent-letter.jpg",
+        "status": "ready",
+        "fallback": {
+          "kind": "scene-card",
+          "cue": "夜灯、信纸与停在发送键上的手"
+        },
+        "runtimeAsset": {
+          "assetId": "EV-FINAL-unsent-letter",
+          "src": "/media/video/EV-FINAL-unsent-letter.mp4",
+          "poster": "/media/posters/EV-FINAL-unsent-letter.jpg",
+          "durationSeconds": 15.0
+        }
+      }
+    },
+    {
+      "id": "story.final.confession-day",
+      "title": "最终告白日：走向或独自离开",
+      "phase": "late",
+      "arcType": "final-choice",
+      "sourceRefIds": [
+        "source.heart-signal.s2",
+        "source.heart-signal.s3"
+      ],
+      "roles": {
+        "min": 1,
+        "max": 1
+      },
+      "eligibility": {
+        "nodeIds": [
+          "callback"
+        ],
+        "minTotalMemories": 10,
+        "minDistinctCharacters": 2,
+        "participantRule": "top-bond",
+        "minAxes": {
+          "trust": 4,
+          "affection": 3
+        },
+        "requiredStoryEvents": [
+          "story.final.unsent-letter"
+        ],
+        "cooldownRevisions": 99
+      },
+      "dramaticQuestion": "经历所有事件后，你会走向谁，还是选择不以配对证明旅程价值？",
+      "playerMission": {
+        "objective": "基于已经发生的行动作出最终选择：走向一人、请求节目后继续了解，或独自离开。",
+        "deadline": "FINAL DAY · 日落",
+        "successEvidence": "选择包含明确对象或明确独行，不保留多人候选。",
+        "exit": "独自离开是完整结局，不视为失败。"
+      },
+      "beats": [
+        "所有关系数值从界面隐藏",
+        "角色按独立记忆作出自己的选择",
+        "双方选择相遇才进入牵手结局"
+      ],
+      "onActivate": {
+        "arcDelta": {
+          "tension": 4,
+          "reciprocity": 0,
+          "uncertainty": 0
+        },
+        "flagDelta": {
+          "courage": 2
+        }
+      },
+      "callbackPlan": "结局报告列出双方做过的关键行动，不给人格打分。",
+      "safety": [
+        "不保证被选择者一定回应",
+        "独自离开不失败",
+        "角色选择必须来自人物卡和独立记忆"
+      ],
+      "mediaPlan": {
+        "kind": "finale",
+        "cue": "三条路径、日落与双方独立入场镜头",
+        "assetId": "EV-FINAL-confession-day",
+        "src": "/media/video/EV-FINAL-confession-day.mp4",
+        "poster": "/media/posters/EV-FINAL-confession-day.jpg",
+        "status": "ready",
+        "fallback": {
+          "kind": "finale-card",
+          "cue": "三条路径、日落与双方独立入场镜头"
+        },
+        "runtimeAsset": {
+          "assetId": "EV-FINAL-confession-day",
+          "src": "/media/video/EV-FINAL-confession-day.mp4",
+          "poster": "/media/posters/EV-FINAL-confession-day.jpg",
+          "durationSeconds": 15.0
+        }
+      }
+    }
+  ]
+}

@@ -15,15 +15,39 @@ from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from psycopg.rows import dict_row
 
+from backend.agent_prompt import (
+    build_agent_messages,
+    build_chat_opening_messages,
+    extract_json,
+    fallback_chat_opening,
+    validate_chat_opening,
+)
+from backend.day1_script import (
+    build_day1_node_messages,
+    build_day1_script_messages,
+    install_cached_day1_script,
+    install_day1_node_script,
+    install_day1_script,
+    validate_day1_node_script,
+)
 from backend.game_content import (
     CHARACTER_CARD_MAP,
     CHARACTER_MAP,
     CHARACTERS,
+    CONTENT_VERSION,
     apply_choice,
     commit_agent_turn,
     create_snapshot,
     migrate_snapshot,
     project_view,
+    validate_agent_turn,
+)
+from backend.story_director import (
+    build_story_director_messages,
+    commit_story_event,
+    eligible_story_events,
+    resolve_story_mission,
+    validate_story_director_output,
 )
 
 ROOT = Path(__file__).resolve().parent
@@ -76,14 +100,18 @@ def _parse_sso_user(decrypted_userinfo: Optional[str]) -> Optional[dict]:
 
 
 def _require_user(decrypted_userinfo: Optional[str], client_id: Optional[str] = None) -> dict:
-    user = _parse_sso_user(decrypted_userinfo)
-    if user:
-        return user
+    # Public deployments must never trust the internal SSO header supplied by
+    # an arbitrary internet client. Bind identity exclusively to the anonymous
+    # browser token in this mode; the SSO header is only authoritative behind
+    # the internal gateway.
     if os.getenv("APP_AUTH_MODE", "sso").lower() == "public":
         normalized = (client_id or "").strip().lower()
         if not re.fullmatch(r"[a-z0-9-]{16,64}", normalized):
             raise HTTPException(status_code=400, detail="访客身份无效，请刷新页面重试")
         return {"userId": f"public:{normalized}", "username": "心动嘉宾", "email": None}
+    user = _parse_sso_user(decrypted_userinfo)
+    if user:
+        return user
     raise HTTPException(status_code=401, detail="请先通过小红书内网身份登录")
 
 
@@ -137,71 +165,121 @@ def _record_event(conn: psycopg.Connection, run_id: str, owner_id: str, event_ty
     )
 
 
-def _extract_json(text: str) -> dict:
-    cleaned = text.strip()
-    if cleaned.startswith("```"):
-        cleaned = re.sub(r"^```(?:json)?\s*", "", cleaned)
-        cleaned = re.sub(r"\s*```$", "", cleaned)
-    try:
-        data = json.loads(cleaned)
-    except json.JSONDecodeError:
-        match = re.search(r"\{.*\}", cleaned, re.DOTALL)
-        if not match:
-            raise RuntimeError("DeepSeek did not return a JSON object")
-        data = json.loads(match.group(0))
-    if not isinstance(data, dict):
-        raise RuntimeError("DeepSeek returned a non-object payload")
-    return data
-
-
 async def _agent_turn(character: dict, snapshot: dict, message: str) -> dict:
     card = CHARACTER_CARD_MAP[character["id"]]
-    memories = [item for item in snapshot["echoMemories"] if item.get("characterId") == character["id"]][-6:]
-    events = [item for item in snapshot.get("eventLedger", []) if item.get("characterId") == character["id"]]
-    context = {
-        "scene": {"nodeId": snapshot["nodeId"], "flags": snapshot["flags"]},
-        "player": snapshot["player"],
-        "relationship": snapshot["relationships"][character["id"]],
-        "currentAttitude": snapshot["attitudes"].get(character["id"], "curious"),
-        "recentMemories": [{key: item.get(key) for key in ("kind", "summary", "interpretation", "rawQuote", "agentReply", "attitude")} for item in memories],
-        "activatedEvents": events,
-    }
-    schema = {
-        "dialogue": "35-120个中文字符的原创角色台词",
-        "stageDirection": "不超过30字、镜头可见的动作",
-        "attitude": sorted(["warm", "curious", "guarded", "challenging", "vulnerable", "softened", "uncertain", "honest", "moved", "careful", "steady", "boundary"]),
-        "intentId": card["agentPolicy"]["allowedIntentIds"],
-        "publicReason": "不暴露后台的关系变化原因，不超过40字",
-        "relationshipDelta": {axis: "必须为人物卡对应范围内整数" for axis in card["agentPolicy"]["deltaBounds"]},
-        "memory": {"kind": ["episodic", "promise", "preference", "semantic"], "summary": "第三人称事实摘要", "interpretation": "角色自己的可修正理解", "salience": "0-100整数", "emotionalValence": "-100到100整数"},
-        "proposedEventId": [None, *card["agentPolicy"]["allowedEventIds"]],
-    }
-    system = """你是回声剧场的角色决策 Agent。你不是通用陪聊助手。
-你必须只依据人物卡、当前场景、该角色可见的关系与私有记忆做出本轮判断。
-人物台词、态度、七轴变化、新记忆和事件意图必须来自同一次角色判断。
-MBTI 只是一层行为偏好，人物卡中的目标、边界、盲点和现场压力优先。
-不得新增人物卡没有的身世或节目事实；不得替玩家定义感受；不得复制参考文学作品的原句或风格。
-参数变化要克制：普通交流多为 -1 到 1，只有具体承诺、明显越界或事件激活才可到 2 或 3。
-只有角色确实愿意让专属物件/邀约进入剧情时才提出 proposedEventId；否则返回 null。
-只输出一个合法 JSON 对象，不要 Markdown，不要解释。"""
-    prompt = "人物卡：\n" + json.dumps(card, ensure_ascii=False) + "\n\n当前状态：\n" + json.dumps(context, ensure_ascii=False) + "\n\n玩家输入：\n" + message[:240] + "\n\n输出合同：\n" + json.dumps(schema, ensure_ascii=False)
-    raw = await _llm_text([{"role": "system", "content": system}, {"role": "user", "content": prompt}], max_tokens=760)
-    return _extract_json(raw)
+    player_card = CHARACTER_CARD_MAP[snapshot["player"]["perspectiveCharacterId"]]
+    messages = build_agent_messages(card, snapshot, message, player_card)
+    payload: dict | None = None
+    for attempt in range(2):
+        try:
+            payload = None
+            raw = await _llm_text(messages, max_tokens=760)
+            payload = extract_json(raw)
+            validate_agent_turn(card, payload, snapshot, message)
+            return payload
+        except Exception as error:
+            if attempt == 0:
+                messages = [*messages, {"role": "user", "content": f"上一轮未通过人物与时间线合同：{error}。保持同一人物判断，重写完整 JSON；只使用当前已发生事实。"}]
+                continue
+            if isinstance(payload, dict) and any(term in str(error) for term in ("建议语", "followup", "mainline")):
+                payload.pop("suggestions", None)
+                validate_agent_turn(card, payload, snapshot, message)
+                return payload
+            raise
+    raise RuntimeError("DeepSeek 角色判断没有通过合同")
+
+
+async def _generate_day1_node_script(snapshot: dict, node_id: str) -> dict | None:
+    """Generate only surface copy for the deterministic next node."""
+    if not os.getenv("DEEPSEEK_API_KEY", "").strip():
+        return None
+    messages = build_day1_node_messages(snapshot, node_id)
+    for attempt in range(2):
+        try:
+            raw = await _llm_text(messages, max_tokens=1900)
+            payload = extract_json(raw)
+            normalized = validate_day1_node_script(snapshot, node_id, payload)
+            return {"node": normalized}
+        except Exception as error:
+            if attempt == 0:
+                protagonist_name = CHARACTER_MAP[snapshot["player"]["perspectiveCharacterId"]]["name"]
+                messages = [*messages, {"role": "user", "content": (
+                    f"上一稿未通过当前节点合同：{error}。保持人物卡和固定 choice id，只重写完整 node JSON。"
+                    f"身份再次确认：玩家就是{protagonist_name}，‘你’就是{protagonist_name}，场内没有第二个{protagonist_name}，不得让{protagonist_name}作为NPC对你行动或说话。"
+                )}]
+    return None
+
+
+async def _generate_day1_script(snapshot: dict) -> dict:
+    """Prefer the validated cache; generation is a bounded recovery path only."""
+    cached = install_cached_day1_script(snapshot)
+    if cached is not None:
+        return cached
+    if not os.getenv("DEEPSEEK_API_KEY", "").strip():
+        return install_day1_script(snapshot, None)
+    messages = build_day1_script_messages(snapshot)
+    for attempt in range(2):
+        try:
+            raw = await _llm_text(messages, max_tokens=6000)
+            installed = install_day1_script(snapshot, extract_json(raw))
+            if installed["scriptFlavor"]["source"] == "deepseek":
+                return installed
+            raise ValueError("台本输出没有通过确定性合同")
+        except Exception as error:
+            if attempt == 0:
+                messages = [*messages, {"role": "user", "content": f"上一稿未通过台本合同：{error}。请按确定性骨架重新输出全部节点 JSON，不要解释。"}]
+    return install_day1_script(snapshot, None)
+
+
+async def _chat_opening(card: dict, snapshot: dict) -> dict:
+    fallback = fallback_chat_opening(card, snapshot)
+    if not os.getenv("DEEPSEEK_API_KEY", "").strip():
+        return fallback
+    player_card = CHARACTER_CARD_MAP[snapshot["player"]["perspectiveCharacterId"]]
+    messages = build_chat_opening_messages(card, snapshot, player_card)
+    for attempt in range(2):
+        try:
+            raw = await _llm_text(messages, max_tokens=520)
+            return validate_chat_opening(card, snapshot, extract_json(raw), player_card)
+        except Exception as error:
+            if attempt == 0:
+                messages = [*messages, {"role": "user", "content": f"上一稿未通过首聊合同：{error}。请保持角色身份，并让建议语严格使用玩家人物卡，重写完整 JSON。"}]
+    return fallback
+
+
+async def _story_director_turn(snapshot: dict, candidates: list[dict]) -> dict:
+    messages = build_story_director_messages(snapshot, candidates)
+    raw = await _llm_text(messages, max_tokens=1100)
+    payload = extract_json(raw)
+    try:
+        return validate_story_director_output(snapshot, candidates, payload)
+    except ValueError as error:
+        repair = [*messages, {"role": "user", "content": f"上一份 JSON 未通过事件合同：{error}。请重新输出完整 JSON；只写候选参与者的行动。"}]
+        repaired_raw = await _llm_text(repair, max_tokens=1100)
+        return validate_story_director_output(snapshot, candidates, extract_json(repaired_raw))
 
 
 app = FastAPI(title="心动之旅：MBTI恋综模拟器")
 _agent_windows: dict[str, list[float]] = {}
+_agent_global_window: list[float] = []
 
 
 def _enforce_agent_rate_limit(user_id: str) -> None:
+    global _agent_global_window
     now = time.time()
     window_seconds = 600
     limit = max(1, int(os.getenv("AGENT_RATE_LIMIT", "20")))
+    global_limit = max(limit, int(os.getenv("AGENT_GLOBAL_RATE_LIMIT", "200")))
     recent = [stamp for stamp in _agent_windows.get(user_id, []) if now - stamp < window_seconds]
+    recent_global = [stamp for stamp in _agent_global_window if now - stamp < window_seconds]
     if len(recent) >= limit:
         raise HTTPException(status_code=429, detail="心动信号有点拥挤，请稍后再聊")
+    if len(recent_global) >= global_limit:
+        raise HTTPException(status_code=429, detail="今晚的心动信号已到上限，请稍后再试")
     recent.append(now)
+    recent_global.append(now)
     _agent_windows[user_id] = recent
+    _agent_global_window = recent_global
 
 
 @app.get("/health")
@@ -209,7 +287,7 @@ def health() -> dict:
     return {
         "ok": True,
         "service": "xindong-journey-echo",
-        "contentVersion": "2.0.0",
+        "contentVersion": CONTENT_VERSION,
         "authMode": os.getenv("APP_AUTH_MODE", "sso"),
         "agentProvider": "deepseek" if os.getenv("DEEPSEEK_API_KEY") else "unconfigured",
         "databaseConfigured": bool(os.getenv("DATABASE_URL") or _load_props("db.properties").get("db.host")),
@@ -236,13 +314,17 @@ def bootstrap(decrypted_userinfo: Optional[str] = Header(None, alias="Decrypted-
 
 
 @app.post("/api/runs", status_code=201)
-def start_run(body: dict, decrypted_userinfo: Optional[str] = Header(None, alias="Decrypted-Userinfo"), x_client_id: Optional[str] = Header(None, alias="X-Client-Id")) -> JSONResponse:
+async def start_run(body: dict, decrypted_userinfo: Optional[str] = Header(None, alias="Decrypted-Userinfo"), x_client_id: Optional[str] = Header(None, alias="X-Client-Id")) -> JSONResponse:
     user = _require_user(decrypted_userinfo, x_client_id)
     mbti = str(body.get("mbti") or "INFP").upper()
     valid = {"INTJ", "INTP", "ENTJ", "ENTP", "INFJ", "INFP", "ENFJ", "ENFP", "ISTJ", "ISFJ", "ESTJ", "ESFJ", "ISTP", "ISFP", "ESTP", "ESFP"}
     if mbti not in valid:
         raise HTTPException(status_code=400, detail="请选择有效的 MBTI")
-    snapshot = create_snapshot(mbti)
+    perspective_character_id = str(body.get("perspectiveCharacterId") or "").strip()
+    if perspective_character_id not in CHARACTER_MAP:
+        raise HTTPException(status_code=400, detail="请选择一位有效的观察人物")
+    snapshot = create_snapshot(mbti, perspective_character_id)
+    snapshot = await _generate_day1_script(snapshot)
     with _get_db_conn() as conn:
         conn.execute(
             "INSERT INTO app_users (id, username, email) VALUES (%s, %s, %s) ON CONFLICT (id) DO UPDATE SET username = EXCLUDED.username, email = EXCLUDED.email, updated_at = NOW()",
@@ -252,24 +334,40 @@ def start_run(body: dict, decrypted_userinfo: Optional[str] = Header(None, alias
             "INSERT INTO game_runs (id, owner_id, content_version, snapshot, revision) VALUES (%s, %s, %s, %s, %s)",
             (snapshot["runId"], user["userId"], snapshot["contentVersion"], json.dumps(snapshot, ensure_ascii=False), 0),
         )
-        _record_event(conn, snapshot["runId"], user["userId"], "run.started", {"mbti": mbti})
+        _record_event(conn, snapshot["runId"], user["userId"], "run.started", {"mbti": mbti, "perspectiveCharacterId": perspective_character_id, "scriptFlavorSource": snapshot["scriptFlavor"]["source"]})
         conn.commit()
     return JSONResponse(project_view(snapshot), status_code=201)
 
 
 @app.post("/api/runs/{run_id}/choices")
-def choose(run_id: str, body: dict, decrypted_userinfo: Optional[str] = Header(None, alias="Decrypted-Userinfo"), x_client_id: Optional[str] = Header(None, alias="X-Client-Id")) -> JSONResponse:
+async def choose(run_id: str, body: dict, decrypted_userinfo: Optional[str] = Header(None, alias="Decrypted-Userinfo"), x_client_id: Optional[str] = Header(None, alias="X-Client-Id")) -> JSONResponse:
     user = _require_user(decrypted_userinfo, x_client_id)
+    _enforce_agent_rate_limit(user["userId"])
     try:
         expected_revision = int(body.get("revision"))
     except (TypeError, ValueError):
         raise HTTPException(status_code=400, detail="缺少 revision")
+    choice_id, character_id = str(body.get("choiceId") or ""), body.get("characterId")
     with _get_db_conn() as conn:
-        snapshot = _load_run(conn, run_id, user["userId"], for_update=True)
-        if snapshot["revision"] != expected_revision:
+        snapshot = _load_run(conn, run_id, user["userId"])
+    if snapshot["revision"] != expected_revision:
+        raise HTTPException(status_code=409, detail="状态已经更新，请刷新后重试")
+    try:
+        provisional, _ = apply_choice(snapshot, choice_id, character_id)
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error))
+    contextual_payload = await _generate_day1_node_script(provisional, provisional["nodeId"])
+    with _get_db_conn() as conn:
+        current = _load_run(conn, run_id, user["userId"], for_update=True)
+        if current["revision"] != expected_revision:
             raise HTTPException(status_code=409, detail="状态已经更新，请刷新后重试")
         try:
-            next_snapshot, receipt = apply_choice(snapshot, str(body.get("choiceId") or ""), body.get("characterId"))
+            next_snapshot, receipt = apply_choice(current, choice_id, character_id)
+            if contextual_payload is not None:
+                next_snapshot = install_day1_node_script(
+                    next_snapshot, next_snapshot["nodeId"], contextual_payload,
+                    {"provider": "deepseek", "model": os.getenv("DEEPSEEK_MODEL", "deepseek-v4-flash")},
+                )
         except ValueError as error:
             raise HTTPException(status_code=400, detail=str(error))
         _save_run(conn, run_id, user["userId"], next_snapshot)
@@ -296,6 +394,12 @@ async def agent_message(run_id: str, character_id: str, body: dict, decrypted_us
         snapshot = _load_run(conn, run_id, user["userId"])
     if snapshot["revision"] != expected_revision:
         raise HTTPException(status_code=409, detail="状态已经更新，请刷新后重试")
+    if character_id == snapshot["player"]["perspectiveCharacterId"]:
+        raise HTTPException(status_code=400, detail="当前观察视角就是这位嘉宾，不能和自己进入 1 对 1 私聊")
+    pending = snapshot.get("pendingInteraction") or {}
+    if snapshot["nodeId"] == "guided-chat" and pending.get("status") == "required" and pending.get("targetCharacterId") != character_id:
+        target_name = CHARACTER_MAP[pending["targetCharacterId"]]["name"]
+        raise HTTPException(status_code=409, detail=f"节目组正在引导你先和{target_name}完成第一次破冰交流")
     try:
         turn = await _agent_turn(character, snapshot, message)
     except Exception as error:
@@ -322,7 +426,110 @@ async def agent_message(run_id: str, character_id: str, body: dict, decrypted_us
         )
         _record_event(conn, run_id, user["userId"], "agent.memory", receipt)
         conn.commit()
-    return JSONResponse({**project_view(next_snapshot), "reply": reply, "receipt": receipt})
+    return JSONResponse({
+        **project_view(next_snapshot), "reply": reply,
+        "suggestions": receipt.get("suggestions", []),
+        "suggestedPrompts": receipt.get("suggestedPrompts", []),
+        "suggestionsSource": receipt.get("suggestionsSource"),
+        "receipt": receipt,
+    })
+
+
+@app.get("/api/runs/{run_id}/agents/{character_id}/opener")
+@app.get("/api/runs/{run_id}/agents/{character_id}/opening")
+async def agent_opening(run_id: str, character_id: str, revision: Optional[int] = None, decrypted_userinfo: Optional[str] = Header(None, alias="Decrypted-Userinfo"), x_client_id: Optional[str] = Header(None, alias="X-Client-Id")) -> JSONResponse:
+    """Generate first-meeting or reopening copy without committing story state."""
+    user = _require_user(decrypted_userinfo, x_client_id)
+    _enforce_agent_rate_limit(user["userId"])
+    card = CHARACTER_CARD_MAP.get(character_id)
+    if not card:
+        raise HTTPException(status_code=404, detail="没有这位嘉宾")
+    with _get_db_conn() as conn:
+        snapshot = _load_run(conn, run_id, user["userId"])
+    if revision is not None and snapshot["revision"] != revision:
+        raise HTTPException(status_code=409, detail="关系状态已经更新，请重新打开私聊")
+    if character_id == snapshot["player"]["perspectiveCharacterId"]:
+        raise HTTPException(status_code=400, detail="当前观察视角就是这位嘉宾，不能打开自己的私聊")
+    opening = await _chat_opening(card, snapshot)
+    return JSONResponse({
+        **opening,
+        "opener": {"stageDirection": opening["stageDirection"], "line": opening["opening"], "dialogue": opening["opening"], "mode": opening["mode"]},
+        "suggestedPrompts": opening["suggestions"],
+        "suggestions": opening.get("typedSuggestions", []),
+        "characterId": character_id, "revision": snapshot["revision"],
+        "guided": (snapshot.get("pendingInteraction") or {}).get("targetCharacterId") == character_id,
+    })
+
+
+@app.post("/api/runs/{run_id}/story-director")
+async def story_director(run_id: str, body: dict, decrypted_userinfo: Optional[str] = Header(None, alias="Decrypted-Userinfo"), x_client_id: Optional[str] = Header(None, alias="X-Client-Id")) -> JSONResponse:
+    """Ask DeepSeek to select one authored, currently eligible main-quest event."""
+    user = _require_user(decrypted_userinfo, x_client_id)
+    _enforce_agent_rate_limit(user["userId"])
+    try:
+        expected_revision = int(body.get("revision"))
+    except (TypeError, ValueError):
+        raise HTTPException(status_code=400, detail="缺少 revision")
+    with _get_db_conn() as conn:
+        snapshot = _load_run(conn, run_id, user["userId"])
+    if snapshot["revision"] != expected_revision:
+        raise HTTPException(status_code=409, detail="剧情状态已经更新，请刷新后重试")
+    if snapshot["nodeId"] != "callback":
+        raise HTTPException(status_code=409, detail="第一天先按节目流程完成初见、破冰、组队和心动短信；剧情导演会从第二天开始介入")
+    candidates = eligible_story_events(snapshot)
+    if not candidates:
+        if snapshot.get("storyMission"):
+            raise HTTPException(status_code=409, detail="请先完成或放弃当前主任务")
+        raise HTTPException(status_code=409, detail="当前证据还不足以激活新主任务，先完成一次具体交流或剧情选择")
+    try:
+        proposal = await _story_director_turn(snapshot, candidates)
+    except Exception as error:
+        if isinstance(error, httpx.HTTPStatusError):
+            safe_kind = f"http-{error.response.status_code}"
+        elif isinstance(error, httpx.HTTPError):
+            safe_kind = "http-network"
+        else:
+            safe_kind = "json" if isinstance(error, (json.JSONDecodeError, RuntimeError)) else "runtime"
+        raise HTTPException(status_code=503, detail=f"DeepSeek 剧情导演暂时没有完成判断（{safe_kind}），请重试") from error
+    with _get_db_conn() as conn:
+        current = _load_run(conn, run_id, user["userId"], for_update=True)
+        if current["revision"] != expected_revision:
+            raise HTTPException(status_code=409, detail="剧情状态已变化，本次导演判断没有写入")
+        current_candidates = eligible_story_events(current)
+        try:
+            next_snapshot, receipt = commit_story_event(current, current_candidates, proposal)
+        except ValueError as error:
+            raise HTTPException(status_code=502, detail=f"DeepSeek 剧情导演输出未通过事件合同：{error}") from error
+        if receipt["kind"] == "story-director-wait":
+            return JSONResponse({**project_view(current), "directorHint": receipt, "receipt": receipt})
+        _save_run(conn, run_id, user["userId"], next_snapshot)
+        _record_event(conn, run_id, user["userId"], "story.event.activated", receipt)
+        conn.commit()
+    return JSONResponse({**project_view(next_snapshot), "receipt": receipt})
+
+
+@app.post("/api/runs/{run_id}/story-missions/{mission_id}/resolve")
+def story_mission_resolve(run_id: str, mission_id: str, body: dict, decrypted_userinfo: Optional[str] = Header(None, alias="Decrypted-Userinfo"), x_client_id: Optional[str] = Header(None, alias="X-Client-Id")) -> JSONResponse:
+    """Commit a player-visible mission outcome; no LLM is allowed to patch state here."""
+    user = _require_user(decrypted_userinfo, x_client_id)
+    try:
+        expected_revision = int(body.get("revision"))
+    except (TypeError, ValueError):
+        raise HTTPException(status_code=400, detail="缺少 revision")
+    outcome = str(body.get("outcome") or "")
+    evidence = str(body.get("evidence") or "")
+    with _get_db_conn() as conn:
+        snapshot = _load_run(conn, run_id, user["userId"], for_update=True)
+        if snapshot["revision"] != expected_revision:
+            raise HTTPException(status_code=409, detail="剧情状态已经更新，请刷新后重试")
+        try:
+            next_snapshot, receipt = resolve_story_mission(snapshot, mission_id, outcome, evidence)
+        except ValueError as error:
+            raise HTTPException(status_code=400, detail=str(error)) from error
+        _save_run(conn, run_id, user["userId"], next_snapshot)
+        _record_event(conn, run_id, user["userId"], "story.mission.resolved", receipt)
+        conn.commit()
+    return JSONResponse({**project_view(next_snapshot), "receipt": receipt})
 
 
 if (FRONTEND_DIST / "assets").exists():

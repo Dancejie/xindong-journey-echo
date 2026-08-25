@@ -1,0 +1,337 @@
+{
+  "model": "deepseek-v4-flash",
+  "results": [
+    {
+      "scenario": "初期协作",
+      "setup": "两位嘉宾都留下了具体交流证据，但还没有形成稳定选择。",
+      "candidateIds": [
+        "story.kitchen.two-person-shift",
+        "story.house.rules-friction",
+        "story.signal.first-anonymous-message"
+      ],
+      "validated": {
+        "decision": "activate",
+        "proposedEventId": "story.kitchen.two-person-shift",
+        "participantIds": [
+          "shenmo"
+        ],
+        "bridgeTitle": "厨房里的分工分歧",
+        "bridgeText": "晚餐准备开始，你与沈墨被分到同组。厨房只容两人并肩，冰箱里食材有限，任务卡要求明确分工。你刚开口划分职责，沈墨却放下手中的料理刀，提出不同顺序。你必须在他坚持的方案与你的提议之间做出选择，或说明自己不愿承担哪项工作。",
+        "sceneSetup": "只够两个人站下的厨房。在狭小空间和明确分工里，体贴会变成行动还是表演？ 当前任务：和一位聊过的嘉宾完成晚餐分工，并说清自己不愿承担的一项工作。 截止：DAY 1 · 晚餐前",
+        "reversalBeat": "沈墨没有直接退让，而是拿出自己记录的厨房动线笔记，冷静列出你的方案中两个可验证的流程冲突，等待你回应。",
+        "characterInsight": "沈墨的坚持并非固执，而是基于具体观察与可核对的规则，他把分歧当成待解决的问题而非人际对抗。",
+        "visualCue": "暖光厨房、食材与手部协作",
+        "availableStrategies": [
+          "接受沈墨的调整，交换岗位，明确说出自己不愿碰生食",
+          "坚持原方案，但用一条可执行的理由解释，并提议折中顺序",
+          "暂缓分工，先共同清理台面，等使用顺序更清晰后再决定"
+        ],
+        "playerMissionPrompt": "在晚餐前与沈墨达成一致分工，并明确说出你拒绝承担的一项具体工作。",
+        "publicReason": "厨房双人协作的冲突最直接暴露行动模式，适合当前关系温度。",
+        "urgency": "medium",
+        "memoryCallbackIds": [
+          "sample-shenmo-0"
+        ]
+      },
+      "receipt": {
+        "id": "b13987eb-bc0e-443e-a9e9-0c7482872985",
+        "kind": "story-event",
+        "eventId": "story.kitchen.two-person-shift",
+        "title": "只够两个人站下的厨房",
+        "participantIds": [
+          "shenmo"
+        ],
+        "publicReason": "厨房双人协作的冲突最直接暴露行动模式，适合当前关系温度。",
+        "mission": {
+          "id": "b13987eb-bc0e-443e-a9e9-0c7482872985",
+          "eventId": "story.kitchen.two-person-shift",
+          "title": "厨房里的分工分歧",
+          "bridgeText": "晚餐准备开始，你与沈墨被分到同组。厨房只容两人并肩，冰箱里食材有限，任务卡要求明确分工。你刚开口划分职责，沈墨却放下手中的料理刀，提出不同顺序。你必须在他坚持的方案与你的提议之间做出选择，或说明自己不愿承担哪项工作。",
+          "prompt": "和一位聊过的嘉宾完成晚餐分工，并说清自己不愿承担的一项工作。",
+          "sceneSetup": "只够两个人站下的厨房。在狭小空间和明确分工里，体贴会变成行动还是表演？ 当前任务：和一位聊过的嘉宾完成晚餐分工，并说清自己不愿承担的一项工作。 截止：DAY 1 · 晚餐前",
+          "reversalBeat": "沈墨没有直接退让，而是拿出自己记录的厨房动线笔记，冷静列出你的方案中两个可验证的流程冲突，等待你回应。",
+          "characterInsight": "沈墨的坚持并非固执，而是基于具体观察与可核对的规则，他把分歧当成待解决的问题而非人际对抗。",
+          "visualCue": "暖光厨房、食材与手部协作",
+          "availableStrategies": [
+            "接受沈墨的调整，交换岗位，明确说出自己不愿碰生食",
+            "坚持原方案，但用一条可执行的理由解释，并提议折中顺序",
+            "暂缓分工，先共同清理台面，等使用顺序更清晰后再决定"
+          ],
+          "directorPrompt": "在晚餐前与沈墨达成一致分工，并明确说出你拒绝承担的一项具体工作。",
+          "objective": "和一位聊过的嘉宾完成晚餐分工，并说清自己不愿承担的一项工作。",
+          "deadline": "DAY 1 · 晚餐前",
+          "successEvidence": "完成一项具体分工，并让对方回应你的边界。",
+          "exit": "可以交换岗位，不以肢体接触制造心动。",
+          "participantIds": [
+            "shenmo"
+          ],
+          "memoryCallbackIds": [
+            "sample-shenmo-0"
+          ],
+          "urgency": "medium",
+          "status": "active",
+          "activatedAt": "2026-08-24T10:30:02.470258+00:00",
+          "resolvedAt": null,
+          "media": null
+        },
+        "committedAt": "2026-08-24T10:30:02.470258+00:00"
+      },
+      "committedMission": {
+        "id": "b13987eb-bc0e-443e-a9e9-0c7482872985",
+        "eventId": "story.kitchen.two-person-shift",
+        "title": "厨房里的分工分歧",
+        "bridgeText": "晚餐准备开始，你与沈墨被分到同组。厨房只容两人并肩，冰箱里食材有限，任务卡要求明确分工。你刚开口划分职责，沈墨却放下手中的料理刀，提出不同顺序。你必须在他坚持的方案与你的提议之间做出选择，或说明自己不愿承担哪项工作。",
+        "prompt": "和一位聊过的嘉宾完成晚餐分工，并说清自己不愿承担的一项工作。",
+        "sceneSetup": "只够两个人站下的厨房。在狭小空间和明确分工里，体贴会变成行动还是表演？ 当前任务：和一位聊过的嘉宾完成晚餐分工，并说清自己不愿承担的一项工作。 截止：DAY 1 · 晚餐前",
+        "reversalBeat": "沈墨没有直接退让，而是拿出自己记录的厨房动线笔记，冷静列出你的方案中两个可验证的流程冲突，等待你回应。",
+        "characterInsight": "沈墨的坚持并非固执，而是基于具体观察与可核对的规则，他把分歧当成待解决的问题而非人际对抗。",
+        "visualCue": "暖光厨房、食材与手部协作",
+        "availableStrategies": [
+          "接受沈墨的调整，交换岗位，明确说出自己不愿碰生食",
+          "坚持原方案，但用一条可执行的理由解释，并提议折中顺序",
+          "暂缓分工，先共同清理台面，等使用顺序更清晰后再决定"
+        ],
+        "directorPrompt": "在晚餐前与沈墨达成一致分工，并明确说出你拒绝承担的一项具体工作。",
+        "objective": "和一位聊过的嘉宾完成晚餐分工，并说清自己不愿承担的一项工作。",
+        "deadline": "DAY 1 · 晚餐前",
+        "successEvidence": "完成一项具体分工，并让对方回应你的边界。",
+        "exit": "可以交换岗位，不以肢体接触制造心动。",
+        "participantIds": [
+          "shenmo"
+        ],
+        "memoryCallbackIds": [
+          "sample-shenmo-0"
+        ],
+        "urgency": "medium",
+        "status": "active",
+        "activatedAt": "2026-08-24T10:30:02.470258+00:00",
+        "resolvedAt": null,
+        "media": null
+      }
+    },
+    {
+      "scenario": "中期双线拉扯",
+      "setup": "职业公开和盲盒约会已经发生；玩家同时与沈墨、程野形成吸引，两人的关系证据明显不同。",
+      "candidateIds": [
+        "story.triangle.reverse-invite"
+      ],
+      "validated": {
+        "decision": "activate",
+        "proposedEventId": "story.triangle.reverse-invite",
+        "participantIds": [
+          "chengye",
+          "shenmo"
+        ],
+        "bridgeTitle": "同一时刻的两张邀约卡",
+        "bridgeText": "两张邀约卡同时推到桌前，程野和沈墨都看向你。两人都等着你先动作，系统只给30分钟做出单选。",
+        "sceneSetup": "同一时刻的两张邀约卡。两张邀约同时到达时，你如何选择而不把落选者变成剧情工具？ 当前任务：在两张同档期邀约中作出选择，并分别给出一句基于事实的回应。 截止：收到卡片后30分钟",
+        "reversalBeat": "沈墨先移开视线低声说“你先选”，程野却把卡推得更近，等你当场开口。",
+        "characterInsight": "沈墨用退让保持控场，程野用行动逼你表态，两人都在守自己的边界。",
+        "visualCue": "两张邀约卡、沈墨与程野的眼神交锋、等待玩家单选",
+        "availableStrategies": [
+          "直接选一个人，并当面说明理由",
+          "两张都拒绝，但明确说出原因",
+          "先反问两人邀约的具体内容，再决定"
+        ],
+        "playerMissionPrompt": "在30分钟内，依据邀约内容明确选择一张或全部拒绝，并向两人各说一句基于事实的回应。",
+        "publicReason": "两人同时发出邀约，玩家必须做出有代价的选择，推动三角关系明朗化。",
+        "urgency": "high",
+        "memoryCallbackIds": []
+      },
+      "receipt": {
+        "id": "56e0fb94-562a-4866-aa5a-b91c3e584dd7",
+        "kind": "story-event",
+        "eventId": "story.triangle.reverse-invite",
+        "title": "同一时刻的两张邀约卡",
+        "participantIds": [
+          "chengye",
+          "shenmo"
+        ],
+        "publicReason": "两人同时发出邀约，玩家必须做出有代价的选择，推动三角关系明朗化。",
+        "mission": {
+          "id": "56e0fb94-562a-4866-aa5a-b91c3e584dd7",
+          "eventId": "story.triangle.reverse-invite",
+          "title": "同一时刻的两张邀约卡",
+          "bridgeText": "两张邀约卡同时推到桌前，程野和沈墨都看向你。两人都等着你先动作，系统只给30分钟做出单选。",
+          "prompt": "在两张同档期邀约中作出选择，并分别给出一句基于事实的回应。",
+          "sceneSetup": "同一时刻的两张邀约卡。两张邀约同时到达时，你如何选择而不把落选者变成剧情工具？ 当前任务：在两张同档期邀约中作出选择，并分别给出一句基于事实的回应。 截止：收到卡片后30分钟",
+          "reversalBeat": "沈墨先移开视线低声说“你先选”，程野却把卡推得更近，等你当场开口。",
+          "characterInsight": "沈墨用退让保持控场，程野用行动逼你表态，两人都在守自己的边界。",
+          "visualCue": "两张邀约卡、沈墨与程野的眼神交锋、等待玩家单选",
+          "availableStrategies": [
+            "直接选一个人，并当面说明理由",
+            "两张都拒绝，但明确说出原因",
+            "先反问两人邀约的具体内容，再决定"
+          ],
+          "directorPrompt": "在30分钟内，依据邀约内容明确选择一张或全部拒绝，并向两人各说一句基于事实的回应。",
+          "objective": "在两张同档期邀约中作出选择，并分别给出一句基于事实的回应。",
+          "deadline": "收到卡片后30分钟",
+          "successEvidence": "选择一张，并对另一张明确回应而非消失。",
+          "exit": "可以两张都拒绝，但不能同时保留。",
+          "participantIds": [
+            "chengye",
+            "shenmo"
+          ],
+          "memoryCallbackIds": [],
+          "urgency": "high",
+          "status": "active",
+          "activatedAt": "2026-08-24T10:30:01.102518+00:00",
+          "resolvedAt": null,
+          "media": {
+            "assetId": "EV-TRIANGLE-reverse-invite",
+            "src": "/media/video/EV-TRIANGLE-reverse-invite.mp4",
+            "poster": "/media/posters/EV-TRIANGLE-reverse-invite.jpg",
+            "durationSeconds": 15.125
+          }
+        },
+        "committedAt": "2026-08-24T10:30:01.102518+00:00"
+      },
+      "committedMission": {
+        "id": "56e0fb94-562a-4866-aa5a-b91c3e584dd7",
+        "eventId": "story.triangle.reverse-invite",
+        "title": "同一时刻的两张邀约卡",
+        "bridgeText": "两张邀约卡同时推到桌前，程野和沈墨都看向你。两人都等着你先动作，系统只给30分钟做出单选。",
+        "prompt": "在两张同档期邀约中作出选择，并分别给出一句基于事实的回应。",
+        "sceneSetup": "同一时刻的两张邀约卡。两张邀约同时到达时，你如何选择而不把落选者变成剧情工具？ 当前任务：在两张同档期邀约中作出选择，并分别给出一句基于事实的回应。 截止：收到卡片后30分钟",
+        "reversalBeat": "沈墨先移开视线低声说“你先选”，程野却把卡推得更近，等你当场开口。",
+        "characterInsight": "沈墨用退让保持控场，程野用行动逼你表态，两人都在守自己的边界。",
+        "visualCue": "两张邀约卡、沈墨与程野的眼神交锋、等待玩家单选",
+        "availableStrategies": [
+          "直接选一个人，并当面说明理由",
+          "两张都拒绝，但明确说出原因",
+          "先反问两人邀约的具体内容，再决定"
+        ],
+        "directorPrompt": "在30分钟内，依据邀约内容明确选择一张或全部拒绝，并向两人各说一句基于事实的回应。",
+        "objective": "在两张同档期邀约中作出选择，并分别给出一句基于事实的回应。",
+        "deadline": "收到卡片后30分钟",
+        "successEvidence": "选择一张，并对另一张明确回应而非消失。",
+        "exit": "可以两张都拒绝，但不能同时保留。",
+        "participantIds": [
+          "chengye",
+          "shenmo"
+        ],
+        "memoryCallbackIds": [],
+        "urgency": "high",
+        "status": "active",
+        "activatedAt": "2026-08-24T10:30:01.102518+00:00",
+        "resolvedAt": null,
+        "media": {
+          "assetId": "EV-TRIANGLE-reverse-invite",
+          "src": "/media/video/EV-TRIANGLE-reverse-invite.mp4",
+          "poster": "/media/posters/EV-TRIANGLE-reverse-invite.jpg",
+          "durationSeconds": 15.125
+        }
+      }
+    },
+    {
+      "scenario": "后期现实选择",
+      "setup": "告白前的最后旅行即将开始；玩家与江晚形成最稳定的信任，也保留着与林屿的长期照顾线。",
+      "candidateIds": [
+        "story.trip.last-two-days"
+      ],
+      "validated": {
+        "decision": "activate",
+        "proposedEventId": "story.trip.last-two-days",
+        "participantIds": [
+          "jiangwan"
+        ],
+        "bridgeTitle": "最后两日的邀请",
+        "bridgeText": "节目进入尾声，最后两日一夜的选择摆在面前。江晚在刚才的交流后递出邀请，说想和你单独走完这段路，也聊一个节目外的问题。",
+        "sceneSetup": "告白前的两日一夜。离开小屋的节目节奏后，这段关系还有没有真实的下一天？ 当前任务：选择一位嘉宾完成两日一夜，并讨论一个节目结束后仍成立的现实问题。 截止：最终告白前夜",
+        "reversalBeat": "江晚没有替你决定，而是先问你自己是否愿意，并说如果不想去可以拒绝。",
+        "characterInsight": "她主动表达需要，也把选择权交还给你——温柔不再是无边容量。",
+        "visualCue": "路线卡、江晚发出邀请与海边开放出发的三段式蒙太奇",
+        "availableStrategies": [
+          "接受邀请，当面讨论节目后的现实问题",
+          "婉拒并说明理由，观察她的反应",
+          "提出替代方案，例如改日再谈"
+        ],
+        "playerMissionPrompt": "在告白前夜前，明确回应江晚的邀请，并讨论一个节目结束后你仍在乎的具体话题。",
+        "publicReason": "她主动发出具体邀约，关系已具备足够信任基础的推进条件。",
+        "urgency": "high",
+        "memoryCallbackIds": []
+      },
+      "receipt": {
+        "id": "3ca70e72-5f3f-4895-90ce-3bf729099f35",
+        "kind": "story-event",
+        "eventId": "story.trip.last-two-days",
+        "title": "告白前的两日一夜",
+        "participantIds": [
+          "jiangwan"
+        ],
+        "publicReason": "她主动发出具体邀约，关系已具备足够信任基础的推进条件。",
+        "mission": {
+          "id": "3ca70e72-5f3f-4895-90ce-3bf729099f35",
+          "eventId": "story.trip.last-two-days",
+          "title": "最后两日的邀请",
+          "bridgeText": "节目进入尾声，最后两日一夜的选择摆在面前。江晚在刚才的交流后递出邀请，说想和你单独走完这段路，也聊一个节目外的问题。",
+          "prompt": "选择一位嘉宾完成两日一夜，并讨论一个节目结束后仍成立的现实问题。",
+          "sceneSetup": "告白前的两日一夜。离开小屋的节目节奏后，这段关系还有没有真实的下一天？ 当前任务：选择一位嘉宾完成两日一夜，并讨论一个节目结束后仍成立的现实问题。 截止：最终告白前夜",
+          "reversalBeat": "江晚没有替你决定，而是先问你自己是否愿意，并说如果不想去可以拒绝。",
+          "characterInsight": "她主动表达需要，也把选择权交还给你——温柔不再是无边容量。",
+          "visualCue": "路线卡、江晚发出邀请与海边开放出发的三段式蒙太奇",
+          "availableStrategies": [
+            "接受邀请，当面讨论节目后的现实问题",
+            "婉拒并说明理由，观察她的反应",
+            "提出替代方案，例如改日再谈"
+          ],
+          "directorPrompt": "在告白前夜前，明确回应江晚的邀请，并讨论一个节目结束后你仍在乎的具体话题。",
+          "objective": "选择一位嘉宾完成两日一夜，并讨论一个节目结束后仍成立的现实问题。",
+          "deadline": "最终告白前夜",
+          "successEvidence": "提出一个现实条件、一个仍不确定之处和一个可执行下一步。",
+          "exit": "旅行不构成最终选择，任一方可提前结束单独行程。",
+          "participantIds": [
+            "jiangwan"
+          ],
+          "memoryCallbackIds": [],
+          "urgency": "high",
+          "status": "active",
+          "activatedAt": "2026-08-24T10:30:03.917767+00:00",
+          "resolvedAt": null,
+          "media": {
+            "assetId": "EV-TRIP-last-two-days",
+            "src": "/media/video/EV-TRIP-last-two-days.mp4",
+            "poster": "/media/posters/EV-TRIP-last-two-days.jpg",
+            "durationSeconds": 15.125
+          }
+        },
+        "committedAt": "2026-08-24T10:30:03.917767+00:00"
+      },
+      "committedMission": {
+        "id": "3ca70e72-5f3f-4895-90ce-3bf729099f35",
+        "eventId": "story.trip.last-two-days",
+        "title": "最后两日的邀请",
+        "bridgeText": "节目进入尾声，最后两日一夜的选择摆在面前。江晚在刚才的交流后递出邀请，说想和你单独走完这段路，也聊一个节目外的问题。",
+        "prompt": "选择一位嘉宾完成两日一夜，并讨论一个节目结束后仍成立的现实问题。",
+        "sceneSetup": "告白前的两日一夜。离开小屋的节目节奏后，这段关系还有没有真实的下一天？ 当前任务：选择一位嘉宾完成两日一夜，并讨论一个节目结束后仍成立的现实问题。 截止：最终告白前夜",
+        "reversalBeat": "江晚没有替你决定，而是先问你自己是否愿意，并说如果不想去可以拒绝。",
+        "characterInsight": "她主动表达需要，也把选择权交还给你——温柔不再是无边容量。",
+        "visualCue": "路线卡、江晚发出邀请与海边开放出发的三段式蒙太奇",
+        "availableStrategies": [
+          "接受邀请，当面讨论节目后的现实问题",
+          "婉拒并说明理由，观察她的反应",
+          "提出替代方案，例如改日再谈"
+        ],
+        "directorPrompt": "在告白前夜前，明确回应江晚的邀请，并讨论一个节目结束后你仍在乎的具体话题。",
+        "objective": "选择一位嘉宾完成两日一夜，并讨论一个节目结束后仍成立的现实问题。",
+        "deadline": "最终告白前夜",
+        "successEvidence": "提出一个现实条件、一个仍不确定之处和一个可执行下一步。",
+        "exit": "旅行不构成最终选择，任一方可提前结束单独行程。",
+        "participantIds": [
+          "jiangwan"
+        ],
+        "memoryCallbackIds": [],
+        "urgency": "high",
+        "status": "active",
+        "activatedAt": "2026-08-24T10:30:03.917767+00:00",
+        "resolvedAt": null,
+        "media": {
+          "assetId": "EV-TRIP-last-two-days",
+          "src": "/media/video/EV-TRIP-last-two-days.mp4",
+          "poster": "/media/posters/EV-TRIP-last-two-days.jpg",
+          "durationSeconds": 15.125
+        }
+      }
+    }
+  ]
+}

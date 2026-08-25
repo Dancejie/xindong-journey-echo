@@ -13,3 +13,10 @@ release/
 __pycache__/
 *.pyc
 .pytest_cache/
+.local-runtime/
+.work-*
+media/production/day1-all-events-r3/
+media/production/day1-onboarding-r1/
+media/production/story-events-r1/
+media/production/story-events-r2/
+media/production/identity-audio-r4/*

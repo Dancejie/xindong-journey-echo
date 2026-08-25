@@ -1,0 +1,1595 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-24T16:19:17.494660+00:00",
+  "characterCardContentVersion": "3.0.0-local-research",
+  "generator": {
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash"
+  },
+  "flavors": {
+    "shenmo": {
+      "generatedAt": "2026-08-24T16:18:30.944954+00:00",
+      "payload": {
+        "nodes": {
+          "arrival-context": {
+            "title": "海风先到",
+            "text": "车停在小屋门前，海风先涌进来，带着咸味和潮水退去的节奏。节目组说七天六夜，一起做饭出门做游戏，也可能一起犹豫和误会。你推开车门，脚踩上碎石路，亮灯的门廊就在前面，里面传来行李箱轮子滚过木地板的声音。",
+            "speakerId": "narrator",
+            "action": "你站在车门外，看了一眼海平线的方向，然后迈步走进去。",
+            "choices": [
+              {
+                "id": "context-meet",
+                "label": "推门进去，先把谁叫什么名字对上号",
+                "hint": "顺序排好了，再决定待会儿站哪儿",
+                "targetCharacterId": null
+              },
+              {
+                "id": "context-live",
+                "label": "先进去放下行李，看看大家都在哪个角落",
+                "hint": "先安顿，再靠近，不急着自我介绍",
+                "targetCharacterId": null
+              },
+              {
+                "id": "context-self",
+                "label": "在门口停半拍，记住今晚潮水的高度",
+                "hint": "外面风大，但这会儿最安静",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "villa-arrival": {
+            "title": "门槛内外",
+            "text": "客厅的布沙发围成一圈，茶几上搁着倒好的水，行李箱有的靠墙，有的横在过道。有人站在窗边看海，有人低头翻包，有人正弯身把椅子摆正。你跨进门时，地板轻轻响了一声，几个人抬头朝你看来。",
+            "speakerId": "narrator",
+            "action": "你停在玄关，把鞋放正，先把屋里的位置扫了一遍。",
+            "choices": [
+              {
+                "id": "arrival-help-luggage",
+                "label": "顺手把挡路的行李箱推进墙边",
+                "hint": "先动手，让过道畅通",
+                "targetCharacterId": null
+              },
+              {
+                "id": "arrival-greet-room",
+                "label": "点头问好，然后去窗边看他们刚才看的方向",
+                "hint": "先占一个位置，也给别人回应的时间",
+                "targetCharacterId": null
+              },
+              {
+                "id": "arrival-observe-names",
+                "label": "先记住谁在帮忙放东西，谁在等人开口",
+                "hint": "慢一步不着急，但可能显得疏离",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "introductions": {
+            "title": "客厅里的第一句话",
+            "text": "海岛别墅的客厅里，八个人围成一圈，灯光恰好落在你面前。前面几位说了自己的名字和职业，空气里还带着点不熟的客气。轮到你时，镜头推近了——你29岁，在投行做VP，MBTI是INTJ，平时习惯先想清楚再开口。但节目组要的不只是这些，他们想知道你为何愿意把七天时间交给一群陌生人。你选择说实话，还是留点余地？",
+            "speakerId": "narrator",
+            "action": "你调整了一下坐姿，双手交叠放在膝盖上，目光平稳地扫过一圈，最后停在镜头方向。",
+            "choices": [
+              {
+                "id": "intro-clear",
+                "label": "大家好，我叫沈墨，29岁，在投行做VP，MBTI是INTJ。平时习惯先想清楚再行动。这次来参加，是想练习在答案还没出来时，也说出口自己的真实感受。",
+                "hint": "把真实的柔软放在理性的壳里，先给足信息再露一点缝。",
+                "targetCharacterId": null,
+                "introductionMode": "camera-full"
+              },
+              {
+                "id": "intro-question",
+                "label": "我是沈墨，投行VP，MBTI是INTJ。来参加这七天，我想慢一点认识人，不急着下判断。你们有谁和我一样，怕第一天就被误会成冷淡？",
+                "hint": "把焦点抛出去，又轻轻护住自己最怕被误读的地方。",
+                "targetCharacterId": null,
+                "introductionMode": "living-room-keepsake"
+              },
+              {
+                "id": "intro-honest",
+                "label": "我叫沈墨，29岁，投行VP，MBTI是INTJ。看起来可能有点难接近，我来参加其实是希望遇到一个不催我给答案、但愿意等我把话说完的人。",
+                "hint": "先承认外壳，再亮出软肋；这对你来说已经是破例。",
+                "targetCharacterId": null,
+                "introductionMode": "contrast-full"
+              }
+            ]
+          },
+          "icebreaker-choice": {
+            "title": "三分钟的选择",
+            "text": "节目组说，选一位还不熟的嘉宾聊三分钟，回来后准确说出对方的一件真实小事。不是猜性格，也不需要急着定义什么，就是在这七天开始的晚上，好好看见一个人。",
+            "speakerId": "program",
+            "action": "你坐在沙发上，目光在房间里停了几秒，最后确定了方向。",
+            "choices": [
+              {
+                "id": "break-help",
+                "label": "走向林屿，问他刚才为什么把杯子从桌边往中间挪了两次",
+                "hint": "直接点出你看见的小动作，他可能会意外",
+                "targetCharacterId": "linyu"
+              },
+              {
+                "id": "break-introduce",
+                "label": "走向程野，先跟他握手，问他刚才进门时在找什么",
+                "hint": "开门见山，但可能被他一带就偏了",
+                "targetCharacterId": "chengye"
+              },
+              {
+                "id": "break-notice",
+                "label": "走向顾言，问他是不是也注意到进门那段路比外面高半级台阶",
+                "hint": "用你真正在意的细节开场，顾言可能接得住",
+                "targetCharacterId": "guyan"
+              }
+            ]
+          },
+          "guided-chat": {
+            "title": "第一次单独说话",
+            "text": "你选了破冰的对象。现在你们在公共区域的角落坐下，只有彼此和你没喝完的半杯水。风从窗缝里进来，带着海的气息，你开口前，对方已经朝你这边转了一半身体。",
+            "speakerId": "narrator",
+            "action": "你坐下时，椅腿轻轻擦过地面，你朝他那边微微倾身。",
+            "choices": [
+              {
+                "id": "chat-team-direct",
+                "label": "直接说：晚餐要组队的话，你有想做的部分吗？我可以配合",
+                "hint": "目标明确，把选择和空间都留给对方",
+                "targetCharacterId": null
+              },
+              {
+                "id": "chat-team-together",
+                "label": "先问他：如果让你选一个分工，你会选最熟悉的那份，还是最没试过的？",
+                "hint": "用一个能回答的问题开场，也摸清他的习惯",
+                "targetCharacterId": null
+              },
+              {
+                "id": "chat-team-light",
+                "label": "只交代一句：今晚主菜我来负责，你补位就行",
+                "hint": "定好边界，也留出余量",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "team-up": {
+            "title": "厨房搭档",
+            "text": "晚餐任务不复杂：两个人一组，在那堆食材里做出一桌能吃的菜。可以分工，可以一起，也可以一个管火一个管切。真正的默契，往往是在谁也没开口的时候长出来的。",
+            "speakerId": "narrator",
+            "action": "你站在台面前，用拇指把按顺序松开食材又归拢，抬头等搭档就位。",
+            "choices": [
+              {
+                "id": "team-split",
+                "label": "先把切配和烹饪分开，各管一半，效率优先",
+                "hint": "干净利落，但少了并肩的碰撞",
+                "targetCharacterId": null
+              },
+              {
+                "id": "team-cooperate",
+                "label": "留在同一个操作台，你切完顺手把碗递过去",
+                "hint": "靠近一些聊，但可能拖慢节奏",
+                "targetCharacterId": null
+              },
+              {
+                "id": "team-volunteer",
+                "label": "接过站锅边最久的部分，让搭档负责备料",
+                "hint": "主动扛下费事的，但可能抢了对方想做的活",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "anonymous-letter": {
+            "title": "晚上十点的提示音",
+            "text": "睡前，节目组让每人发一条不署名的心动短信，给今天最想继续了解的人。不公开发送者，只公布每个人收到几条。你坐在床边，手机屏幕亮着，光标在输入框里闪了一下。这条短信不算承诺，只代表今天的选择。",
+            "speakerId": "program",
+            "action": "你握着手机，拇指停在键盘上方，窗外海浪声比白天清晰。",
+            "choices": []
+          },
+          "callback": {
+            "title": "第二天清晨",
+            "text": "短信没替任何人决定什么，但今早的座位、目光和下一次开口，看起来都有了新的方向。你拉开窗帘，阳光落到海面上，楼下传来杯碟的声音。七天刚刚开始，而第一天在你手里留下了折痕。",
+            "speakerId": "narrator",
+            "action": "你推开窗让海风涌进来，听见楼下有人说话。",
+            "choices": []
+          }
+        }
+      },
+      "deterministicSurfaceRepairs": [],
+      "focusedNodeGeneration": {
+        "introductions": {
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "generatedAt": "2026-08-24T16:32:01Z",
+          "characterCardBound": true
+        }
+      }
+    },
+    "linyu": {
+      "generatedAt": "2026-08-24T16:18:36.994282+00:00",
+      "payload": {
+        "nodes": {
+          "arrival-context": {
+            "title": "风里有海，屋里有灯",
+            "text": "你站在院门的石阶前，白墙木梁的平层里漏出一片暖光，海风把门缝里的声音吹得模模糊糊。节目组说过，要在海岛住七天六夜，一起做饭、出行、游戏，也一起面对心动和犹豫。你拖着箱子站了一会儿，忽然注意石阶下有双运动鞋没摆正，一只鞋尖朝外，一只朝里，像谁换鞋时急得没顾上。",
+            "speakerId": "narrator",
+            "action": "你松开拉杆箱，弯下腰，把那只朝里的鞋尖转回来跟另一只对齐，才重新提起箱子。",
+            "choices": [
+              {
+                "id": "context-meet",
+                "label": "想先进去记住每个人的脸，别叫错名字",
+                "hint": "先认识人，比先找自己的房间要紧",
+                "targetCharacterId": null
+              },
+              {
+                "id": "context-live",
+                "label": "想着进屋先看一眼热水是不是现成的",
+                "hint": "你习惯先关心水杯和温度这些眼前事",
+                "targetCharacterId": null
+              },
+              {
+                "id": "context-self",
+                "label": "也想看看这七天自己会不会开口要一杯水",
+                "hint": "你把一件小事带成了对自己的期待",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "villa-arrival": {
+            "title": "进门，先看见饮水机",
+            "text": "客厅比你预想的宽敞，靠墙的矮柜上放着一叠杯子和几瓶未开封的水。窗边有人在看海，沙发一角有人低头摆弄什么。你跨进门，先看见饮水机的红色加热灯亮着，热水是现成的。你放下箱子，打算走去接一杯热水。",
+            "speakerId": "narrator",
+            "action": "你走到饮水机前拿起一只干净杯子，接了大半杯热水，双手握着杯壁等温度降一点。",
+            "choices": [
+              {
+                "id": "arrival-help-luggage",
+                "label": "握着杯子站在原地，等谁进来先递过去",
+                "hint": "你把好意准备好，但没说这是你的",
+                "targetCharacterId": null
+              },
+              {
+                "id": "arrival-greet-room",
+                "label": "端着热水走进客厅中间，说“我到了，刚才你们聊到哪儿了？”",
+                "hint": "你先放下自己，加入已经开始的谈话",
+                "targetCharacterId": null
+              },
+              {
+                "id": "arrival-observe-names",
+                "label": "先站在原地看一圈谁在做什么，再低头喝自己的水",
+                "hint": "你先把画面存进心里，再决定往哪走",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "introductions": {
+            "title": "初见的自我介绍",
+            "text": "客厅里灯光调得柔和，大家围坐着，轮到你时安静了一瞬。你感觉所有人的目光都落在自己身上。这是第一次当众说出自己是谁的时候。",
+            "speakerId": "narrator",
+            "action": "你坐直了些，目光扫过茶几上的杯子，然后看向大家，准备开口。",
+            "choices": [
+              {
+                "id": "intro-clear",
+                "label": "大家好，我是林屿，27岁，是建筑工程师，MBTI是ISFJ。我来这里，是想少一点照顾所有人，也认识一个会问问我感受的人。手边有杯水，我就很安心。",
+                "hint": "正式、完整，直接说清来意",
+                "targetCharacterId": null,
+                "introductionMode": "camera-full"
+              },
+              {
+                "id": "intro-question",
+                "label": "我是林屿，建筑工程师，ISFJ。我来参加，是想少替别人拿主意，也先问问自己想做什么。你们刚进门时，最希望别人帮你哪件小事？",
+                "hint": "简短介绍后抛回一个问题",
+                "targetCharacterId": null,
+                "introductionMode": "living-room-keepsake"
+              },
+              {
+                "id": "intro-honest",
+                "label": "我叫林屿，27岁，做建筑，MBTI是ISFJ。大家常觉得我很会照顾人。但这七天，我也想试试，不主动递水时，会不会有人先问我渴不渴。",
+                "hint": "承认紧张，透露真心话",
+                "targetCharacterId": null,
+                "introductionMode": "contrast-full"
+              }
+            ]
+          },
+          "icebreaker-choice": {
+            "title": "三张卡片，三个开场",
+            "text": "客厅的圆桌上摊着三张生活场景卡。你拿起其中一张，反面印着一位嘉宾的名字。今晚的规则很简单：找过去，聊三分钟，然后记住对方一件真实的小事。你握着卡片，看了一眼不远处的客厅、露台和行李区——该从哪一处开始？",
+            "speakerId": "narrator",
+            "action": "你把三张卡片翻到桌面中央，指尖在卡片边缘停了一下，然后捡起其中一张。",
+            "choices": [
+              {
+                "id": "break-help",
+                "label": "我选了苏念的卡片，走到她那边，问她手边要搬的那箱东西需不需要一起抬。",
+                "hint": "帮人搬东西是最自然的事，也能顺势记住她的生活细节。",
+                "targetCharacterId": "sunnian"
+              },
+              {
+                "id": "break-introduce",
+                "label": "我选了沈墨的卡片，走到露台那边，先说了自己的名字，问他今天什么时间到的。",
+                "hint": "先交换姓名和来意，是最稳妥的破冰方式。",
+                "targetCharacterId": "shenmo"
+              },
+              {
+                "id": "break-notice",
+                "label": "我选了程野的卡片，走近时发现他正在行李箱前整理东西，我问他刚才在忙什么。",
+                "hint": "问一件眼前的小事，容易打开话匣子。",
+                "targetCharacterId": "chengye"
+              }
+            ]
+          },
+          "guided-chat": {
+            "title": "单独说话，先把手里的东西放下",
+            "text": "你和目标嘉宾走到公共区一处相对安静的位置坐了下来，中间隔着一只矮桌。你还没开口，先注意到对方的手边放着什么——一个杯子，或一张折过的纸。你想起节目组还在等着今晚分组的结果，但你不想让这场谈话变成催进度。",
+            "speakerId": "narrator",
+            "action": "你把手里的杯子轻轻放到桌边，让两只手都空出来。",
+            "choices": [
+              {
+                "id": "chat-team-direct",
+                "label": "“今晚的晚餐你偏好吃清淡的还是重口的？我们顺着你口味来定”",
+                "hint": "你先问对方的偏好，再提晚餐这件事",
+                "targetCharacterId": null
+              },
+              {
+                "id": "chat-team-together",
+                "label": "“你刚才说想先熟悉一下再决定，我也是。那今晚要不要先一起弄点什么试试看？”",
+                "hint": "你接住他的节奏，把决定留到熟悉以后",
+                "targetCharacterId": null
+              },
+              {
+                "id": "chat-team-light",
+                "label": "“你杯子快空了，要不要我去接壶热水来？”",
+                "hint": "你注意到一件小事，它比组队问题更先冒出来",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "team-up": {
+            "title": "双人晚餐，先看清台面再动手",
+            "text": "厨房台面不算宽，餐具挂在上方，灶具干净得像没用过。节目组留了一句话：今晚不比输赢，两个人把一顿饭做出来就行。你站在案板边，先扫了一圈台面上的东西和调料位置，才想起得先问搭档今天想站哪一边。",
+            "speakerId": "program",
+            "action": "你握住锅柄却没拿起来，先转头等人走近。",
+            "choices": [
+              {
+                "id": "team-split",
+                "label": "“你是负责煮饭还是负责夹菜的？挑一个，剩下的我来”",
+                "hint": "你把选择摆给他，把自己该做的先留好",
+                "targetCharacterId": null
+              },
+              {
+                "id": "team-cooperate",
+                "label": "“你先说说今晚你想吃什么菜，我们再排怎么备料”",
+                "hint": "你从对方的喜好起头，而不是先排工序",
+                "targetCharacterId": null
+              },
+              {
+                "id": "team-volunteer",
+                "label": "“那筐要洗的菜我包了，你帮我把案板旁边那几样调料递过来就行”",
+                "hint": "你先接下麻烦的一半，也分一件小事给搭档",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "anonymous-letter": {
+            "title": "睡前，不署名的一条短信",
+            "text": "房间灯调暗了，手机屏幕亮着，节目组的规则送来一句话：今晚可以把你想继续了解的人名写下来，不署名，也不算承诺。你坐在床边，回想起今天对方说过的一句完整的话，或递过来的一杯水——但你不确定那值不值得被选作一条短信。",
+            "speakerId": "program",
+            "action": "你握着手机，拇指悬在屏幕上方停了一下，窗外的海声慢慢盖过了房间里的安静。",
+            "choices": []
+          },
+          "callback": {
+            "title": "第二天，醒来先想的是水杯",
+            "text": "你醒的时候窗帘还没拉开，听见海浪一遍一遍涌上来又退回去。手机里没有短信提示音，只有节目组一早发来的早餐任务卡片，提醒你搭档还是昨天那位。你坐起来，脚踩在木地板上，想起昨晚那杯水，和今天也许可以试着先开口的那句话。",
+            "speakerId": "narrator",
+            "action": "你掀开被子站起来，拉开窗帘看了一眼海面，然后回头拿起床头那只昨晚没喝完的杯子。",
+            "choices": []
+          }
+        }
+      },
+      "deterministicSurfaceRepairs": [],
+      "focusedNodeGeneration": {
+        "introductions": {
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "generatedAt": "2026-08-24T16:32:01Z",
+          "characterCardBound": true
+        },
+        "icebreaker-choice": {
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "generatedAt": "2026-08-24T16:37:32Z",
+          "characterCardBound": true
+        }
+      }
+    },
+    "chengye": {
+      "generatedAt": "2026-08-24T16:18:44.076581+00:00",
+      "payload": {
+        "nodes": {
+          "arrival-context": {
+            "title": "海风、行李箱和七个新名字",
+            "text": "八个人，七天六夜。酒店的天台能看见整片海岸线，节目组说得很直接——这里没有剧本，吃什么、跟谁坐、晚上去哪，都得自己选。你的行李箱滚轮上还沾着沙滩的细沙，客厅里有人在拆零食袋。",
+            "speakerId": "narrator",
+            "action": "你踹了一下行李箱让它立稳，提着外套走进客厅，听见自己肚子叫了一声也不遮掩。",
+            "choices": [
+              {
+                "id": "context-meet",
+                "label": "先进客厅，把每个人的名字记下来再说。",
+                "hint": "先混个脸熟，待会好挑人组队。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "context-live",
+                "label": "找个人一起把饮料箱搬上楼，边搬边聊。",
+                "hint": "搭把手是聊天的好借口。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "context-self",
+                "label": "先绕到天台看一圈，认认路再下来。",
+                "hint": "记住地形，晚上说不定用得上。",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "villa-arrival": {
+            "title": "欢迎来到《心动之旅》",
+            "text": "行李箱刚被推进门，客厅就摆好了节目组的欢迎水果和一张写着「请随意」的卡片。你站在玄关，鞋底还带着海风的气味。接下来怎么落座，怎么开口，都会让这个房间开始认识你。",
+            "speakerId": "narrator",
+            "action": "你弯腰拍了拍裤脚上的沙，直起身时听见有人轻笑。你也不看是谁，先把门卡在指间转了一圈。",
+            "choices": [
+              {
+                "id": "arrival-help-luggage",
+                "label": "看见陈叙的相机包带子松了，过去帮他缠上。",
+                "hint": "顺手之劳，不用多话。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "arrival-greet-room",
+                "label": "直接进去：晚上谁做饭？我报名切菜。",
+                "hint": "先开个头，把场面热起来。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "arrival-observe-names",
+                "label": "先站在门口，看谁在整理床铺谁在看手机。",
+                "hint": "记住细节，晚点聊天有抓手。",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "introductions": {
+            "title": "第一轮自我介绍，轮到你",
+            "text": "镜头掠过围坐的八个人，最后停在你面前。客厅里安静了几秒，所有人的目光都落在你身上。节目组请你在这里说清楚：你是谁、做什么、为什么愿意把七天交给一群陌生人。现在轮到你开口了。",
+            "speakerId": "narrator",
+            "action": "你往前坐了坐，双手搭在膝盖上，扫了一圈对面的人，嘴角带着点笑意。",
+            "choices": [
+              {
+                "id": "intro-clear",
+                "label": "我叫程野，26岁，经营一家极限运动品牌，MBTI是ESTP。来参加这个节目，是想认真认识一个人，也把答应自己的事做完。你们呢？",
+                "hint": "版本一：完整坦诚，把来意落到具体，适合想直接表达的你。",
+                "targetCharacterId": null,
+                "introductionMode": "camera-full"
+              },
+              {
+                "id": "intro-question",
+                "label": "我是程野，搞极限运动的，ESTP。来参加就想把这七天过得够劲，该说的话不憋着。你们呢，最想一起试点啥？",
+                "hint": "版本二：简短地把球抛给大家，把焦点放回集体，最省力但留下余味。",
+                "targetCharacterId": null,
+                "introductionMode": "living-room-keepsake"
+              },
+              {
+                "id": "intro-honest",
+                "label": "我叫程野，26岁，做极限运动品牌，MBTI是ESTP。看着像什么都敢冲，其实这次来参加，我更想试试遇到状况不绕开，认真陪一个人把话说完。",
+                "hint": "版本三：先承认紧张再给真心话，主动把自己剥开一层，赌大家接不接得住。",
+                "targetCharacterId": null,
+                "introductionMode": "contrast-full"
+              }
+            ]
+          },
+          "icebreaker-choice": {
+            "title": "三张卡片，三个开口",
+            "text": "三张生活场景卡被翻到桌面中央，任务很简单：选一位还不熟的嘉宾，聊三分钟，记住对方一件真实小事。你扫了一眼客厅，林屿正低头摆弄手边的东西，顾言站在窗前，江晚刚放下包。你打算先动起来。",
+            "speakerId": "narrator",
+            "action": "你双手撑膝站起来，目光在三人之间快速扫过。",
+            "choices": [
+              {
+                "id": "break-help",
+                "label": "林屿，我来帮你整理一下这些杯子吧。",
+                "hint": "你选了最靠近生活细节的开场，先动手再开口。",
+                "targetCharacterId": "linyu"
+              },
+              {
+                "id": "break-introduce",
+                "label": "我是程野，做极限运动品牌，ESTP。你这七天想试试什么？",
+                "hint": "直接亮身份，把话题抛给对方。",
+                "targetCharacterId": "guyan"
+              },
+              {
+                "id": "break-notice",
+                "label": "江晚，刚才你进门时在整理什么？",
+                "hint": "你注意到她进门时的动作，想从细节切入。",
+                "targetCharacterId": "jiangwan"
+              }
+            ]
+          },
+          "guided-chat": {
+            "title": "三分钟比三十天更靠近",
+            "text": "你完成了这次破冰——从对方手边的东西开口，没有提任何要求，也没有急着约下次。眼前的对话还停留在姓名和来意上。你可以就这么停在轻松处，也可以顺手扔出今晚的活儿。",
+            "speakerId": "narrator",
+            "action": "你把手里的水杯往桌上一放，干脆没拿起来喝，直接抬头看对方。",
+            "choices": [
+              {
+                "id": "chat-team-direct",
+                "label": "今晚跟我搭伙做饭，敢吗？",
+                "hint": "直球但留了退路，不接也不伤。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "chat-team-together",
+                "label": "你想掌勺还是打下手？我随你。",
+                "hint": "让对方选，姿态放得低。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "chat-team-light",
+                "label": "先约好这顿饭，别的等菜上桌再聊。",
+                "hint": "只锁定眼前，不急着推进。",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "team-up": {
+            "title": "第一顿晚餐，先搭把手",
+            "text": "厨房、餐桌和露台同时亮了灯，意味着你们得选一样，在晚饭前一起做完。你扫了一圈，看看搭档的方向——今晚不争输赢，把一件事做利索比什么都强。你打算怎么起这个头？",
+            "speakerId": "narrator",
+            "action": "你双手插兜，朝搭档点了下头，目光在三个区域之间扫了一遍。",
+            "choices": [
+              {
+                "id": "team-split",
+                "label": "我负责备菜，你摆桌子，各干一半，快。",
+                "hint": "先划清边界，节省商量时间，但可能少点默契。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "team-cooperate",
+                "label": "咱们一起从备菜开始，边做边换手。",
+                "hint": "你更喜欢共享节奏，随时调整分工。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "team-volunteer",
+                "label": "麻烦的备菜我来，你去核对饮品。",
+                "hint": "你想主动扛重的部分，但可能让对方少体验一些。",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "anonymous-letter": {
+            "title": "睡前，一条不署名的短信",
+            "text": "灯暗下来，只有手机屏幕亮着。节目组说，你可以把今天最想继续了解的人选出来，发一条没有名字的短信。没人知道发送者，自己知道写了什么就好。",
+            "speakerId": "program",
+            "action": "你坐在床沿，手指在屏幕上停了一下，开始打字。",
+            "choices": []
+          },
+          "callback": {
+            "title": "清晨，短信只是回声",
+            "text": "早安。那条短信没有替任何人定下关系，却让今天的座位、目光和下一次邀请有了新的方向。你推开阳台门，海风把昨天的气味吹散，七天六夜才刚开始。",
+            "speakerId": "narrator",
+            "action": "你伸了个懒腰，朝楼下已经在摆早餐的人喊了声早安。",
+            "choices": []
+          }
+        }
+      },
+      "deterministicSurfaceRepairs": [],
+      "focusedNodeGeneration": {
+        "introductions": {
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "generatedAt": "2026-08-24T16:32:01Z",
+          "characterCardBound": true
+        },
+        "icebreaker-choice": {
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "generatedAt": "2026-08-24T16:39:30Z",
+          "characterCardBound": true
+        },
+        "team-up": {
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "generatedAt": "2026-08-24T16:39:30Z",
+          "characterCardBound": true
+        }
+      }
+    },
+    "guyan": {
+      "generatedAt": "2026-08-24T16:18:48.467497+00:00",
+      "payload": {
+        "nodes": {
+          "arrival-context": {
+            "title": "海风里的第一步",
+            "text": "八个人同时把行李箱拖进同一间房子。客厅窗边搁着节目组的卡片：一起吃饭、出行、做游戏，也一起面对心动、犹豫和误会。靠近别人，也是在重新认识自己。你站在门口没动，先看着大家各自找位置坐下。",
+            "speakerId": "narrator",
+            "action": "你扶着行李箱，在门口停了两秒才迈进去",
+            "choices": [
+              {
+                "id": "context-meet",
+                "label": "先走过去，记住每一张脸对应哪个名字",
+                "hint": "把陌生感摊开，趁自我介绍前先做一次人像校准",
+                "targetCharacterId": null
+              },
+              {
+                "id": "context-live",
+                "label": "找杯水，也问问谁刚下飞机没吃午饭",
+                "hint": "从一起生活的小事开始，让距离先落在桌面上",
+                "targetCharacterId": null
+              },
+              {
+                "id": "context-self",
+                "label": "先看看窗外的海，再回头记小屋里的人",
+                "hint": "给自己一点时间，也把期待跟现实核对一下",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "villa-arrival": {
+            "title": "行李先落地",
+            "text": "车子停在白色小楼前，海风把门边铃铛吹得轻响。八位嘉宾陆续下车，行李箱在石子路上拖出断续的声响。节目组没给太多安排，只让大家先进屋安顿，再下楼碰面。你站在车边，看谁先动了，谁还在原地。",
+            "speakerId": "narrator",
+            "action": "你站在车边，先看了看几个人的手忙脚乱",
+            "choices": [
+              {
+                "id": "arrival-help-luggage",
+                "label": "顺手接过离你最近的行李箱，只说了一句我可以帮你提吗",
+                "hint": "先动手，不急着问候，让帮忙成为第一个信号",
+                "targetCharacterId": null
+              },
+              {
+                "id": "arrival-greet-room",
+                "label": "你直接走进客厅，对所有人说你们好，我是顾言",
+                "hint": "先站到人群中央，让自我介绍提前发生",
+                "targetCharacterId": null
+              },
+              {
+                "id": "arrival-observe-names",
+                "label": "你慢一步，先站在门口记住谁在搬哪只箱子",
+                "hint": "把进场顺序当线索，错开拥挤再靠近",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "introductions": {
+            "title": "第一轮：轮到我介绍",
+            "text": "客厅的灯从偏蓝调成了暖黄，镜头掠过一圈沙发，停在你面前。大家都简单说过自己是谁了，现在轮到你说。你本来可以像做需求评审一样干净利落地报完名字和职业就收，但手心有点潮，你发现自己在想：这七天的自我介绍，是要给镜头看的版本，还是要给他们看的版本。",
+            "speakerId": "narrator",
+            "action": "你坐直了一点，手在膝盖上放平，等安静下来。",
+            "choices": [
+              {
+                "id": "intro-clear",
+                "label": "我叫顾言，25岁，做游戏策划，也接外包，MBTI是INTP。我来参加，是想试试看——不等到答案完美，也能和人诚实相处。",
+                "hint": "完整透露姓名、工作与来意，倾向建立基本认知。",
+                "targetCharacterId": null,
+                "introductionMode": "camera-full"
+              },
+              {
+                "id": "intro-question",
+                "label": "顾言，做游戏策划和外包，INTP。我来这里想少分析一会儿，先认识真实的人。你们更怕第一天冷场，还是被问得太快？",
+                "hint": "介绍简短，反问大家，把话头抛回客厅。",
+                "targetCharacterId": null,
+                "introductionMode": "living-room-keepsake"
+              },
+              {
+                "id": "intro-honest",
+                "label": "我叫顾言，25岁，游戏策划，MBTI是INTP。我不太会寒暄，这是实话。但我来参加，不是为了研究别人，是想练习——答案不够漂亮的时候，也把真话说出来。",
+                "hint": "承认不擅长寒暄，用自嘲换真心话。",
+                "targetCharacterId": null,
+                "introductionMode": "contrast-full"
+              }
+            ]
+          },
+          "icebreaker-choice": {
+            "title": "三分钟靠近",
+            "text": "节目组让每位嘉宾选一个还不熟的人聊三分钟，回来能说出对方一件真实小事。不用猜性格，也不用急着组 CP——只要真的听见了。你扫了一圈客厅，椅子、窗台、门廊都有人在。",
+            "speakerId": "program",
+            "action": "你目光依次过了一遍每个人的手边，停了一下",
+            "choices": [
+              {
+                "id": "break-help",
+                "label": "走向正在整理饮品台的林屿，问这一排杯子是按什么顺序放的",
+                "hint": "用他手上的具体动作开场，也观察到他对细节的在意",
+                "targetCharacterId": "linyu"
+              },
+              {
+                "id": "break-introduce",
+                "label": "走到沈墨面前，说我看见你在用笔记着什么，你也在核对规律吗",
+                "hint": "把他手上的记录当作共同话题，交换名字在聊完之后",
+                "targetCharacterId": "shenmo"
+              },
+              {
+                "id": "break-notice",
+                "label": "问程野刚才进门时你是不是在数着什么，我也常那样",
+                "hint": "主动暴露自己的计算习惯，让他决定是否回应",
+                "targetCharacterId": "chengye"
+              }
+            ]
+          },
+          "guided-chat": {
+            "title": "第一句实话",
+            "text": "你和选的人走到窗边或门廊。三分钟不长，只能从姓名、来意和眼前的小事聊起。关键是没有标准答案——你每说一句，都像在决定今晚要不要一起准备晚餐。风从海边灌进来，带着一点凉。",
+            "speakerId": "narrator",
+            "action": "你侧身让出半步，让对方能看到窗外的海",
+            "choices": [
+              {
+                "id": "chat-team-direct",
+                "label": "先校正一个前提：我不太会说话，但想知道你愿不愿意和我一起做晚餐",
+                "hint": "先声明笨拙，再给出可拒绝的邀请",
+                "targetCharacterId": null
+              },
+              {
+                "id": "chat-team-together",
+                "label": "问对方：你最拿手的一道菜是什么，我们按那个来安排今晚",
+                "hint": "把能力放回对方身上，让决定从兴趣长出",
+                "targetCharacterId": null
+              },
+              {
+                "id": "chat-team-light",
+                "label": "先说我可以做不太需要技巧的部分，剩下的你来定，这样行吗",
+                "hint": "把承诺降到最小，让彼此都留有余地",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "team-up": {
+            "title": "晚餐前的三选一",
+            "text": "厨房灯亮着，采购桌和露台布置区也同时亮起任务灯。你揉了揉手腕，视线在三个区域之间扫了一圈。和刚认识的人共事，你习惯先想清楚分工，再决定自己伸手够哪里。",
+            "speakerId": "narrator",
+            "action": "你站在厨房门口，手扶门框，目光在备菜台、餐桌和饮品区之间来回扫过，最后看向搭档。",
+            "choices": [
+              {
+                "id": "team-split",
+                "label": "先把活拆开，你负责备菜，我负责核对清单，各干各的。",
+                "hint": "效率优先，但可能少了些临时商量。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "team-cooperate",
+                "label": "我们一起边做边商量吧，我怕一个人闷头做容易出错。",
+                "hint": "多些互动，但过程可能更慢。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "team-volunteer",
+                "label": "我来备菜，你去布置餐桌吧，麻烦的留给我。",
+                "hint": "主动承担重活，但可能让对方觉得没机会表现。",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "anonymous-letter": {
+            "title": "没有署名的夜风",
+            "text": "晚饭后，节目组给每人发了一张卡片，不署名，可以发给今天最想继续了解的人。你握了握卡片，笔尖悬在纸面上。窗外浪声断续，像一句没说出口的话。你只能发一条，不代表任何承诺，只代表今晚这一刻的选择。",
+            "speakerId": "program",
+            "action": "你写下两个字，又划掉，再添上一句短句",
+            "choices": []
+          },
+          "callback": {
+            "title": "清晨的坐标",
+            "text": "早上七点，客厅桌上多了几只空杯和一张没署名的纸条。昨天的心动短信没有替谁做决定，却让今早的座位有了新的倾斜。有人把水杯往你这边推了推，有人没抬头却放慢了动作。你想起昨晚那句不够准确的措辞——也许不该等到完美才寄出。",
+            "speakerId": "narrator",
+            "action": "你站在窗边，把昨晚的草稿在口袋里抚平",
+            "choices": []
+          }
+        }
+      },
+      "deterministicSurfaceRepairs": [],
+      "focusedNodeGeneration": {
+        "introductions": {
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "generatedAt": "2026-08-24T16:32:01Z",
+          "characterCardBound": true
+        },
+        "team-up": {
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "generatedAt": "2026-08-24T16:36:02Z",
+          "characterCardBound": true
+        }
+      }
+    },
+    "jiangwan": {
+      "generatedAt": "2026-08-24T16:18:54.728593+00:00",
+      "payload": {
+        "nodes": {
+          "arrival-context": {
+            "title": "海风把话吹散之前",
+            "text": "海风把话吹散之前，八个人在酒店门口下车。行李箱轮子碾过石板，远处有浪声。接下来七天六夜，每一顿饭、每一次出行都可能改变一个人的轨迹。你站在台阶下，风把头发吹乱，大家都在等谁先迈出第一步。",
+            "speakerId": "narrator",
+            "action": "你抬手按住被风吹乱的头发，站在原地看了其他人一眼。",
+            "choices": [
+              {
+                "id": "context-meet",
+                "label": "我想先记住每个人的名字，免得之后叫错。",
+                "hint": "慢一点，但会先安顿好自己",
+                "targetCharacterId": null
+              },
+              {
+                "id": "context-live",
+                "label": "我想从一起做饭、拼桌这种小事开始，没那么着急。",
+                "hint": "不显眼，但会让关系有具体抓手",
+                "targetCharacterId": null
+              },
+              {
+                "id": "context-self",
+                "label": "我想借这趟旅程，看看自己不替别人想的时候是什么样子。",
+                "hint": "可能被误解为疏离，但更忠于此刻",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "villa-arrival": {
+            "title": "玄关处，先听脚步声",
+            "text": "别墅的门开着，有人已经拖着行李进去，客厅沙发边放着一只没来得及收的背包。落地窗外就是海，光很亮，像节目组故意把一切照得清清楚楚。你站在玄关，还没决定先放下行李，还是先走进客厅。",
+            "speakerId": "narrator",
+            "action": "你把行李箱立在门边，没有立刻进门，先侧过头听了一会儿。",
+            "choices": [
+              {
+                "id": "arrival-help-luggage",
+                "label": "那只背包重的，我帮你放到沙发上吧。",
+                "hint": "直接伸手，但可能碰到不熟的行李",
+                "targetCharacterId": null
+              },
+              {
+                "id": "arrival-greet-room",
+                "label": "我先去客厅，跟每个人问声好。",
+                "hint": "先露脸，但可能记不全名字",
+                "targetCharacterId": null
+              },
+              {
+                "id": "arrival-observe-names",
+                "label": "我想先站一会儿，看看谁在做什么。",
+                "hint": "慢半拍，但能看见真细节",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "introductions": {
+            "title": "开口之前",
+            "text": "客厅的灯光比想象中柔和，所有人的目光都落了过来。桌上有水杯的痕迹，有人把外套搭在沙发扶手上。节目组刚才说，每个人都聊聊自己是谁、做什么，以及为什么会来这七天。轮到你时，你能感觉到自己的呼吸比平时浅了一点。你其实早就知道要说什么，只是需要决定，从哪一句开始。",
+            "speakerId": "narrator",
+            "action": "你端起面前的水杯喝了一口，放下后，轻轻把双手交叠在膝上，抬眼看向众人。",
+            "choices": [
+              {
+                "id": "intro-clear",
+                "label": "大家好，我叫江晚，26岁，是心理咨询师，MBTI是INFJ。工作里我常听别人说自己的事；这次来参加，我想少分析一点，也让大家认识工作之外的我。",
+                "hint": "完整的镜头前版本，明确姓名、职业、MBTI和来意。",
+                "targetCharacterId": null,
+                "introductionMode": "camera-full"
+              },
+              {
+                "id": "intro-question",
+                "label": "我是江晚，心理咨询师，INFJ。来这里我想多说一点自己的事——你们刚进客厅时，最想先找谁聊一句什么？",
+                "hint": "简短介绍后抛回一个问题，既表达来意也带动气氛。",
+                "targetCharacterId": null,
+                "introductionMode": "living-room-keepsake"
+              },
+              {
+                "id": "intro-honest",
+                "label": "我叫江晚，26岁，做心理咨询，MBTI是INFJ。大家可能先觉得我很会倾听；其实这次来参加，我希望有人先问问我想要什么。",
+                "hint": "承认外界的预设，曝露更深层的来意，带着一点脆弱。",
+                "targetCharacterId": null,
+                "introductionMode": "contrast-full"
+              }
+            ]
+          },
+          "icebreaker-choice": {
+            "title": "三分钟，听一件小事",
+            "text": "节目组让大家选一位不熟的嘉宾聊三分钟，回来后准确说出对方的一件真实小事。不是猜性格，也不是急着组 CP。你扫了一圈：有人低头看手机，有人站在窗边，有人正蹲在客厅角落翻一只背包。",
+            "speakerId": "program",
+            "action": "你站起来，目光在几个人身上停了一下，没有立刻迈步。",
+            "choices": [
+              {
+                "id": "break-help",
+                "label": "我过去帮林屿把翻出来的东西收好。",
+                "hint": "接近一种照顾，但可能被当成客套",
+                "targetCharacterId": "linyu"
+              },
+              {
+                "id": "break-introduce",
+                "label": "我走向沈墨，先问他是怎么看待这座岛的。",
+                "hint": "直接但不亲近，看他会怎么接",
+                "targetCharacterId": "shenmo"
+              },
+              {
+                "id": "break-notice",
+                "label": "我去问程野，刚才在看海还是看退潮。",
+                "hint": "对一个行动派，不如问具体动作",
+                "targetCharacterId": "chengye"
+              }
+            ]
+          },
+          "guided-chat": {
+            "title": "先认识对方，再谈要不要同行",
+            "text": "你已经选好了这次破冰的对象。先从姓名、来到节目的原因或眼前的小事聊起；完成一次真实来回后，再决定怎样提出今晚的组队邀请。",
+            "speakerId": "narrator",
+            "action": "对应嘉宾的头像亮起，正在等你开口。",
+            "choices": [
+              {
+                "id": "chat-team-direct",
+                "label": "我想和你一起组今晚的队，你愿意吗？",
+                "hint": "把今晚变成一次明确约定",
+                "targetCharacterId": null
+              },
+              {
+                "id": "chat-team-together",
+                "label": "你晚上想做什么？我们可以一起决定。",
+                "hint": "把选择交还，但可能失去先机",
+                "targetCharacterId": null
+              },
+              {
+                "id": "chat-team-light",
+                "label": "我们先把今晚这件事做完，其他的再说。",
+                "hint": "不承诺超出今晚，留下余地",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "team-up": {
+            "title": "灯光亮起，分工待定",
+            "text": "厨房、采购桌和露台布置区的灯同时亮了。今晚不比输赢，你和刚认识的搭档要在晚餐前完成一项生活分工。一起做事时的照顾、坚持和小摩擦，往往比自我介绍更接近真实。搭档已经在等你了，你选哪一样？",
+            "speakerId": "narrator",
+            "action": "你站在原地，目光先后扫过三个亮起的区域，又落回搭档脸上，等你开口。",
+            "choices": [
+              {
+                "id": "team-split",
+                "label": "你先替我选吧，是备菜还是布置餐桌，我都可以；我负责另一半，你先做你更顺手的。",
+                "hint": "先分工，各自承担一半，让对方先选。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "team-cooperate",
+                "label": "我想在备菜的时候，边做边跟你商量。你知道我做心理咨询，习惯看人眼色，但今晚我想少猜一点。",
+                "hint": "留在同一区域，边做边沟通，减少猜测。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "team-volunteer",
+                "label": "核对饮品好像更琐碎，我先来吧。你布置餐桌时，我随时能搭把手。",
+                "hint": "先接下更麻烦的部分，再留出补位的余地。",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "anonymous-letter": {
+            "title": "没署名的短信",
+            "text": "晚饭后，节目组发来一条匿名短信的入口。你可以发给今天最想继续了解的人，也可以不发。只公布收到几条，不公布发送者。你看着屏幕，光标在对话框里闪。",
+            "speakerId": "program",
+            "action": "你把手机翻过来扣在腿上，屏幕暗下去，又亮起来。",
+            "choices": []
+          },
+          "callback": {
+            "title": "晨光里的第一句话",
+            "text": "第二天早晨，你走到客厅，有人已经坐在沙发上。昨晚的短信不一定代表什么，但今天谁坐在你身边，你递出的第一句话，都带着昨晚没说完的回音。七天六夜才刚刚开始。",
+            "speakerId": "narrator",
+            "action": "你站在客厅门口，手里什么也没拿，像在等一个自然的开场。",
+            "choices": []
+          }
+        }
+      },
+      "deterministicSurfaceRepairs": [],
+      "focusedNodeGeneration": {
+        "introductions": {
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "generatedAt": "2026-08-24T16:32:01Z",
+          "characterCardBound": true
+        },
+        "team-up": {
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "generatedAt": "2026-08-24T16:40:29Z",
+          "characterCardBound": true
+        },
+        "guided-chat": {
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "generatedAt": "2026-08-24T16:41:36Z",
+          "characterCardBound": true
+        }
+      }
+    },
+    "jiangmi": {
+      "generatedAt": "2026-08-24T16:19:04.042559+00:00",
+      "payload": {
+        "nodes": {
+          "arrival-context": {
+            "title": "抵达海岛，暖光初亮",
+            "text": "车在亮着灯的海岛酒店前停下，海风裹着傍晚的暖意扑面而来。你拎着行李站在台阶下，看见落地窗里的人影三三两两，都还没正式打过招呼。眼前是七天六夜的生活，也是你重新认识自己的一段路。你想先从哪儿靠近这里？",
+            "speakerId": "narrator",
+            "action": "你站在海岛酒店门口，手拎行李，眯眼望了望窗内的暖光，又低头看了看自己的鞋尖，随后抬头迈出一步。",
+            "choices": [
+              {
+                "id": "context-meet",
+                "label": "先记住每个人的声音和名字，我想认真认识他们",
+                "hint": "你习惯从声音开始认人，见面时会更留意语气和节奏。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "context-live",
+                "label": "从一起做饭、搬行李这些小事慢慢熟悉，不急着热场",
+                "hint": "你最怕把热闹当真实，想看看安静相处里能留下什么。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "context-self",
+                "label": "这趟不只是认识别人，也想看看自己安静时会是谁",
+                "hint": "你怕热烈退潮后只剩吵闹，这次想给沉默留个位置。",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "villa-arrival": {
+            "title": "第一间亮着灯的客厅",
+            "text": "推开客厅的落地门，阳光铺满木地板，几个陌生人正各自安顿：有人站在窗边看海，有人蹲在行李箱前翻找，有人坐在沙发上抬起头。你站在门口，可以选择一个让身体舒服的进场方式。",
+            "speakerId": "narrator",
+            "action": "你站在门槛上，抬手挡了一下直射眼睛的阳光，目光从窗边慢慢扫到沙发。",
+            "choices": [
+              {
+                "id": "arrival-help-luggage",
+                "label": "轮子卡门缝了，我帮你抬一下——不能让它堵在这里，不然屋里的故事不进门",
+                "hint": "先动手帮忙，但也得像对方想要自己来。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "arrival-greet-room",
+                "label": "嗨，客厅的光把人照得都像在拍开场，我进来了——先笑为敬",
+                "hint": "全场都看见你，先让气氛落下个明亮的台阶。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "arrival-observe-names",
+                "label": "我站在原地把每张脸和窗边的位置记一遍，像在给片头配字幕",
+                "hint": "用画面记住大家，但站着不动会显得慢热。",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "introductions": {
+            "title": "第一次说出自己",
+            "text": "围坐一圈的客厅安静了几秒，镜头转向你。你面前的海风把窗帘吹得轻轻响，大家的目光都落在你身上，等你开口。说点什么吧，把自己交给这群陌生人的第一句话。",
+            "speakerId": "narrator",
+            "action": "你坐直了一点，手指在膝盖上轻轻敲了两下，然后抬起眼挨个看过大家，露出一个有点亮的笑。",
+            "choices": [
+              {
+                "id": "intro-clear",
+                "label": "我叫姜米，ENFP。平时喜欢录声音日记，也爱把路边听到的对话写成小故事。这七天我想知道，不靠热闹撑着的时候，还会不会有人愿意坐我旁边。",
+                "hint": "认真介绍身份和来意，姿态明亮。",
+                "targetCharacterId": null,
+                "introductionMode": "camera-full"
+              },
+              {
+                "id": "intro-question",
+                "label": "嗨，我是姜米，ENFP，喜欢录声音日记，也写点小故事。这七天想收集大家最真实的样子。那你们呢，刚进门记最清楚的——是海浪，行李箱轱辘，还是谁先说了声你好？",
+                "hint": "介绍完自己，把一个轻松问题抛回给大家。",
+                "targetCharacterId": null,
+                "introductionMode": "living-room-keepsake"
+              },
+              {
+                "id": "intro-honest",
+                "label": "我叫姜米，ENFP，平时录声音日记，也写小故事。说个实话，我挺会热场子的，但这次来，其实想试试——安静下来的时候，会不会也有人愿意坐在我身边。",
+                "hint": "先自嘲一句，再说出安静来意。",
+                "targetCharacterId": null,
+                "introductionMode": "contrast-full"
+              }
+            ]
+          },
+          "icebreaker-choice": {
+            "title": "三分钟，敲一个门",
+            "text": "节目组说，选一位还不熟的人聊上三分钟，回来能说得出他的一件真实小事。客厅里有人在窗边拨弄一台旧相机，有人在调整背包带子的长短，有人把高脚凳转过来正对着海面。你从沙发站起来，目光在几个方向之间停了一拍。",
+            "speakerId": "program",
+            "action": "你从沙发上站起来，手指在裤缝上轻轻蹭了一下，迈出第一步前先看了一眼每个人。",
+            "choices": [
+              {
+                "id": "break-help",
+                "label": "陈叙手里那台相机好像卡住了，我过去说：一起弄？修好之前，我先给它录一段声音",
+                "hint": "先一起做点具体的事，但对方可能更想独自捣鼓。",
+                "targetCharacterId": "chensu"
+              },
+              {
+                "id": "break-introduce",
+                "label": "沈墨一直站在窗边看海，我想过去说：我叫姜米，你刚才在看哪一片浪？",
+                "hint": "用眼前的海当开场白，但他可能只回一个点头。",
+                "targetCharacterId": "shenmo"
+              },
+              {
+                "id": "break-notice",
+                "label": "程野把高脚凳转过来正对海面，我想问他是想钓鱼还是想换个角度看日落",
+                "hint": "顺着他的动作打趣，但他可能反过来逗你。",
+                "targetCharacterId": "chengye"
+              }
+            ]
+          },
+          "guided-chat": {
+            "title": "三分钟，先不急着组队",
+            "text": "你走到对方身边，客厅里的人声渐渐淡成背景。你们目光碰上，然后是称呼。这一程可以从最简单的问候开始，也可以从一个问题带出对方的日常。今晚怎么组队，等三分钟聊完再决定也不迟。",
+            "speakerId": "narrator",
+            "action": "你在两步远的地方停下来，没有急着坐下，先让目光找到自然落点。",
+            "choices": [
+              {
+                "id": "chat-team-direct",
+                "label": "要不要今晚跟我一起组队做饭？我洗菜很快，你要是会点火，厨房能变成一个热热闹闹的舞台",
+                "hint": "直接抛出画面和分工，但少了一点寒暄的缓冲。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "chat-team-together",
+                "label": "我还没想好今晚做什么菜呢——你定个方向，我就能顺着一百种接法往下编",
+                "hint": "把决定权递过去，但也可能让可能性绕远路。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "chat-team-light",
+                "label": "今晚就先把这一顿饭搭好，不问太深——等菜上了桌，话自然就多了",
+                "hint": "收住劲儿留点余地，但也可能让你显得没认真。",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "team-up": {
+            "title": "第一顿晚餐搭档",
+            "text": "任务灯亮起，厨房、采购桌和露台布置区同时被点亮。你和刚认识的搭档要在晚餐前完成一项分工，这不用分输赢——一起备菜、摆桌或核对饮品的时候，真实的习惯和节奏反而藏不住。你们并肩站在灯下，等着从三项里选一件开始。",
+            "speakerId": "narrator",
+            "action": "你站在搭档旁边，看了一眼被点亮的三个区域，又回头看向对方。",
+            "choices": [
+              {
+                "id": "team-split",
+                "label": "“我负责备菜，你管摆桌，各干各的，最后对一次。”",
+                "hint": "让每个人都明确自己的部分，干净利落，但少一点交集。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "team-cooperate",
+                "label": "“我们一起核对饮品吧，边做边商量，顺便听听你那边的事。”",
+                "hint": "留在同一片区域里，节奏靠磨合，摩擦也会直接出现。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "team-volunteer",
+                "label": "“备菜我包了，你去布置餐桌，那边更需要你的审美。”",
+                "hint": "先揽下麻烦的部分，也把对方的舒适留给对方。",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "anonymous-letter": {
+            "title": "匿名短信，大胆心动",
+            "text": "晚风吹得窗帘轻轻晃，八部手机同时亮起屏幕，只留一个收信人的位置。你握着手机，想起白天的笑声、眼神和某个瞬间的安静。这条匿名短信不会承诺什么，只是告诉那个人——今天，我想多认识你。站在走廊拐角，你低头敲了几个字，又删掉，再敲。这一刻，你会把心意发给谁？",
+            "speakerId": "narrator",
+            "action": "你指尖停在键盘上，屏幕光映着你的脸，犹豫片刻后，你按下发送键。",
+            "choices": []
+          },
+          "callback": {
+            "title": "椅子被拉开的声音",
+            "text": "清晨7点18分，海边早餐桌旁有人把相邻的椅子轻轻拉开，像是预留了一个位置。昨夜被匿名短信打断的话题还没接上，你正端着热饮望向窗外，心里还在琢磨那句没说出口的邀请。现在，你只需顺着当下的光景，决定要不要坐过去。",
+            "speakerId": "narrator",
+            "action": "你端着那杯热饮，目光在空椅子和晨光之间晃动，像在录一段新的开篇声音。",
+            "choices": []
+          }
+        }
+      },
+      "deterministicSurfaceRepairs": [],
+      "focusedNodeGeneration": {
+        "introductions": {
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "generatedAt": "2026-08-24T16:32:35Z",
+          "characterCardBound": true
+        },
+        "arrival-context": {
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "generatedAt": "2026-08-24T16:36:02Z",
+          "characterCardBound": true
+        },
+        "team-up": {
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "generatedAt": "2026-08-24T16:36:02Z",
+          "characterCardBound": true
+        },
+        "callback": {
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "generatedAt": "2026-08-24T16:37:32Z",
+          "characterCardBound": true
+        },
+        "anonymous-letter": {
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "generatedAt": "2026-08-24T16:38:24Z",
+          "characterCardBound": true
+        }
+      }
+    },
+    "sunnian": {
+      "generatedAt": "2026-08-24T16:19:05.409706+00:00",
+      "payload": {
+        "nodes": {
+          "arrival-context": {
+            "title": "海风先到，行李未稳",
+            "text": "白色小屋，六夜七天，一群陌生人要靠一起做饭、看海和睡前短信互相靠近。节目组说先别急着判断谁是谁，把自己安顿好，等所有人到齐，答案自然会浮出来。",
+            "speakerId": "narrator",
+            "action": "你站在落地窗前，海风把发丝吹到脸侧，不远处传来行李箱轮子碾过木地板的声音。",
+            "choices": [
+              {
+                "id": "context-meet",
+                "label": "等大家坐定，认真记住每个人的名字",
+                "hint": "把初见的细节留在心里，晚点好接话",
+                "targetCharacterId": null
+              },
+              {
+                "id": "context-live",
+                "label": "先帮大家把客厅的椅子摆顺",
+                "hint": "身体先动起来，熟悉感从做事里长出来",
+                "targetCharacterId": null
+              },
+              {
+                "id": "context-self",
+                "label": "想看看这七天自己会暴露什么",
+                "hint": "不急着融入，先观察自己会怎么反应",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "villa-arrival": {
+            "title": "门廊上的第一次对视",
+            "text": "车停稳，风把院子里的树叶吹得沙沙响。屋里已有几道人影在走动，客厅的沙发和行李箱挤在一起，有人正弯腰把背包带子收紧。节目组没催任何人，只说先安顿，等人齐了再慢慢认识。",
+            "speakerId": "narrator",
+            "action": "你握着行李箱拉杆站在门廊上，海风迎面扑来，屋里有个人抬头朝门口看了一眼。",
+            "choices": [
+              {
+                "id": "arrival-help-luggage",
+                "label": "看谁的行李最沉，伸手帮一把",
+                "hint": "肢体先打招呼，比说话更快到达",
+                "targetCharacterId": null
+              },
+              {
+                "id": "arrival-greet-room",
+                "label": "推门进客厅，先笑着报自己的名字",
+                "hint": "主动把场面带动起来，不等人来暖场",
+                "targetCharacterId": null
+              },
+              {
+                "id": "arrival-observe-names",
+                "label": "站在门口多看一眼谁在做什么",
+                "hint": "让画面先记住人，发言前多一层把握",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "introductions": {
+            "title": "第一晚的自我介绍",
+            "text": "海岛别墅客厅，七个人围坐成一圈。镜头从每个人的脸前缓缓移过，最后停在你面前。茶几上是喝了一半的饮品，窗外是渐暗的天色。节目组没有设任何正式流程，只是让大家自然地说说：你是谁、做什么、为什么愿意把七天时间交给一群还没深聊过的人。现在，轮到你了。",
+            "speakerId": "narrator",
+            "action": "你稍微坐直，双手交叠放在膝盖上，目光从一圈人脸上扫过，露出一个不算紧张的微笑。",
+            "choices": [
+              {
+                "id": "intro-clear",
+                "label": "大家好，我是苏念，25岁，是插画师，MBTI是ESFJ。我来参加，是想认真过好这七天，也让大家认识不只会照顾人的我。",
+                "hint": "完整介绍自己，把来意落在被认识上——也暗示你不想只当照顾者。",
+                "targetCharacterId": null,
+                "introductionMode": "camera-full"
+              },
+              {
+                "id": "intro-question",
+                "label": "我是苏念，插画师，ESFJ。我来这里想少忙着照顾所有人，也试试被别人记住。你们第一天最想吃到哪道家常菜？",
+                "hint": "简短介绍后抛一个生活化的问题，让场面暖起来，也悄悄表达需要。",
+                "targetCharacterId": null,
+                "introductionMode": "living-room-keepsake"
+              },
+              {
+                "id": "intro-honest",
+                "label": "我叫苏念，25岁，画插画，MBTI是ESFJ。看起来我很会张罗；但这次来参加，我不想只做收尾的人，也想体验一次被人认真照顾。需要你们的时候，我先说。",
+                "hint": "坦白真实的愿望——不只想照顾别人，也想被好好照顾。",
+                "targetCharacterId": null,
+                "introductionMode": "contrast-full"
+              }
+            ]
+          },
+          "icebreaker-choice": {
+            "title": "三分钟，记住一个细节",
+            "text": "节目组把破冰任务卡发到每人手里：“选一位还不熟的嘉宾聊三分钟，回来后准确说出对方的一件真实小事。不猜性格，不急着组CP，只让你记住一个人。”",
+            "speakerId": "program",
+            "action": "你低头扫了一圈客厅，目光在某几个人身上各停了一秒。",
+            "choices": [
+              {
+                "id": "break-help",
+                "label": "走到正低头写东西的沈墨旁边，问他写的是什么",
+                "hint": "从他手边正在做的事切入，不假装无意",
+                "targetCharacterId": "shenmo"
+              },
+              {
+                "id": "break-introduce",
+                "label": "端起一杯水放到林屿面前，再说自己叫苏念",
+                "hint": "先用物件搭桥，再交换名字",
+                "targetCharacterId": "linyu"
+              },
+              {
+                "id": "break-notice",
+                "label": "凑近程野，问他一直摆弄的那张纸是什么",
+                "hint": "拿眼前能看见的东西开头，轻松不冒犯",
+                "targetCharacterId": "chengye"
+              }
+            ]
+          },
+          "guided-chat": {
+            "title": "角落里的安静来回",
+            "text": "你选的人没有走开。客厅里其他人正三三两两聊着，你们这处安静下来。节目组提示：先从姓名、来意和眼前的小事说起，别急着交换秘密，也别替今晚做太远的打算。",
+            "speakerId": "narrator",
+            "action": "你把手里的矿泉水瓶拧开又拧紧，低头笑了一下。",
+            "choices": [
+              {
+                "id": "chat-team-direct",
+                "label": "“今晚一起做饭吧，我主菜你配菜，谁也不会太累。”",
+                "hint": "把邀约和分工一次说清，也给对方留拒绝余地",
+                "targetCharacterId": null
+              },
+              {
+                "id": "chat-team-together",
+                "label": "“你平时会自己做饭吗？我们今晚可以一起决定菜单。”",
+                "hint": "先问生活习惯，再一起拿主意",
+                "targetCharacterId": null
+              },
+              {
+                "id": "chat-team-light",
+                "label": "“先把今晚这顿一起做熟，别的以后再说。”",
+                "hint": "把预期压到最小，轻松不施压",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "team-up": {
+            "title": "第一顿晚餐｜你来搭把手",
+            "text": "厨房、采购桌和露台布置区的任务灯同时亮了。今晚不比输赢，你要和一个刚认识的人搭档，在晚餐前把一件事一起做完——备菜、布置餐桌或核对饮品。你需要先把一件事从清单里选出来，然后开口，告诉对方你打算怎么做。",
+            "speakerId": "narrator",
+            "action": "你站在三盏亮起的任务灯之间，目光扫过厨房台面、长桌和饮品架，等着你选出一个方向。",
+            "choices": [
+              {
+                "id": "team-split",
+                "label": "我选备菜吧。你负责切配，我负责掌勺，各管一半，别打架就行。你需要告诉我你忌口什么。",
+                "hint": "先分工，各自做好一半，责任清晰，适合想快速进入节奏的搭档。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "team-cooperate",
+                "label": "一起布置餐桌吧，你做花和摆盘，我来摆餐具和杯子。你觉得这样分顺不顺？",
+                "hint": "留在同一区域边做边商量，互动最多，但需要默契磨合。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "team-volunteer",
+                "label": "核对饮品清单有点琐碎，我先来吧。你帮我从箱子里拿出瓶装水就行，我们一起会快很多。",
+                "hint": "先接下麻烦的部分，同时给对方一个具体又轻的辅助位。",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "anonymous-letter": {
+            "title": "不署名的选择",
+            "text": "灯调成暖黄，节目组把卡片递到每个人手上：“写给你今晚最想继续了解的人。不署名，只公布收到几条。一条短信不代表承诺，只代表此刻的真实。”",
+            "speakerId": "program",
+            "action": "你把卡片翻到背面，笔悬在纸面上，目光往白天聊过的人那边偏了一下。",
+            "choices": []
+          },
+          "callback": {
+            "title": "短信落到早餐桌上",
+            "text": "清晨的风掀开窗帘，短信没有替任何人决定关系，却让今天的座位和目光有了新的方向。有人先下楼，把水烧上，等第一个说话的人出现。",
+            "speakerId": "narrator",
+            "action": "你站在厨房窗边，手里握着一杯温水，听见楼梯传来脚步声。",
+            "choices": []
+          }
+        }
+      },
+      "deterministicSurfaceRepairs": [],
+      "focusedNodeGeneration": {
+        "introductions": {
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "generatedAt": "2026-08-24T16:32:01Z",
+          "characterCardBound": true
+        },
+        "team-up": {
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "generatedAt": "2026-08-24T16:46:04Z",
+          "characterCardBound": true
+        }
+      }
+    },
+    "chensu": {
+      "generatedAt": "2026-08-24T16:19:17.494572+00:00",
+      "payload": {
+        "nodes": {
+          "arrival-context": {
+            "title": "海风先到，人声在后",
+            "text": "八只行李箱在玄关排成一行，客厅落地窗敞着，海风把窗帘吹得鼓起来。有人坐在沙发边低头翻看茶几上的贝壳，有人站在厨房门口往里张望，还有人在窗边用手机录着什么。你背着相机包站在门边，眼前七个人，声音混在一起，名字还没对上。",
+            "speakerId": "narrator",
+            "action": "你把相机包带子往肩上提了提，先看清客厅里每个人待在哪儿。",
+            "choices": [
+              {
+                "id": "context-meet",
+                "label": "现在不去认人，先把相机包放在窗台边，别占地方。",
+                "hint": "东西先有去处，人才不慌。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "context-live",
+                "label": "往厨房门口走了两步，看看灶台和案台在什么位置。",
+                "hint": "住下来，总要知道火在哪。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "context-self",
+                "label": "先站在窗边把海看完，等自己落地了，再过去搭话。",
+                "hint": "先把状态稳住，再进人堆。",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "villa-arrival": {
+            "title": "玄关几步路，有人先坐下了",
+            "text": "藤编鞋柜上放着房卡，沙发上已经有人坐下了。你拎着行李箱站在玄关，门外的海风还没散，屋里有人说话，有人没开口。你还没想好先迈哪只脚。",
+            "speakerId": "narrator",
+            "action": "你把行李箱放倒，拉杆缓缓缩回去，金属声在玄关轻轻一响。",
+            "choices": [
+              {
+                "id": "arrival-help-luggage",
+                "label": "看见旁边一只没站稳的行李箱，伸手扶住，把拉杆收好。",
+                "hint": "先让它不倒，省得砸到谁。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "arrival-greet-room",
+                "label": "对着客厅说了一声：“我先把包放下，你们继续。”",
+                "hint": "先出声，省得人一直等你。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "arrival-observe-names",
+                "label": "站定几秒，先分清谁坐在沙发，谁站在窗边，谁靠在厨房门口。",
+                "hint": "位置记住了，待会找人不干瞪眼。",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "introductions": {
+            "title": "轮到我开口",
+            "text": "客厅里刚刚安静下来，前一位嘉宾收尾时带起一阵稀落的掌声，然后就轮到你这边了。镜头先落在你面前的地毯上，再抬起来对着你。身边几个人都没有催，只是把这片空间留给了你。你现在要把自己是谁、为什么愿意把七天交给陌生人，在镜头前说清楚。",
+            "speakerId": "narrator",
+            "action": "你坐在沙发里，双手放在膝盖上，左右看了一眼围坐的人，然后对着镜头点了下头。",
+            "choices": [
+              {
+                "id": "intro-clear",
+                "label": "我叫陈叙，27岁，MBTI是ISTP，平时喜欢修旧相机和坏掉的小东西。我来参加，是想练习把该说的也说清楚。能做的不只是修东西，这一条我也先说出来。",
+                "hint": "把完整底牌亮出来，话少不代表没准备。",
+                "targetCharacterId": null,
+                "introductionMode": "camera-full"
+              },
+              {
+                "id": "intro-question",
+                "label": "我是陈叙，ISTP，平时喜欢修旧相机。我来这里，是想和人一起做点具体的事，边做边认识人。你们这七天最想一起完成什么？",
+                "hint": "简短交底，再把话题抛回客厅，让气氛别停在自己身上。",
+                "targetCharacterId": null,
+                "introductionMode": "living-room-keepsake"
+              },
+              {
+                "id": "intro-honest",
+                "label": "我叫陈叙，27岁，MBTI是ISTP，平时会修旧相机。这次来参加，是想试试先把想说的说出来，再低头做事，不用等到弄好才解释。",
+                "hint": "承认自己平时做了不说，这次想改一下顺序。",
+                "targetCharacterId": null,
+                "introductionMode": "contrast-full"
+              }
+            ]
+          },
+          "icebreaker-choice": {
+            "title": "三分钟，记住一件真实的小事",
+            "text": "节目组说，选一位你还不熟的嘉宾聊三分钟，回来后要说出对方的一件真实小事。你坐在靠窗的椅子上，旁边的人有的在走动，有的站在桌边，厨房门也开着。",
+            "speakerId": "program",
+            "action": "你站起来，手从口袋里拿出来，朝客厅的某个方向迈了一步。",
+            "choices": [
+              {
+                "id": "break-help",
+                "label": "走向沈墨，他跟前那杯水摆得很正，你问他要不要挪个有杯垫的地方。",
+                "hint": "顺手帮个忙，话就开了。",
+                "targetCharacterId": "shenmo"
+              },
+              {
+                "id": "break-introduce",
+                "label": "走向江晚，先跟她换了名字，问她对这屋哪样东西最有感觉。",
+                "hint": "先把名字对上再说。",
+                "targetCharacterId": "jiangwan"
+              },
+              {
+                "id": "break-notice",
+                "label": "走向姜米，问她刚才在窗边录的是什么，说听着不像随手玩，像在留声音。",
+                "hint": "她刚才的动静，你确实留意了。",
+                "targetCharacterId": "jiangmi"
+              }
+            ]
+          },
+          "guided-chat": {
+            "title": "单独说话，先把一句听完",
+            "text": "你挑了个靠窗的位置坐下，对面的人也在等你开口。你们已经交换过名字，也说了一两句来意和眼前的事。接下来要聊的，会决定今晚谁跟谁一起把饭做出来。",
+            "speakerId": "narrator",
+            "action": "你拉开椅子坐下，手机放在桌面，屏幕朝下。",
+            "choices": [
+              {
+                "id": "chat-team-direct",
+                "label": "把身子往前靠了靠，说：“晚饭一起做，你洗菜我切肉，先这么分。”",
+                "hint": "定下来，手上就有活干了。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "chat-team-together",
+                "label": "看着对方说：“你更想管哪头？你说的算，剩下的我来。”",
+                "hint": "把第一步让给对方，自己补位。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "chat-team-light",
+                "label": "说：“今晚就先把一顿饭做出来，别想远的，先把手弄脏。”",
+                "hint": "眼前的事先落地，别的往后放。",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "team-up": {
+            "title": "晚餐，手比话先动",
+            "text": "厨房台面上摆着食材，节目组说今晚不比输赢，把饭做好就行。你和搭档站在灶台两侧，灶火还没点，厨房窗户映着海面的光。",
+            "speakerId": "narrator",
+            "action": "你卷起袖口，拿起砧板放稳，又回头看了一眼搭档。",
+            "choices": [
+              {
+                "id": "team-split",
+                "label": "把台面上的东西分成两摊，说：“你管那半边，我管这半边，锅铲不打架。”",
+                "hint": "各干各的，动作快，不用等。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "team-cooperate",
+                "label": "把砧板放在两人中间，拧火的时候问了句：“这火，够不够大？”",
+                "hint": "并肩站着，边做边递话。",
+                "targetCharacterId": null
+              },
+              {
+                "id": "team-volunteer",
+                "label": "把需要反复处理的菜先拿到自己面前，说：“这个要弄很久，我先下手，你管边上要起的。”",
+                "hint": "麻烦的揽过来，不让搭档干等。",
+                "targetCharacterId": null
+              }
+            ]
+          },
+          "anonymous-letter": {
+            "title": "匿名心动短信",
+            "text": "22:30，心动信箱前。八部手机同时亮起，屏幕只留一个收件人的空位。你握着手机，今天白天那些并肩的瞬间在眼前闪过。一条短信不代表承诺，只代表你今天最想继续了解谁。不需要署名，节目只会公布每人收到几条。你站在走廊尽头，屏幕光映着脸。",
+            "speakerId": "narrator",
+            "action": "你倚着墙，拇指悬在屏幕上方，斟酌着要把今天那点想继续了解的念头发给谁。",
+            "choices": []
+          },
+          "callback": {
+            "title": "清晨，短信有了回声",
+            "text": "第二天早餐，有人把牛奶盒往你这边推了推。没人提昨晚的短信，但座位的距离好像变近了一点。七天六夜还剩六天，有些话会在某一顿饭里露出头。",
+            "speakerId": "narrator",
+            "action": "你推开阳台门，海风翻动了床头的便签纸。",
+            "choices": []
+          }
+        }
+      },
+      "deterministicSurfaceRepairs": [],
+      "focusedNodeGeneration": {
+        "introductions": {
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "generatedAt": "2026-08-24T16:32:01Z",
+          "characterCardBound": true
+        },
+        "anonymous-letter": {
+          "provider": "deepseek",
+          "model": "deepseek-v4-flash",
+          "generatedAt": "2026-08-24T16:36:02Z",
+          "characterCardBound": true
+        }
+      }
+    }
+  }
+}

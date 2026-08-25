@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "worldId": "xindong-journey-echo",
+  "title": "心动之旅",
+  "chapter": "DAY 1 · 初见与破冰",
+  "playerRole": "从一位首发嘉宾的视角参加七天六夜海岛恋爱旅行",
+  "emotionalPromise": "在被引导的真实相识、选择和夜间心动短信中，既靠近别人，也更清楚自己如何爱与被爱",
+  "sessionLengthMinutes": 8,
+  "interactionDensity": "每个短剧情页手动推进；关键节点提供三种明确行动；仅在剧情点名时进入 1 对 1",
+  "chapterFlow": [
+    "节目与海岛酒店背景",
+    "嘉宾入住别墅",
+    "八人自我介绍",
+    "第一轮破冰选择",
+    "被点名嘉宾的一对一寒暄",
+    "第一天临时组队",
+    "夜间心动短信",
+    "第二天回声"
+  ],
+  "agentAuthority": {
+    "may": [
+      "依据人物卡和当前剧情生成自然台词、动作和三种选项的表面表达",
+      "从当前允许的非主角嘉宾中提议一个引导交互对象",
+      "依据独立记忆生成寒暄、追问、反价和边界表达"
+    ],
+    "mustNot": [
+      "新增剧情节点、证据、人物或路线",
+      "直接写关系数值或状态补丁",
+      "让主角与自己对话",
+      "把寒暄直接跳成告白或任务汇报"
+    ]
+  },
+  "readingContract": {
+    "default": "manual",
+    "typewriter": true,
+    "firstTap": "reveal-current-page",
+    "secondTap": "advance-or-show-choice",
+    "recommendedChineseCharactersPerPage": "18-45"
+  },
+  "mediaContract": {
+    "aspectRatio": "9:16",
+    "runtimeResolution": "480x854",
+    "entranceSeconds": "8-10",
+    "eventSeconds": "10-15",
+    "currentRound": [
+      "入住海岛别墅",
+      "八人初见与破冰",
+      "夜间匿名心动短信"
+    ]
+  },
+  "castBoundary": {
+    "runtimeCast": "沿用当前已有人物卡与身份锚点的八位嘉宾",
+    "sourceRoster": "原始设定为四男四女，陈叙与姜晚属于中途加入",
+    "assumption": "本轮不擅自替换已上线人物；玩家文案只称八位嘉宾，不宣称当前运行阵容为四男四女",
+    "followUp": "后续单独恢复原始首发阵容并补齐身份锚点后，再制作严格四男四女群像版本"
+  },
+  "deliveryTarget": "本地 DeepSeek + PostgreSQL 完整试玩",
+  "rightsBoundary": "所有新台词为原创；文学 few-shot 只提取可观察表达规律，不复制受保护原句"
+}
