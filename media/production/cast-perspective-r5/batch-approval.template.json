@@ -5,8 +5,8 @@
   "manifestSha256": "0000000000000000000000000000000000000000000000000000000000000000",
   "taskMatrixSha256": "0000000000000000000000000000000000000000000000000000000000000000",
   "runtimeVariantMatrixSha256": "e7ef4b874c1d06d32526c66a59400be4cab4850538f0cbaddbaf3689f86f8a6a",
-  "approvedTaskCount": 178,
-  "approvedTotalDurationSeconds": 2670,
+  "approvedTaskCount": 198,
+  "approvedTotalDurationSeconds": 2970,
   "policy": {
     "provider": "fumin",
     "model": "seedance-2.0-mini",

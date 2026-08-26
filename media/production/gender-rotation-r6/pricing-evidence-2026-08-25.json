@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "heart-journey/provider-pricing-evidence-v1",
+  "retrievedAt": "2026-08-25T20:32:00+08:00",
+  "source": {
+    "provider": "fumin",
+    "endpoint": "GET /api/log/token",
+    "recordType": "historical-settled-account-entry",
+    "containsCredentials": false,
+    "containsUserIdentifiers": false
+  },
+  "sample": {
+    "model": "seedance-2.0-mini",
+    "resolution": "480p",
+    "videoInput": false,
+    "durationSeconds": 15,
+    "matchedTier": "480p no video input",
+    "group": "limited-discount-sdmini",
+    "groupRatio": 1.06,
+    "preConsumedQuota": 1224364,
+    "actualQuota": 1229459,
+    "quotaPerUnit": 500000,
+    "priceCnyPerUnit": 0.4
+  },
+  "derived": {
+    "actualCnyPer15Seconds": 0.9835672,
+    "actualCnyPerSecond": 0.0655711467,
+    "r6PlannedSeconds": 698,
+    "r6BaselineEstimateCny": 45.7686604,
+    "r6SuggestedIncrementalHardCapCny": 60,
+    "automaticPaidRetryCount": 0
+  },
+  "authorizationBoundary": {
+    "projectManualReviewThresholdCny": 200,
+    "projectCumulativeSpendExceedsThreshold": true,
+    "paidSubmissionAuthorized": false,
+    "requiredExplicitApprovalText": "Confirm this project's R6 incremental maximum CNY 60.",
+    "note": "Historical settled cost is evidence for an estimate only. It is not a provider price guarantee and is not permission to submit paid jobs."
+  }
+}

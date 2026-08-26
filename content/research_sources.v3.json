@@ -1,10 +1,11 @@
 {
   "schemaVersion": 1,
-  "contentVersion": "3.0.0-local-research",
+  "contentVersion": "3.1.0-dual-roster",
   "notes": [
     "原始人物设定DOCX已重新定位并完成文本核对。",
     "人物事实、运行时改编、MBTI偏好和文学风味分层保存；后两者不能覆盖人物事实。",
-    "文学微引文只作为作者研究锚点，DeepSeek不得复制或仿写原句。"
+    "文学微引文只作为作者研究锚点，DeepSeek不得复制或仿写原句。",
+    "正式版扩展为每个现有MBTI一男一女；新增八人是独立原创人物，不继承同型异性角色的身世与秘密。"
   ],
   "sources": [
     {

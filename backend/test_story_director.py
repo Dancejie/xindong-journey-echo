@@ -4,7 +4,7 @@ from copy import deepcopy
 from pathlib import Path
 from unittest.mock import patch
 
-from backend.game_content import CHARACTER_MAP, DAY1_MEDIA_CONTRACT, NODES, create_snapshot, project_view
+from backend.game_content import CHARACTER_MAP, DAY1_MEDIA_CONTRACT, LEGACY_CAST_IDS, NODES, create_snapshot as _create_snapshot, migrate_snapshot, project_view
 from backend.story_director import (
     STORY_EVENTS,
     build_story_director_messages,
@@ -17,6 +17,13 @@ from backend.story_director import (
 
 
 ROOT = Path(__file__).resolve().parent.parent
+
+
+def create_snapshot(user_mbti="INFP", perspective_character_id=None):
+    """Authored-event fixture: retain the original eight whose IDs the v1 catalog names."""
+    snapshot = _create_snapshot(user_mbti, perspective_character_id)
+    snapshot["castIds"] = list(LEGACY_CAST_IDS)
+    return migrate_snapshot(snapshot)
 
 
 def add_memory(snapshot, character_id, index=0):
@@ -201,11 +208,13 @@ class StoryDirectorContractTests(unittest.TestCase):
         next_snapshot, receipt = commit_story_event(snapshot, candidates, valid_proposal(triangle))
         media = receipt["mission"]["media"]
         self.assertEqual("EV-TRIANGLE-reverse-invite", media["baseAssetId"])
-        self.assertEqual("CHAR-shenmo-portrait", media["assetId"])
-        self.assertEqual("fixed-cast", media["routingMode"])
+        self.assertTrue(media["assetId"].startswith("EV-TRIANGLE-reverse-invite--rotation-F-"))
+        self.assertEqual("gender-rotation", media["routingMode"])
         self.assertEqual(["shenmo", "chengye"], media["requiredIdentityCast"])
-        self.assertEqual(["shenmo"], media["identityCast"])
-        self.assertEqual("/media/video/CHAR-shenmo-portrait.mp4", next_snapshot["storyMission"]["media"]["src"])
+        self.assertTrue(media["identityCast"])
+        self.assertEqual("女性", media["leadGender"])
+        self.assertEqual("approved-gender-rotation", media["selectionReason"])
+        self.assertEqual(media["src"], next_snapshot["storyMission"]["media"]["src"])
         self.assertEqual("/media/video/EV-TRIANGLE-reverse-invite--fixed-shenmo-chengye.mp4", media["plannedSrc"])
 
     def test_exact_pair_variant_routes_only_when_reviewed_cast_matches(self):

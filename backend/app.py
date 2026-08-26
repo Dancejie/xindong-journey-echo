@@ -35,10 +35,13 @@ from backend.game_content import (
     CHARACTER_MAP,
     CHARACTERS,
     CONTENT_VERSION,
+    active_cast_ids,
+    available_chat_contexts,
     apply_choice,
     commit_agent_turn,
     create_snapshot,
     migrate_snapshot,
+    normalize_conversation_context,
     project_view,
     validate_agent_turn,
 )
@@ -165,10 +168,10 @@ def _record_event(conn: psycopg.Connection, run_id: str, owner_id: str, event_ty
     )
 
 
-async def _agent_turn(character: dict, snapshot: dict, message: str) -> dict:
+async def _agent_turn(character: dict, snapshot: dict, message: str, conversation_context: dict | None = None) -> dict:
     card = CHARACTER_CARD_MAP[character["id"]]
     player_card = CHARACTER_CARD_MAP[snapshot["player"]["perspectiveCharacterId"]]
-    messages = build_agent_messages(card, snapshot, message, player_card)
+    messages = build_agent_messages(card, snapshot, message, player_card, conversation_context)
     payload: dict | None = None
     for attempt in range(2):
         try:
@@ -179,7 +182,7 @@ async def _agent_turn(character: dict, snapshot: dict, message: str) -> dict:
             return payload
         except Exception as error:
             if attempt == 0:
-                messages = [*messages, {"role": "user", "content": f"上一轮未通过人物与时间线合同：{error}。保持同一人物判断，重写完整 JSON；只使用当前已发生事实。"}]
+                messages = [*messages, {"role": "user", "content": f"上一轮未通过人物与时间线合同：{error}。保持同一人物判断，重写完整 JSON；只使用当前已发生事实。若原因涉及重复，必须避开 usedTopics，并贡献一个新的具体事实、轻巧反应或可执行行动。"}]
                 continue
             if isinstance(payload, dict) and any(term in str(error) for term in ("建议语", "followup", "mainline")):
                 payload.pop("suggestions", None)
@@ -310,7 +313,10 @@ def bootstrap(decrypted_userinfo: Optional[str] = Header(None, alias="Decrypted-
     if isinstance(snapshot, str):
         snapshot = json.loads(snapshot)
     snapshot = migrate_snapshot(snapshot)
-    return JSONResponse({"user": user, "characters": CHARACTERS, "view": project_view(snapshot) if snapshot else None})
+    return JSONResponse({
+        "user": user, "characters": CHARACTERS, "view": project_view(snapshot) if snapshot else None,
+        "rosterPolicy": {"librarySize": len(CHARACTERS), "runCastSize": 8, "selectionOrder": ["mbti", "gender", "character"]},
+    })
 
 
 @app.post("/api/runs", status_code=201)
@@ -323,6 +329,8 @@ async def start_run(body: dict, decrypted_userinfo: Optional[str] = Header(None,
     perspective_character_id = str(body.get("perspectiveCharacterId") or "").strip()
     if perspective_character_id not in CHARACTER_MAP:
         raise HTTPException(status_code=400, detail="请选择一位有效的观察人物")
+    if CHARACTER_MAP[perspective_character_id]["mbti"] != mbti:
+        raise HTTPException(status_code=400, detail="所选 MBTI 与观察人物不一致，请先选 MBTI 再选对应角色")
     snapshot = create_snapshot(mbti, perspective_character_id)
     snapshot = await _generate_day1_script(snapshot)
     with _get_db_conn() as conn:
@@ -348,12 +356,14 @@ async def choose(run_id: str, body: dict, decrypted_userinfo: Optional[str] = He
     except (TypeError, ValueError):
         raise HTTPException(status_code=400, detail="缺少 revision")
     choice_id, character_id = str(body.get("choiceId") or ""), body.get("characterId")
+    custom_text = body.get("customText")
+    suggestion_id = body.get("suggestionId")
     with _get_db_conn() as conn:
         snapshot = _load_run(conn, run_id, user["userId"])
     if snapshot["revision"] != expected_revision:
         raise HTTPException(status_code=409, detail="状态已经更新，请刷新后重试")
     try:
-        provisional, _ = apply_choice(snapshot, choice_id, character_id)
+        provisional, _ = apply_choice(snapshot, choice_id, character_id, custom_text, suggestion_id)
     except ValueError as error:
         raise HTTPException(status_code=400, detail=str(error))
     contextual_payload = await _generate_day1_node_script(provisional, provisional["nodeId"])
@@ -362,7 +372,7 @@ async def choose(run_id: str, body: dict, decrypted_userinfo: Optional[str] = He
         if current["revision"] != expected_revision:
             raise HTTPException(status_code=409, detail="状态已经更新，请刷新后重试")
         try:
-            next_snapshot, receipt = apply_choice(current, choice_id, character_id)
+            next_snapshot, receipt = apply_choice(current, choice_id, character_id, custom_text, suggestion_id)
             if contextual_payload is not None:
                 next_snapshot = install_day1_node_script(
                     next_snapshot, next_snapshot["nodeId"], contextual_payload,
@@ -396,12 +406,30 @@ async def agent_message(run_id: str, character_id: str, body: dict, decrypted_us
         raise HTTPException(status_code=409, detail="状态已经更新，请刷新后重试")
     if character_id == snapshot["player"]["perspectiveCharacterId"]:
         raise HTTPException(status_code=400, detail="当前观察视角就是这位嘉宾，不能和自己进入 1 对 1 私聊")
+    if character_id not in active_cast_ids(snapshot):
+        raise HTTPException(status_code=404, detail="这位嘉宾不在本季八人名单中")
     pending = snapshot.get("pendingInteraction") or {}
     if snapshot["nodeId"] == "guided-chat" and pending.get("status") == "required" and pending.get("targetCharacterId") != character_id:
         target_name = CHARACTER_MAP[pending["targetCharacterId"]]["name"]
         raise HTTPException(status_code=409, detail=f"节目组正在引导你先和{target_name}完成第一次破冰交流")
+    supplied_context = body.get("context") if isinstance(body.get("context"), dict) else None
     try:
-        turn = await _agent_turn(character, snapshot, message)
+        presence = snapshot.get("characterPresence", {})
+        context_input = dict(supplied_context or {})
+        context_input["channel"] = "1v1"
+        # Old clients did not send context. Keep them valid by resolving the
+        # NPC's actual current venue server-side instead of silently assigning
+        # the node's default venue.
+        context_input.setdefault("locationId", presence.get(character_id))
+        conversation_context = normalize_conversation_context(
+            snapshot, context_input,
+            participant_ids=[snapshot["player"]["perspectiveCharacterId"], character_id], channel="1v1",
+        )
+        if presence.get(character_id) != conversation_context["locationId"]:
+            raise ValueError(f"{character['name']}现在不在{conversation_context['locationName']}")
+        turn = await _agent_turn(character, snapshot, message, conversation_context)
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error)) from error
     except Exception as error:
         if isinstance(error, httpx.HTTPStatusError):
             safe_kind = f"http-{error.response.status_code}"
@@ -415,7 +443,7 @@ async def agent_message(run_id: str, character_id: str, body: dict, decrypted_us
         if current["revision"] != expected_revision:
             raise HTTPException(status_code=409, detail="关系状态已变化，这句话没有被重复写入")
         try:
-            next_snapshot, receipt = commit_agent_turn(current, character_id, message, turn)
+            next_snapshot, receipt = commit_agent_turn(current, character_id, message, turn, conversation_context)
         except ValueError as error:
             raise HTTPException(status_code=502, detail=f"DeepSeek 角色输出未通过人物卡校验：{error}") from error
         reply = next_snapshot["echoMemories"][-1]["agentReply"]
@@ -450,6 +478,8 @@ async def agent_opening(run_id: str, character_id: str, revision: Optional[int] 
         raise HTTPException(status_code=409, detail="关系状态已经更新，请重新打开私聊")
     if character_id == snapshot["player"]["perspectiveCharacterId"]:
         raise HTTPException(status_code=400, detail="当前观察视角就是这位嘉宾，不能打开自己的私聊")
+    if character_id not in active_cast_ids(snapshot):
+        raise HTTPException(status_code=404, detail="这位嘉宾不在本季八人名单中")
     opening = await _chat_opening(card, snapshot)
     return JSONResponse({
         **opening,
@@ -459,6 +489,102 @@ async def agent_opening(run_id: str, character_id: str, revision: Optional[int] 
         "characterId": character_id, "revision": snapshot["revision"],
         "guided": (snapshot.get("pendingInteraction") or {}).get("targetCharacterId") == character_id,
     })
+
+
+@app.get("/api/runs/{run_id}/chat-contexts")
+def chat_contexts(run_id: str, decrypted_userinfo: Optional[str] = Header(None, alias="Decrypted-Userinfo"), x_client_id: Optional[str] = Header(None, alias="X-Client-Id")) -> JSONResponse:
+    """List only the guests currently present at each playable location."""
+    user = _require_user(decrypted_userinfo, x_client_id)
+    with _get_db_conn() as conn:
+        snapshot = _load_run(conn, run_id, user["userId"])
+    return JSONResponse({**available_chat_contexts(snapshot), "revision": snapshot["revision"]})
+
+
+@app.post("/api/runs/{run_id}/group-messages")
+@app.post("/api/runs/{run_id}/chats/group/messages")
+async def group_message(run_id: str, body: dict, decrypted_userinfo: Optional[str] = Header(None, alias="Decrypted-Userinfo"), x_client_id: Optional[str] = Header(None, alias="X-Client-Id")) -> JSONResponse:
+    """Bounded location-aware group chat; each NPC keeps an independent memory."""
+    user = _require_user(decrypted_userinfo, x_client_id)
+    message = str(body.get("message") or "").strip()
+    if not message or len(message) > 240:
+        raise HTTPException(status_code=400, detail="请输入 1-240 个字")
+    try:
+        expected_revision = int(body.get("revision"))
+    except (TypeError, ValueError):
+        raise HTTPException(status_code=400, detail="缺少 revision")
+    raw_participants = body.get("participantIds")
+    if not isinstance(raw_participants, list):
+        raise HTTPException(status_code=400, detail="群聊参与者必须是列表")
+    if not all(isinstance(item, str) for item in raw_participants):
+        raise HTTPException(status_code=400, detail="群聊参与者 ID 格式无效")
+    participant_ids = list(dict.fromkeys(str(item) for item in raw_participants if isinstance(item, str)))
+    _enforce_agent_rate_limit(user["userId"])
+    with _get_db_conn() as conn:
+        snapshot = _load_run(conn, run_id, user["userId"])
+    if snapshot["revision"] != expected_revision:
+        raise HTTPException(status_code=409, detail="群聊状态已经更新，请刷新后重试")
+    pending = snapshot.get("pendingInteraction") or {}
+    if snapshot["nodeId"] == "guided-chat" and pending.get("status") == "required":
+        raise HTTPException(status_code=409, detail="先完成节目组安排的第一次 1 对 1 破冰，再发起群聊")
+    perspective_id = snapshot["player"]["perspectiveCharacterId"]
+    npc_ids = [character_id for character_id in participant_ids if character_id != perspective_id]
+    if not 2 <= len(npc_ids) <= 4:
+        raise HTTPException(status_code=400, detail="群聊请选择 2-4 位在场嘉宾")
+    if any(character_id not in active_cast_ids(snapshot) for character_id in npc_ids):
+        raise HTTPException(status_code=400, detail="群聊参与者不在本季八人名单中")
+    supplied_context = body.get("context") if isinstance(body.get("context"), dict) else {}
+    try:
+        presence = snapshot.get("characterPresence", {})
+        context_input = {**supplied_context, "channel": "group"}
+        selected_locations = {presence.get(character_id) for character_id in npc_ids}
+        if not context_input.get("locationId"):
+            if len(selected_locations) != 1 or None in selected_locations:
+                raise ValueError("群聊嘉宾不在同一地点，请先按地点筛选。")
+            context_input["locationId"] = selected_locations.pop()
+        context = normalize_conversation_context(
+            snapshot, context_input,
+            participant_ids=[perspective_id, *npc_ids], channel="group",
+        )
+        absent = [character_id for character_id in npc_ids if presence.get(character_id) != context["locationId"]]
+        if absent:
+            names = "、".join(CHARACTER_MAP[character_id]["name"] for character_id in absent if character_id in CHARACTER_MAP)
+            raise ValueError(f"{names}现在不在{context['locationName']}")
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error)) from error
+    generated: list[tuple[str, dict]] = []
+    for character_id in npc_ids:
+        character = CHARACTER_MAP.get(character_id)
+        if not character or character_id not in active_cast_ids(snapshot):
+            raise HTTPException(status_code=400, detail="群聊参与者不在本季八人名单中")
+        try:
+            generated.append((character_id, await _agent_turn(character, snapshot, message, context)))
+        except Exception as error:
+            raise HTTPException(status_code=503, detail=f"{character['name']}的群聊回复暂时没有完成；本轮未写入任何记忆") from error
+    with _get_db_conn() as conn:
+        current = _load_run(conn, run_id, user["userId"], for_update=True)
+        if current["revision"] != expected_revision:
+            raise HTTPException(status_code=409, detail="群聊状态已经更新；本轮未重复写入")
+        replies, receipts = [], []
+        try:
+            for character_id, turn in generated:
+                current, receipt = commit_agent_turn(current, character_id, message, turn, context)
+                memory = current["echoMemories"][-1]
+                replies.append({
+                    "characterId": character_id, "characterName": CHARACTER_MAP[character_id]["name"],
+                    "reply": memory["agentReply"], "stageDirection": memory["stageDirection"],
+                    "memoryId": memory["id"], "context": receipt["context"],
+                })
+                receipts.append(receipt)
+                conn.execute(
+                    "INSERT INTO agent_memories (run_id, owner_id, character_id, memory_id, player_text, agent_reply, intent_id) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+                    (run_id, user["userId"], character_id, receipt["id"], message, memory["agentReply"], receipt["intentId"]),
+                )
+        except ValueError as error:
+            raise HTTPException(status_code=502, detail=f"群聊角色输出未通过人物卡校验：{error}") from error
+        _save_run(conn, run_id, user["userId"], current)
+        _record_event(conn, run_id, user["userId"], "agent.group-memory", {"context": context, "receipts": receipts})
+        conn.commit()
+    return JSONResponse({**project_view(current), "replies": replies, "context": context, "receipts": receipts})
 
 
 @app.post("/api/runs/{run_id}/story-director")

@@ -26,8 +26,8 @@
     "manifestSha256": { "$ref": "#/$defs/sha256" },
     "taskMatrixSha256": { "$ref": "#/$defs/sha256" },
     "runtimeVariantMatrixSha256": { "$ref": "#/$defs/sha256" },
-    "approvedTaskCount": { "const": 178 },
-    "approvedTotalDurationSeconds": { "const": 2670 },
+    "approvedTaskCount": { "const": 198 },
+    "approvedTotalDurationSeconds": { "const": 2970 },
     "policy": {
       "type": "object",
       "additionalProperties": false,
@@ -63,7 +63,7 @@
       "required": ["baseGenerationMaxAmount", "retryTaskCountCap", "retryGenerationMaxAmount", "hardTotalMaxAmount", "retryRequiresNewApproval", "budgetApprovalRef"],
       "properties": {
         "baseGenerationMaxAmount": { "type": "number", "minimum": 0 },
-        "retryTaskCountCap": { "type": "integer", "minimum": 0, "maximum": 178 },
+        "retryTaskCountCap": { "type": "integer", "minimum": 0, "maximum": 198 },
         "retryGenerationMaxAmount": { "type": "number", "minimum": 0 },
         "hardTotalMaxAmount": { "type": "number", "minimum": 0 },
         "retryRequiresNewApproval": { "const": true },

@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "heart-journey/provider-pricing-evidence-v2",
+  "retrievedAt": "2026-08-26T11:50:19+08:00",
+  "source": {
+    "provider": "fumin",
+    "endpoint": "GET /api/log/token",
+    "recordType": "same-day-settled-account-entries",
+    "containsCredentials": false,
+    "containsUserIdentifiers": false,
+    "taskIdsRetained": false
+  },
+  "modelProbe": {
+    "retrievedAt": "2026-08-26T11:49:00+08:00",
+    "endpoint": "GET /v1/models",
+    "allowedModelId": "seedance-2.0-mini"
+  },
+  "samples": [
+    {
+      "resolution": "480p",
+      "videoInput": false,
+      "inferredDurationSeconds": 4,
+      "actualQuota": 617277,
+      "preConsumedQuota": 612182,
+      "quotaPerUnit": 500000,
+      "priceCnyPerUnit": 0.4,
+      "actualCostCny": 0.4938216,
+      "actualCostCnyPerSecond": 0.1234554,
+      "matchedTier": "480p no video input",
+      "groupRatio": 1.06
+    },
+    {
+      "resolution": "480p",
+      "videoInput": false,
+      "inferredDurationSeconds": 8,
+      "actualQuota": 1229459,
+      "preConsumedQuota": 1224364,
+      "quotaPerUnit": 500000,
+      "priceCnyPerUnit": 0.4,
+      "actualCostCny": 0.9835672,
+      "actualCostCnyPerSecond": 0.1229459,
+      "matchedTier": "480p no video input",
+      "groupRatio": 1.06
+    },
+    {
+      "resolution": "480p",
+      "videoInput": false,
+      "inferredDurationSeconds": 12,
+      "actualQuota": 1841641,
+      "preConsumedQuota": 1836545,
+      "quotaPerUnit": 500000,
+      "priceCnyPerUnit": 0.4,
+      "actualCostCny": 1.4733128,
+      "actualCostCnyPerSecond": 0.1227760667,
+      "matchedTier": "480p no video input",
+      "groupRatio": 1.06
+    }
+  ],
+  "derived": {
+    "conservativeUnitPriceCnyPerSecond": 0.1234554,
+    "plannedSeconds": 416,
+    "baselineEstimateCny": 51.3574464,
+    "incrementalHardCapCny": 60,
+    "unallocatedBufferCny": 8.6425536,
+    "automaticPaidRetryCount": 0
+  },
+  "claimBoundary": "Durations are inferred from three same-day settled 480p no-video-input quota tiers and are used conservatively. This is account evidence, not a contractual provider price guarantee."
+}

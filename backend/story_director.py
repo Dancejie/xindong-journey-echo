@@ -13,6 +13,8 @@ from backend.game_content import (
     CHARACTER_CARD_MAP,
     CHARACTER_MAP,
     RELATIONSHIP_AXES,
+    active_cast_ids,
+    media_rotation_for,
     migrate_snapshot,
     resolve_identity_safe_media,
     utc_now,
@@ -95,7 +97,7 @@ def resolve_story_event_media(
         "durationSeconds": runtime.get("durationSeconds"),
         "fallback": deepcopy(plan.get("fallback") or {"kind": "scene-card", "cue": plan.get("cue")}),
     }
-    if snapshot is None or not available:
+    if snapshot is None:
         return media
     perspective_id = str(snapshot.get("player", {}).get("perspectiveCharacterId") or "")
     if perspective_id not in CHARACTER_MAP:
@@ -107,7 +109,13 @@ def resolve_story_event_media(
         perspective_id,
         participant_ids or [],
         routing_mode=routing_mode,
-        fixed_cast_ids=fixed_cast_ids,
+        fixed_cast_ids=[character_id for character_id in fixed_cast_ids if character_id in active_cast_ids(snapshot)],
+        current_cast_ids=active_cast_ids(snapshot),
+        rotation=media_rotation_for(
+            perspective_id,
+            str(snapshot.get("runId") or perspective_id),
+            identity_safe_base_asset_id,
+        ),
     )
     return {
         **media,
@@ -156,7 +164,8 @@ def _eligible_participants(state: dict[str, Any], event: dict[str, Any]) -> list
     rule = event["eligibility"].get("participantRule", "any")
     memory_owners = {item.get("characterId") for item in state["echoMemories"] if item.get("characterId") in CHARACTER_MAP}
     perspective_id = state.get("player", {}).get("perspectiveCharacterId")
-    ids = list(CHARACTER_MAP) if rule == "any" else list(memory_owners)
+    cast_ids = active_cast_ids(state)
+    ids = list(cast_ids) if rule == "any" else [character_id for character_id in memory_owners if character_id in cast_ids]
     ids = [character_id for character_id in ids if character_id != perspective_id]
     authored_ids = set(event["eligibility"].get("characterIds", []))
     if authored_ids:
@@ -379,7 +388,7 @@ def validate_story_director_output(snapshot: dict[str, Any], candidates: list[di
     if any(not 8 <= len(item) <= 40 for item in strategies):
         raise ValueError("单项策略长度不符合合同")
     participant_names = {CHARACTER_MAP[character_id]["name"] for character_id in participants}
-    other_names = {character["name"] for character in CHARACTER_MAP.values()} - participant_names
+    other_names = {CHARACTER_MAP[character_id]["name"] for character_id in active_cast_ids(state)} - participant_names
     generated_scene_text = bridge_text + mission_prompt + scene_setup + reversal_beat + character_insight + visual_cue + "".join(strategies)
     allowed_contract_text = json.dumps(event, ensure_ascii=False) + json.dumps(state.get("storyEventLedger", []), ensure_ascii=False)
     guarded_scene_details = ("周三", "周五", "墨痕", "记录本", "山径", "灯塔", "小灯", "倒计时数字", "路线卡", "明早", "六点", "告别信", "贝壳", "末班车", "收工后", "走廊", "袖口", "手腕")

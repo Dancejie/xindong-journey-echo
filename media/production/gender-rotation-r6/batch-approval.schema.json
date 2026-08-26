@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://echo.local/schemas/gender-rotation-r6-batch-approval.schema.json",
+  "title": "Heart Journey Gender Rotation R6 paid batch approval",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "batchId",
+    "doNotSubmit",
+    "manifestSha256",
+    "approvedTaskCount",
+    "approvedTotalDurationSeconds",
+    "policy",
+    "pricing",
+    "budget",
+    "userApproval",
+    "rights",
+    "approval"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "gender-rotation-r6/approval-v1" },
+    "batchId": { "type": "string", "minLength": 1 },
+    "doNotSubmit": { "type": "boolean" },
+    "manifestSha256": { "$ref": "#/$defs/sha256" },
+    "approvedTaskCount": { "const": 81 },
+    "approvedTotalDurationSeconds": { "const": 416 },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "model", "ratio", "resolution", "durationRangeSeconds", "generateEventAudio", "watermark", "concurrency", "maxApiRetry"],
+      "properties": {
+        "provider": { "const": "fumin" },
+        "model": { "const": "seedance-2.0-mini" },
+        "ratio": { "const": "9:16" },
+        "resolution": { "const": "480p" },
+        "durationRangeSeconds": {
+          "type": "array",
+          "prefixItems": [{ "const": 4 }, { "const": 15 }],
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "generateEventAudio": { "const": true },
+        "watermark": { "const": false },
+        "concurrency": { "const": 2 },
+        "maxApiRetry": { "const": 0 }
+      }
+    },
+    "pricing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["currency", "unitPriceCnyPerSecond", "pricingEvidenceRef", "verifiedBy", "verifiedAt"],
+      "properties": {
+        "currency": { "const": "CNY" },
+        "unitPriceCnyPerSecond": { "type": ["number", "null"], "minimum": 0 },
+        "pricingEvidenceRef": { "type": ["string", "null"] },
+        "verifiedBy": { "type": ["string", "null"] },
+        "verifiedAt": { "type": ["string", "null"] }
+      }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "thresholdCny",
+        "cumulativeSpendCnyFloor",
+        "cumulativeSpendExactKnown",
+        "cumulativeSpendEvidenceRef",
+        "incrementalSpendCny",
+        "projectedCumulativeSpendCnyFloor",
+        "hardTotalMaxAmountCny",
+        "retryTaskCountCap",
+        "retryRequiresNewApproval",
+        "manualOverBudgetApprovalRef",
+        "manualOverBudgetMaxAmountCny"
+      ],
+      "properties": {
+        "thresholdCny": { "const": 200 },
+        "cumulativeSpendCnyFloor": { "type": ["number", "null"], "minimum": 0 },
+        "cumulativeSpendExactKnown": { "type": "boolean" },
+        "cumulativeSpendEvidenceRef": { "type": ["string", "null"] },
+        "incrementalSpendCny": { "type": ["number", "null"], "minimum": 0 },
+        "projectedCumulativeSpendCnyFloor": { "type": ["number", "null"], "minimum": 0 },
+        "hardTotalMaxAmountCny": { "type": ["number", "null"], "minimum": 0 },
+        "retryTaskCountCap": { "const": 0 },
+        "retryRequiresNewApproval": { "const": true },
+        "manualOverBudgetApprovalRef": { "type": ["string", "null"] },
+        "manualOverBudgetMaxAmountCny": { "type": ["number", "null"], "minimum": 0 }
+      }
+    },
+    "userApproval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "requiredText", "maxCny", "approvalRef", "approvedBy", "approvedAt"],
+      "properties": {
+        "status": { "enum": ["pending", "approved", "rejected"] },
+        "requiredText": { "const": "R6新增上限¥60" },
+        "maxCny": { "type": ["number", "null"], "minimum": 0 },
+        "approvalRef": { "type": ["string", "null"] },
+        "approvedBy": { "type": ["string", "null"] },
+        "approvedAt": { "type": ["string", "null"] }
+      }
+    },
+    "rights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "likenessConsentRefIds", "voiceConsentRefIds", "referenceRightsRefIds", "reviewedBy", "reviewedAt"],
+      "properties": {
+        "status": { "enum": ["pending", "approved", "rejected"] },
+        "likenessConsentRefIds": { "$ref": "#/$defs/refIds" },
+        "voiceConsentRefIds": { "$ref": "#/$defs/refIds" },
+        "referenceRightsRefIds": { "$ref": "#/$defs/refIds" },
+        "reviewedBy": { "type": ["string", "null"] },
+        "reviewedAt": { "type": ["string", "null"] }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reviewedBy", "reviewedAt", "authorizedBy", "authorizedAt", "scopeRef"],
+      "properties": {
+        "reviewedBy": { "type": ["string", "null"] },
+        "reviewedAt": { "type": ["string", "null"] },
+        "authorizedBy": { "type": ["string", "null"] },
+        "authorizedAt": { "type": ["string", "null"] },
+        "scopeRef": { "type": ["string", "null"] }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "refIds": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    }
+  }
+}

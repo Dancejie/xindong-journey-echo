@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import re
+from hashlib import sha256
 from copy import deepcopy
 from datetime import datetime, timezone
 from pathlib import Path
@@ -12,7 +13,28 @@ from uuid import uuid4
 ROOT = Path(__file__).resolve().parent.parent
 RELATIONSHIP_AXES = ("trust", "affection", "respect", "fear", "debt", "attraction", "resentment")
 ATTITUDES = {"warm", "curious", "guarded", "challenging", "vulnerable", "softened", "uncertain", "honest", "moved", "careful", "steady", "boundary"}
-CONTENT_VERSION = "3.6.0-identity-safe-media-routing"
+CONTENT_VERSION = "3.7.0-dual-roster-gender-rotation"
+CHAT_CONTEXT_VERSION = 1
+CHAT_LOCATIONS = {
+    "hotel-entrance": {"name": "酒店玄关", "supportsGroup": True},
+    "living-room": {"name": "客厅", "supportsGroup": True},
+    "terrace": {"name": "海景露台", "supportsGroup": True},
+    "luggage-area": {"name": "行李区", "supportsGroup": True},
+    "kitchen": {"name": "开放厨房", "supportsGroup": True},
+    "dining-room": {"name": "餐厅", "supportsGroup": True},
+    "bedroom": {"name": "卧室", "supportsGroup": False},
+}
+NODE_SCENE_CONTEXT = {
+    "arrival-context": ("DAY 1 · 18:18", "hotel-entrance"),
+    "villa-arrival": ("DAY 1 · 18:20", "hotel-entrance"),
+    "introductions": ("DAY 1 · 18:35", "living-room"),
+    "cast-first-impressions": ("DAY 1 · 18:48", "living-room"),
+    "icebreaker-choice": ("DAY 1 · 18:55", "living-room"),
+    "guided-chat": ("DAY 1 · 19:05", "living-room"),
+    "team-up": ("DAY 1 · 19:25", "kitchen"),
+    "anonymous-letter": ("DAY 1 · 22:30", "bedroom"),
+    "callback": ("DAY 2 · 08:10", "dining-room"),
+}
 INTRODUCTION_MODES = {
     "intro-clear": "camera-full",
     "intro-question": "living-room-keepsake",
@@ -87,6 +109,60 @@ INTRO_REASON_ANCHORS = {
     "chensu": ("说清楚", "解释", "认识", "相处"),
 }
 
+INTRODUCTION_FALLBACKS.update({
+    "luyao": {
+        "intro-clear": ("大家好，我叫陆遥，28岁，是智能硬件产品负责人，MBTI是INTJ。我习惯把复杂的事情理出路线；来这里，是想练习在答案还没确定时，也把自己的感受告诉另一个人。", "把姓名、工作、性格和来意清楚说完"),
+        "intro-question": ("我是陆遥，做智能硬件产品，INTJ。这次来，我想少替所有事预设结局，多认识真实的人。你们更喜欢提前计划，还是到现场再决定？", "简短介绍后留一个人人能答的问题"),
+        "intro-honest": ("我叫陆遥，28岁，做智能硬件产品，MBTI是INTJ。看起来我很少犹豫；其实来这里，是想遇到一个能听见我改变主意、也不急着评价的人。", "说清果断外表下真实的关系期待"),
+    },
+    "yecheng": {
+        "intro-clear": ("大家好，我叫叶澄，27岁，是古籍修复师，MBTI是ISFJ。我很会记住物件和话语留下的痕迹；来这里，是想学着先说自己的偏好，也认识一个愿意互相照顾的人。", "让大家先认识她体贴之外的明确愿望"),
+        "intro-question": ("我是叶澄，古籍修复师，ISFJ。这次来，我想少一点替别人猜，多一点直接问。你们带来的哪件东西，最像现在的自己？", "用具体物件自然开启一轮接话"),
+        "intro-honest": ("我叫叶澄，27岁，做古籍修复，MBTI是ISFJ。大家可能觉得我很有耐心；但我来这里，也想试试说不之后，仍然有人愿意好好认识我。", "承认温柔里也有清楚边界"),
+    },
+    "tangli": {
+        "intro-clear": ("大家好，我叫唐梨，28岁，是户外纪录片现场制片人，MBTI是ESTP。我很会在突发现场把人和事情安全带回终点；来这里，也想学会在自己累的时候开口。", "爽快交代职业、性格和关系来意"),
+        "intro-question": ("我是唐梨，做户外纪录片现场制片，ESTP。这次来，我想和大家把七天过得痛快，也把安全和边界说清楚。你们最想在岛上尝试什么？", "从共同体验切入但保留退出权"),
+        "intro-honest": ("我叫唐梨，28岁，做户外纪录片现场制片，MBTI是ESTP。看着像什么都扛得住；其实来这里，我想遇到一个能在我说‘没事’之前看见我已经累了的人。", "把能扛现场之外会疲惫的一面说出来"),
+    },
+    "wenxu": {
+        "intro-clear": ("大家好，我叫温序，26岁，是城市气候数据研究员，MBTI是INTP。我会为一阵反常的海风追很多组数据；来这里，是想试试答案只有七成时，也能先诚实认识一个人。", "信息具体，不把介绍讲成谜题"),
+        "intro-question": ("我是温序，做城市气候数据研究，INTP。这次来，我想少在心里排练，多当场说出来。你们第一天更怕冷场，还是怕一句话说得不够漂亮？", "用好回答的二选一化开安静"),
+        "intro-honest": ("我叫温序，26岁，做城市气候数据研究，MBTI是INTP。我说话可能会边说边改；来这里，是想认识一个允许我不完美表达、也愿意直接纠正我的人。", "承认笨拙而不故作高深"),
+    },
+    "hechuan": {
+        "intro-clear": ("大家好，我叫贺川，30岁，是纪录片剪辑师，MBTI是INFJ。我常从别人没说完的话里找重点；来这里，是想少替别人剪好答案，也让大家认识有明确偏好的我。", "把倾听能力和自己的来意都说清"),
+        "intro-question": ("我是贺川，纪录片剪辑师，INFJ。这次来，我想多说一点自己的答案。你们带来的一件东西里，哪件最能介绍现在的你？", "从具体物件邀请大家接话"),
+        "intro-honest": ("我叫贺川，30岁，做纪录片剪辑，MBTI是INFJ。大家可能先觉得我很会理解人；其实来这里，我也希望有人不只被我听见，还会反过来问我想要什么。", "不做全场倾听工具人，先交出自己"),
+    },
+    "peiran": {
+        "intro-clear": ("大家好，我叫裴然，27岁，是儿童博物馆体验策展人，MBTI是ENFP。我喜欢把普通东西变成不用分输赢的小游戏；来这里，是想看看热闹结束后，两个人安静坐着会不会也舒服。", "轻快说清职业、性格和真实期待"),
+        "intro-question": ("嗨，我是裴然，做儿童博物馆体验策展，ENFP。这次来，我想认识一些愿意一起创造小事的人。你们小时候最喜欢把什么东西变成游戏？", "用轻松具体的问题让客厅自然热起来"),
+        "intro-honest": ("我叫裴然，27岁，做儿童博物馆体验策展，MBTI是ENFP。我看起来很会热场；其实来这里，是想知道我不表演有趣的时候，会不会也有人愿意留下来。", "说出热闹外表后的安静需要"),
+    },
+    "lichuan": {
+        "intro-clear": ("大家好，我叫黎川，29岁，是精品酒店餐饮运营经理，MBTI是ESFJ。我很会把整张餐桌照顾妥帖；来这里，是想认真认识一个也愿意分担、愿意单独看见我的人。", "明亮介绍，也交代互惠期待"),
+        "intro-question": ("我是黎川，做精品酒店餐饮运营，ESFJ。这次来，我想少一点一个人收尾，多一点大家一起完成。你们最愿意负责今晚哪件小事？", "从自然分工认识每个人"),
+        "intro-honest": ("我叫黎川，29岁，做精品酒店餐饮运营，MBTI是ESFJ。看起来我总能照亮全场；其实来这里，我想体验一次散场以后还有人单独等我的感觉。", "把会照顾全场和想被看见的反差说清"),
+    },
+    "qiaolan": {
+        "intro-clear": ("大家好，我叫乔岚，28岁，是舞台机械工程师，MBTI是ISTP。我习惯在演出开始前把现场稳住；来这里，是想练习在行动之前先问一句，也把必要的话说清楚。", "职业、行动方式和来意都具体"),
+        "intro-question": ("我是乔岚，做舞台机械工程，ISTP。这次来，我想和人一起做点具体的事，也不再让别人猜。你们这七天最想一起完成什么？", "话不多，但问题具体好回答"),
+        "intro-honest": ("我叫乔岚，28岁，做舞台机械工程，MBTI是ISTP。看着像只会做不爱说；其实来这里，我想试试先解释一句，能不能让一段靠近少一点误会。", "保留利落，也承认表达是她的练习"),
+    },
+})
+INTRO_BACKGROUND_ANCHORS.update({
+    "luyao": ("智能硬件", "产品"), "yecheng": ("古籍", "修复"), "tangli": ("户外纪录片", "现场制片"),
+    "wenxu": ("城市气候", "数据"), "hechuan": ("纪录片", "剪辑"), "peiran": ("儿童博物馆", "体验策展"),
+    "lichuan": ("精品酒店", "餐饮运营"), "qiaolan": ("舞台机械", "工程"),
+})
+INTRO_REASON_ANCHORS.update({
+    "luyao": ("感受", "认识", "改变主意", "真实"), "yecheng": ("偏好", "互相照顾", "说不", "认识"),
+    "tangli": ("一起决定", "认真", "慢一点", "关系"), "wenxu": ("诚实", "认识", "不完美", "表达"),
+    "hechuan": ("自己", "偏好", "被问", "认识"), "peiran": ("安静", "留下", "认识", "一起创造"),
+    "lichuan": ("分担", "看见", "认识", "等我"), "qiaolan": ("说清楚", "解释", "认识", "误会"),
+})
+
 CAST_FIRST_IMPRESSION_FALLBACKS: dict[str, tuple[str, str]] = {
     "shenmo": (
         "我先记住沈墨。他介绍得很简洁，听别人说话时也没有抢着接话。",
@@ -121,6 +197,16 @@ CAST_FIRST_IMPRESSION_FALLBACKS: dict[str, tuple[str, str]] = {
         "三分钟单聊时，我想问一个具体问题，看看他会不会认真回答。",
     ),
 }
+CAST_FIRST_IMPRESSION_FALLBACKS.update({
+    "luyao": ("我先记住陆遥。她把工作和来意讲得很清楚，也坦白自己并非从不犹豫。", "晚餐分工时，我想看看她会不会真的把改变主意说出来。"),
+    "yecheng": ("我对叶澄有点好奇。她很自然地照顾场面，却先说了自己也想被询问。", "之后一起做事时，我想先问她一次真正的偏好。"),
+    "tangli": ("我记住了唐梨。她说话很快，但提到别人说停时明显认真下来。", "如果有户外活动，我想看看她会怎样把选择权交回来。"),
+    "wenxu": ("我想再认识温序。她承认会边说边改，却没有用分析躲开自己的来意。", "三分钟单聊时，我想给她一个不用准备完整答案的问题。"),
+    "hechuan": ("我先记住贺川。他很会听，也主动说了自己不想只做倾听者。", "之后再聊时，我想把一个问题真正留给他回答。"),
+    "peiran": ("我对裴然有点好奇。他把客厅带热了，也坦白自己在意热闹结束以后。", "场面安静时，我想看看他会不会仍然留在对话里。"),
+    "lichuan": ("我记住了黎川。他很会组织大家，却直接说不想再一个人收尾。", "晚餐准备时，我想看看谁会主动和他分担。"),
+    "qiaolan": ("我想再认识乔岚。她话不多，却把想练习先解释一句说得很实在。", "一起做事时，我想看看她会不会在行动前先问我。"),
+})
 
 STORY_OBJECTIVES = {
     "arrival-context": "选定你想怎样进入这段七天六夜的旅程",
@@ -162,14 +248,44 @@ def _load_json(name: str) -> dict[str, Any]:
         return json.load(source)
 
 
+APPROVED_RUNTIME_MEDIA_STATUSES = {"ready", "approved-runtime"}
+
+
+def _runtime_asset_map() -> dict[str, dict[str, Any]]:
+    try:
+        package = json.loads((ROOT / "media" / "runtime-media-manifest.json").read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+    return {str(item.get("id")): item for item in package.get("assets", []) if isinstance(item, dict) and item.get("id")}
+
+
+def _asset_is_runtime_ready(asset: dict[str, Any]) -> bool:
+    return bool(asset.get("path")) and asset.get("status") in APPROVED_RUNTIME_MEDIA_STATUSES
+
+
 CARD_PACKAGE = _load_json("character_cards.v3.json")
 PLAYER_GROUPS: dict[str, list[str]] = CARD_PACKAGE["playerGroups"]
 CHARACTER_CARDS: list[dict[str, Any]] = CARD_PACKAGE["cards"]
 CHARACTER_CARD_MAP = {card["id"]: card for card in CHARACTER_CARDS}
+RUNTIME_ASSET_MAP = _runtime_asset_map()
 
 
 def _public_character(card: dict[str, Any]) -> dict[str, Any]:
     psychology, voice = card["psychology"], card["voice"]
+    card_video = str(card.get("video") or "")
+    card_media_status = str(card.get("media", {}).get("status") or "")
+    # The original eight cards predate the explicit media object; their
+    # checked-in character-specific video is the approved legacy runtime.
+    card_video_ready = bool(card_video) and (not card_media_status or card_media_status in APPROVED_RUNTIME_MEDIA_STATUSES)
+    runtime_portrait = RUNTIME_ASSET_MAP.get(f"CHAR-{card['id']}-portrait", {})
+    runtime_portrait_ready = _asset_is_runtime_ready(runtime_portrait)
+    runtime_identity_cast = runtime_portrait.get("identityCast")
+    runtime_portrait_identity_safe = bool(
+        runtime_portrait_ready
+        and isinstance(runtime_identity_cast, list)
+        and [str(character_id) for character_id in runtime_identity_cast] == [card["id"]]
+    )
+    projected_video = str(runtime_portrait.get("path")) if runtime_portrait_identity_safe else (card_video if card_video_ready else "")
     facts = card.get("sourceProfile", {}).get("facts", {})
     raw_occupation = facts.get("occupation")
     occupation = str(raw_occupation).strip() if isinstance(raw_occupation, str) else ""
@@ -180,7 +296,10 @@ def _public_character(card: dict[str, Any]) -> dict[str, Any]:
     return {
         "id": card["id"], "name": card["names"]["primary"], "mbti": card["mbti"],
         "tagline": card["tagline"], "accent": card["accent"], "portrait": card["portrait"],
-        "video": card["video"], "age": age, "occupation": occupation,
+        "video": projected_video, "age": age, "occupation": occupation,
+        "gender": card.get("identity", {}).get("gender") or "未公开",
+        "mediaStatus": "ready" if projected_video else (card.get("media", {}).get("status") or "planned"),
+        "mediaFallbackKind": "dynamic-portrait" if projected_video else card.get("media", {}).get("fallbackKind"),
         "publicFacts": {"age": age, "occupation": occupation},
         "publicMask": "、".join(psychology["publicMask"]),
         "privateFear": psychology["fears"][0], "memorySeed": card["drives"]["stakes"],
@@ -194,6 +313,117 @@ def _public_character(card: dict[str, Any]) -> dict[str, Any]:
 
 CHARACTERS = [_public_character(card) for card in CHARACTER_CARDS]
 CHARACTER_MAP = {character["id"]: character for character in CHARACTERS}
+LEGACY_CAST_IDS = tuple(card["id"] for card in CHARACTER_CARDS[:8])
+ROSTER_GENDERS = ("男性", "女性")
+MEDIA_ROTATION_ANCHORS = {
+    "M-A-chengye": "chengye", "M-B-hechuan": "hechuan",
+    "F-A-jiangmi": "jiangmi", "F-B-luyao": "luyao",
+}
+
+
+def _stable_index(seed: str, namespace: str, size: int) -> int:
+    if size <= 0:
+        return 0
+    digest = sha256(f"{seed}:{namespace}".encode("utf-8")).digest()
+    return int.from_bytes(digest[:8], "big") % size
+
+
+def select_run_cast(perspective_character_id: str, seed: str) -> list[str]:
+    """Choose one persisted eight-person season from the sixteen-card library.
+
+    The selected protagonist and their other-gender MBTI counterpart always
+    appear together.  Six more distinct MBTI types are selected with a stable
+    seed, three men and three women, yielding a balanced four/four cast.
+    """
+    if perspective_character_id not in CHARACTER_CARD_MAP:
+        raise ValueError("观察人物不存在")
+    perspective = CHARACTER_CARD_MAP[perspective_character_id]
+    same_type = [
+        card for card in CHARACTER_CARDS
+        if card["mbti"] == perspective["mbti"] and card["id"] != perspective_character_id
+        and card.get("identity", {}).get("gender") != perspective.get("identity", {}).get("gender")
+    ]
+    if not same_type:
+        raise ValueError("该 MBTI 尚未配置另一性别角色")
+    counterpart = sorted(same_type, key=lambda card: card["id"])[0]
+    other_types = sorted({card["mbti"] for card in CHARACTER_CARDS if card["mbti"] != perspective["mbti"]})
+    omitted = other_types[_stable_index(seed, "omitted-mbti", len(other_types))]
+    included_types = [mbti for mbti in other_types if mbti != omitted]
+    included_types.sort(key=lambda mbti: sha256(f"{seed}:mbti:{mbti}".encode()).hexdigest())
+    male_types = set(included_types[:3])
+    selected = [perspective_character_id, counterpart["id"]]
+    for mbti in included_types:
+        gender = "男性" if mbti in male_types else "女性"
+        options = [card for card in CHARACTER_CARDS if card["mbti"] == mbti and card.get("identity", {}).get("gender") == gender]
+        if not options:
+            raise ValueError(f"{mbti} 尚未配置{gender}角色")
+        selected.append(sorted(options, key=lambda card: card["id"])[0]["id"])
+    return selected
+
+
+MEDIA_ROTATION_SELECTION_BUCKETS: dict[str, tuple[str, ...]] = {
+    "F-A-jiangmi": ("ENFP", "ESFJ", "ISFJ", "ESTP"),
+    "F-B-luyao": ("INTJ", "INFJ", "INTP", "ISTP"),
+    "M-A-chengye": ("ESTP", "ISTP", "ESFJ", "ISFJ"),
+    "M-B-hechuan": ("ENFP", "INFJ", "INTJ", "INTP"),
+}
+
+
+def normalize_character_gender(value: Any) -> str:
+    """Normalize production-manifest gender labels to the runtime contract."""
+    normalized = str(value or "").strip().lower()
+    return {
+        "female": "女性", "woman": "女性", "f": "女性", "女性": "女性", "女": "女性",
+        "male": "男性", "man": "男性", "m": "男性", "男性": "男性", "男": "男性",
+    }.get(normalized, "")
+
+
+def media_rotation_for(
+    perspective_character_id: str,
+    seed: str,
+    event_id: str | None = None,
+) -> dict[str, Any]:
+    """Choose a same-gender reusable video scheme for one event.
+
+    ``selectionBucket`` determines the character's preferred scheme. Event
+    routing then uses a stable hash of ``playerCharacterId + eventId`` to
+    alternate between the two same-gender schemes. This keeps reloads
+    deterministic without showing one lead image for the whole run.
+    ``seed`` remains in the signature for snapshot compatibility; R6 event
+    routing deliberately does not depend on the randomly generated run id.
+    """
+    del seed
+    if perspective_character_id not in CHARACTER_MAP:
+        raise ValueError("媒体视角人物不存在")
+    character = CHARACTER_MAP[perspective_character_id]
+    gender = character["gender"]
+    mbti = character["mbti"]
+    slots = ("M-A-chengye", "M-B-hechuan") if gender == "男性" else ("F-A-jiangmi", "F-B-luyao")
+    preferred_index = next(
+        (index for index, slot_id in enumerate(slots) if mbti in MEDIA_ROTATION_SELECTION_BUCKETS[slot_id]),
+        0,
+    )
+    event_bucket = _stable_index(perspective_character_id, f"media-rotation:{event_id}", len(slots)) if event_id else 0
+    slot = slots[(preferred_index + event_bucket) % len(slots)]
+    return {
+        "slot": slot,
+        "leadGender": gender,
+        "anchorCharacterId": MEDIA_ROTATION_ANCHORS[slot],
+        "selectionBucket": list(MEDIA_ROTATION_SELECTION_BUCKETS[slot]),
+        "eventId": event_id,
+    }
+
+
+def active_cast_ids(snapshot: dict[str, Any]) -> list[str]:
+    perspective_id = str(snapshot.get("player", {}).get("perspectiveCharacterId") or "")
+    cast = snapshot.get("castIds")
+    if isinstance(cast, list):
+        normalized = [str(character_id) for character_id in cast if str(character_id) in CHARACTER_MAP]
+        if len(normalized) == 8 and len(set(normalized)) == 8 and perspective_id in normalized:
+            return normalized
+    if perspective_id in LEGACY_CAST_IDS:
+        return list(LEGACY_CAST_IDS)
+    return select_run_cast(perspective_id, str(snapshot.get("runId") or perspective_id))
 
 NODES: dict[str, dict[str, Any]] = {
     "arrival-context": {
@@ -387,28 +617,15 @@ def split_story_beats(text: str) -> list[str]:
     return beats
 
 
-def _fallback_target_ids(perspective_character_id: str) -> list[str]:
+def _fallback_target_ids(perspective_character_id: str, cast_ids: list[str] | None = None) -> list[str]:
     """Return three deterministic non-self people for the first guided exchange."""
-    cast_order = [character["id"] for character in CHARACTERS]
+    cast_order = [character_id for character_id in (cast_ids or list(LEGACY_CAST_IDS)) if character_id in CHARACTER_MAP]
+    if perspective_character_id not in cast_order:
+        cast_order = [perspective_character_id, *cast_order]
     first_four, second_four = cast_order[:4], cast_order[4:]
     preferred = second_four if perspective_character_id in first_four else first_four
     ordered = [*preferred, *(character_id for character_id in cast_order if character_id not in preferred)]
     return [character_id for character_id in ordered if character_id != perspective_character_id][:3]
-
-
-def _runtime_asset_map() -> dict[str, dict[str, Any]]:
-    try:
-        package = json.loads((ROOT / "media" / "runtime-media-manifest.json").read_text(encoding="utf-8"))
-    except (FileNotFoundError, json.JSONDecodeError):
-        return {}
-    return {str(item.get("id")): item for item in package.get("assets", []) if isinstance(item, dict) and item.get("id")}
-
-
-APPROVED_RUNTIME_MEDIA_STATUSES = {"ready", "approved-runtime"}
-
-
-def _asset_is_runtime_ready(asset: dict[str, Any]) -> bool:
-    return bool(asset.get("path")) and asset.get("status") in APPROVED_RUNTIME_MEDIA_STATUSES
 
 
 def _asset_identity_cast(asset: dict[str, Any]) -> list[str]:
@@ -430,6 +647,48 @@ def _identity_card(character_id: str) -> dict[str, Any]:
     }
 
 
+def _identity_timeline_for_asset(asset: dict[str, Any], identity_cast: list[str]) -> list[dict[str, Any]]:
+    """Return a label timeline that never names somebody outside the clip.
+
+    Reviewed composites list identities in edit order. Older manifests did not
+    include per-person timecodes, so divide those clips into equal sections and
+    show each plate for at most three seconds. This keeps the label on the face
+    it describes instead of cycling independently of the edit.
+    """
+    declared = asset.get("identityTimeline")
+    if isinstance(declared, list):
+        safe_declared: list[dict[str, Any]] = []
+        for item in declared:
+            if not isinstance(item, dict) or str(item.get("characterId") or "") not in identity_cast:
+                continue
+            try:
+                start = max(0.0, float(item.get("startSeconds", 0)))
+                end = float(item.get("endSeconds", start))
+            except (TypeError, ValueError):
+                continue
+            if end > start:
+                safe_declared.append({"characterId": str(item["characterId"]), "startSeconds": start, "endSeconds": end})
+        if safe_declared:
+            return safe_declared
+    if len(identity_cast) < 2 or asset.get("sourceType") != "local-composite":
+        return []
+    try:
+        duration = float(asset.get("duration") or 0)
+    except (TypeError, ValueError):
+        duration = 0
+    if duration <= 0:
+        return []
+    segment = duration / len(identity_cast)
+    return [
+        {
+            "characterId": character_id,
+            "startSeconds": round(index * segment, 3),
+            "endSeconds": round(min((index * segment) + 3.0, (index + 1) * segment), 3),
+        }
+        for index, character_id in enumerate(identity_cast)
+    ]
+
+
 def resolve_identity_safe_media(
     base_asset_id: str,
     perspective_character_id: str,
@@ -437,6 +696,8 @@ def resolve_identity_safe_media(
     *,
     routing_mode: str = "perspective",
     fixed_cast_ids: list[str] | None = None,
+    current_cast_ids: list[str] | None = None,
+    rotation: dict[str, Any] | None = None,
     asset_map: dict[str, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Resolve only footage whose reviewed identity cast covers the live scene.
@@ -450,13 +711,24 @@ def resolve_identity_safe_media(
     if perspective_character_id not in CHARACTER_MAP:
         raise ValueError("媒体视角人物不存在")
     asset_map = asset_map if asset_map is not None else _runtime_asset_map()
+    cast_order = [character_id for character_id in (current_cast_ids or list(CHARACTER_MAP)) if character_id in CHARACTER_MAP]
+    if perspective_character_id not in cast_order:
+        cast_order.insert(0, perspective_character_id)
+    cast_set = set(cast_order)
     participants: list[str] = []
+    participant_out_of_cast = False
     for character_id in participant_ids or []:
+        if character_id in CHARACTER_MAP and character_id not in cast_set:
+            participant_out_of_cast = True
+            continue
         if character_id in CHARACTER_MAP and character_id != perspective_character_id and character_id not in participants:
             participants.append(character_id)
-    cast_order = list(CHARACTER_MAP)
     order_index = {character_id: index for index, character_id in enumerate(cast_order)}
-    if routing_mode == "participant-pov" and participants:
+    if participant_out_of_cast:
+        routing_mode = "perspective"
+        required_cast = [perspective_character_id]
+        canonical_asset_id = f"{base_asset_id}--p-{perspective_character_id}"
+    elif routing_mode == "participant-pov" and participants:
         required_cast = [participants[0]]
         canonical_asset_id = f"{base_asset_id}--npc-{participants[0]}"
     elif routing_mode == "unordered-pair" and participants:
@@ -464,9 +736,15 @@ def resolve_identity_safe_media(
         required_cast = pair
         canonical_asset_id = f"{base_asset_id}--pair-{'-'.join(pair)}"
     elif routing_mode == "fixed-cast":
-        fixed = [character_id for character_id in fixed_cast_ids or participants if character_id in CHARACTER_MAP]
-        required_cast = list(dict.fromkeys(fixed)) or [perspective_character_id]
-        canonical_asset_id = f"{base_asset_id}--fixed-{'-'.join(required_cast)}"
+        requested_fixed = [character_id for character_id in fixed_cast_ids or participants if character_id in CHARACTER_MAP]
+        fixed = [character_id for character_id in requested_fixed if character_id in cast_set]
+        if len(fixed) != len(requested_fixed):
+            routing_mode = "perspective"
+            required_cast = [perspective_character_id]
+            canonical_asset_id = f"{base_asset_id}--p-{perspective_character_id}"
+        else:
+            required_cast = list(dict.fromkeys(fixed)) or [perspective_character_id]
+            canonical_asset_id = f"{base_asset_id}--fixed-{'-'.join(required_cast)}"
     elif routing_mode == "current-eight":
         required_cast = cast_order
         canonical_asset_id = f"{base_asset_id}--group-current-eight"
@@ -493,10 +771,52 @@ def resolve_identity_safe_media(
             selected_asset_id, selected_asset = candidate_id, candidate
             break
 
+    # The formal version may reuse one of four approved reenactment sets (two
+    # per protagonist gender) instead of generating every event for all 16
+    # identities. Exact-cast footage above always wins. A rotation clip is
+    # accepted only when every visible person belongs to this season's eight-
+    # person cast; otherwise it would introduce a stranger under a real name.
+    rotation_asset_id = ""
+    selected_rotation_slot = ""
+    selected_rotation_cast: list[str] = []
+    player_gender = CHARACTER_MAP[perspective_character_id]["gender"]
+    allowed_rotation_slots = ("M-A-chengye", "M-B-hechuan") if player_gender == "男性" else ("F-A-jiangmi", "F-B-luyao")
+    rotation_slot = str((rotation or {}).get("slot") or "")
+    rotation_anchor = str((rotation or {}).get("anchorCharacterId") or "")
+    rotation_gender = normalize_character_gender((rotation or {}).get("leadGender"))
+    rotation_request_is_valid = bool(
+        rotation
+        and rotation_gender == player_gender
+        and rotation_slot in allowed_rotation_slots
+        and MEDIA_ROTATION_ANCHORS.get(rotation_slot) == rotation_anchor
+        and rotation_anchor in CHARACTER_MAP
+        and CHARACTER_MAP[rotation_anchor]["gender"] == player_gender
+    )
+    if not selected_asset_id and rotation_request_is_valid:
+        ordered_slots = [rotation_slot, *(slot for slot in allowed_rotation_slots if slot != rotation_slot)]
+        for candidate_slot in ordered_slots:
+            candidate_anchor = MEDIA_ROTATION_ANCHORS[candidate_slot]
+            if candidate_anchor not in cast_set:
+                continue
+            proposed_rotation_id = f"{base_asset_id}--rotation-{candidate_slot}"
+            candidate = asset_map.get(proposed_rotation_id, {})
+            declared_gender = normalize_character_gender(candidate.get("leadGender"))
+            if not _asset_is_runtime_ready(candidate) or declared_gender != player_gender:
+                continue
+            candidate_cast = _asset_identity_cast(candidate) or [candidate_anchor]
+            if candidate_anchor not in candidate_cast or not set(candidate_cast).issubset(cast_set):
+                continue
+            selected_asset_id, selected_asset = proposed_rotation_id, candidate
+            rotation_asset_id = proposed_rotation_id
+            selected_rotation_slot = candidate_slot
+            selected_rotation_cast = candidate_cast
+            break
+
     planned_asset_id = canonical_asset_id
     if selected_asset_id:
         identity_cast = _asset_identity_cast(selected_asset)
-        identity_timeline = selected_asset.get("identityTimeline") if isinstance(selected_asset.get("identityTimeline"), list) else []
+        visible_cast = selected_rotation_cast if rotation_asset_id else (identity_cast or required_cast)
+        identity_timeline = _identity_timeline_for_asset(selected_asset, visible_cast)
         return {
             "assetId": selected_asset_id,
             "baseAssetId": base_asset_id,
@@ -507,21 +827,28 @@ def resolve_identity_safe_media(
             "plannedPoster": f"/media/posters/{planned_asset_id}.jpg",
             "available": True,
             "status": "ready",
-            "selectionReason": "reviewed-identity-cast",
-            "routingMode": routing_mode,
+            "selectionReason": "approved-gender-rotation" if rotation_asset_id else "reviewed-identity-cast",
+            "routingMode": "gender-rotation" if rotation_asset_id else routing_mode,
+            "rotationSlot": selected_rotation_slot if rotation_asset_id else None,
+            "rotationSelectionBucket": list(MEDIA_ROTATION_SELECTION_BUCKETS[selected_rotation_slot]) if rotation_asset_id else None,
+            "rotationEventId": rotation.get("eventId") if rotation_asset_id and rotation else None,
+            "leadGender": player_gender,
             "requiredIdentityCast": required_cast,
-            "identityCast": identity_cast,
-            "identityCards": [_identity_card(character_id) for character_id in identity_cast],
+            "identityCast": visible_cast,
+            "identityCards": [_identity_card(character_id) for character_id in visible_cast if character_id in CHARACTER_MAP],
             "identityTimeline": deepcopy(identity_timeline),
             "fallback": {
-                "kind": "dynamic-portrait",
+                "kind": "dynamic-portrait" if CHARACTER_MAP[perspective_character_id]["video"] else "static-character-placeholder",
                 "characterId": perspective_character_id,
                 "src": CHARACTER_MAP[perspective_character_id]["video"],
                 "poster": CHARACTER_MAP[perspective_character_id]["portrait"],
             },
         }
 
-    fallback_character_id = required_cast[0] if routing_mode in {"participant-pov", "fixed-cast"} and required_cast else perspective_character_id
+    # A missing event or participant clip always falls back to the selected
+    # protagonist.  Showing a different NPC portrait can silently cross the
+    # player's selected gender and falsely imply that person is the viewpoint.
+    fallback_character_id = perspective_character_id
     portrait_asset_id = f"CHAR-{fallback_character_id}-portrait"
     portrait_asset = asset_map.get(portrait_asset_id, {})
     portrait_src = str(portrait_asset.get("path") or CHARACTER_MAP[fallback_character_id]["video"])
@@ -538,12 +865,18 @@ def resolve_identity_safe_media(
         "status": "identity-safe-fallback",
         "selectionReason": "exact-event-variant-awaiting-review",
         "routingMode": routing_mode,
+        "rotationSlot": rotation_slot if rotation_request_is_valid else None,
+        "rotationSelectionBucket": rotation.get("selectionBucket") if rotation_request_is_valid and rotation else None,
+        "rotationEventId": rotation.get("eventId") if rotation_request_is_valid and rotation else None,
+        "leadGender": player_gender,
+        "rotationPlannedAssetId": f"{base_asset_id}--rotation-{rotation_slot}" if rotation_request_is_valid else None,
+        "audioAvailable": False,
         "requiredIdentityCast": required_cast,
         "identityCast": [fallback_character_id],
         "identityCards": [_identity_card(fallback_character_id)],
         "identityTimeline": [{"characterId": fallback_character_id, "startSeconds": 0, "endSeconds": 3}],
         "fallback": {
-            "kind": "dynamic-portrait",
+            "kind": "dynamic-portrait" if portrait_src else "static-character-placeholder",
             "characterId": fallback_character_id,
             "src": portrait_src,
             "poster": portrait_poster,
@@ -558,6 +891,7 @@ def day1_media_context(state: dict[str, Any], node: dict[str, Any] | None = None
     contract = DAY1_MEDIA_CONTRACT[node_id]
     guided_id = state.get("guidedTargetCharacterId")
     perspective_id = state["player"]["perspectiveCharacterId"]
+    cast_ids = active_cast_ids(state)
     participant_ids: list[str] = []
     if node_id in {"guided-chat", "team-up"} and guided_id:
         participant_ids.append(guided_id)
@@ -575,6 +909,12 @@ def day1_media_context(state: dict[str, Any], node: dict[str, Any] | None = None
         perspective_id,
         participant_ids,
         routing_mode=routing_mode,
+        current_cast_ids=cast_ids,
+        rotation=media_rotation_for(
+            perspective_id,
+            str(state.get("runId") or perspective_id),
+            contract["assetId"],
+        ),
     )
     return {
         "eventId": contract["eventId"],
@@ -585,7 +925,7 @@ def day1_media_context(state: dict[str, Any], node: dict[str, Any] | None = None
     }
 
 
-def build_fallback_script_flavor(perspective_character_id: str) -> dict[str, Any]:
+def build_fallback_script_flavor(perspective_character_id: str, cast_ids: list[str] | None = None) -> dict[str, Any]:
     """Natural authored fallback; IDs and patches always come from ``NODES``."""
     nodes: dict[str, Any] = {}
     for node_id, blueprint in NODES.items():
@@ -599,7 +939,7 @@ def build_fallback_script_flavor(perspective_character_id: str) -> dict[str, Any
                 for choice in blueprint.get("choices", [])
             ],
         }
-    targets = _fallback_target_ids(perspective_character_id)
+    targets = _fallback_target_ids(perspective_character_id, cast_ids)
     icebreaker_copy = [
         (f"选客厅卡，去问{CHARACTER_MAP[targets[0]]['name']}刚才没展开的参加原因", "姓名写在卡上；从自我介绍里没说完的一句接着聊"),
         (f"选露台卡，和{CHARACTER_MAP[targets[1]]['name']}交换这七天最想体验的事", "问题容易回答，也能听见对方真实的期待"),
@@ -627,22 +967,179 @@ def build_fallback_script_flavor(perspective_character_id: str) -> dict[str, Any
 def create_snapshot(user_mbti: str = "INFP", perspective_character_id: str | None = None) -> dict[str, Any]:
     if perspective_character_id not in CHARACTER_MAP:
         perspective_character_id = CHARACTER_CARDS[0]["id"]
-    relationships = {character["id"]: _empty_axes() for character in CHARACTERS}
+    run_id = str(uuid4())
+    cast_ids = select_run_cast(perspective_character_id, run_id)
+    relationships = {character_id: _empty_axes() for character_id in cast_ids}
     flags = {key: 0 for key in ("heat", "clarity", "publicImpression", "courage", "priorityChoice", "observation", "taskFocus", "relationshipFocus", "reciprocity", "eventLinked", "acceptedEvent")}
-    return {
-        "runId": str(uuid4()), "contentVersion": CONTENT_VERSION, "revision": 0,
-        "player": {"mbti": user_mbti, "group": player_group(user_mbti), "displayName": CHARACTER_MAP[perspective_character_id]["name"], "perspectiveCharacterId": perspective_character_id},
+    snapshot = {
+        "runId": run_id, "contentVersion": CONTENT_VERSION, "revision": 0,
+        "player": {"mbti": user_mbti, "group": player_group(user_mbti), "gender": CHARACTER_MAP[perspective_character_id]["gender"], "displayName": CHARACTER_MAP[perspective_character_id]["name"], "perspectiveCharacterId": perspective_character_id},
+        "castIds": cast_ids, "mediaRotation": media_rotation_for(perspective_character_id, run_id),
         "nodeId": "arrival-context", "flags": flags, "relationships": relationships,
         "affection": {cid: 0 for cid in relationships}, "trust": {cid: 0 for cid in relationships},
         "attitudes": {cid: "curious" for cid in relationships}, "beliefs": [],
         "echoMemories": [], "eventLedger": [], "choiceHistory": [],
         "focusCharacterId": None, "activeEventId": None, "letterRecipientId": None,
         "guidedTargetCharacterId": None, "pendingInteraction": None, "agentConversations": {},
+        "conversationHistory": [], "heartMailbox": {"sent": [], "received": []},
         "firstImpressionSeed": None,
         "storyArc": {"phase": "early", "beatCount": 0, "activeMissionId": None, "tension": 0, "reciprocity": 0, "uncertainty": 0},
         "storyEventLedger": [], "storyMission": None, "storyCooldowns": {}, "castTags": [],
-        "scriptFlavor": build_fallback_script_flavor(perspective_character_id),
+        "scriptFlavor": build_fallback_script_flavor(perspective_character_id, cast_ids),
         "cinematicReceipt": None, "createdAt": utc_now(), "updatedAt": utc_now()
+    }
+    _refresh_scene_presence(snapshot)
+    return snapshot
+
+
+def _scene_context_for_node(node_id: str) -> dict[str, Any]:
+    narrative_time, location_id = NODE_SCENE_CONTEXT.get(node_id, ("DAY 1", "living-room"))
+    return {
+        "version": CHAT_CONTEXT_VERSION,
+        "time": narrative_time,
+        "locationId": location_id,
+        "locationName": CHAT_LOCATIONS[location_id]["name"],
+    }
+
+
+def _refresh_scene_presence(state: dict[str, Any]) -> None:
+    """Keep a deterministic, public occupancy map for contextual chat discovery."""
+    scene = _scene_context_for_node(str(state.get("nodeId") or "arrival-context"))
+    perspective_id = state.get("player", {}).get("perspectiveCharacterId")
+    cast_ids = active_cast_ids(state)
+    node_id = str(state.get("nodeId") or "arrival-context")
+    presence: dict[str, str] = {}
+    if node_id in {"arrival-context", "villa-arrival"}:
+        presence = {character_id: "hotel-entrance" for character_id in cast_ids}
+    elif node_id in {"introductions", "cast-first-impressions"}:
+        presence = {character_id: "living-room" for character_id in cast_ids}
+    elif node_id == "icebreaker-choice":
+        rooms = ("living-room", "terrace", "luggage-area")
+        presence = {character_id: rooms[index % len(rooms)] for index, character_id in enumerate(cast_ids)}
+        if perspective_id:
+            presence[perspective_id] = "living-room"
+    elif node_id == "guided-chat":
+        presence = {character_id: "living-room" for character_id in cast_ids}
+        target_id = state.get("guidedTargetCharacterId")
+        if target_id in cast_ids:
+            presence[target_id] = "living-room"
+    elif node_id == "team-up":
+        rooms = ("kitchen", "dining-room")
+        presence = {character_id: rooms[index % 2] for index, character_id in enumerate(cast_ids)}
+        for character_id in (perspective_id, state.get("guidedTargetCharacterId")):
+            if character_id in cast_ids:
+                presence[character_id] = "kitchen"
+    elif node_id == "anonymous-letter":
+        presence = {character_id: "bedroom" for character_id in cast_ids}
+    else:
+        presence = {character_id: "dining-room" for character_id in cast_ids}
+    state["sceneContext"] = scene
+    state["characterPresence"] = presence
+
+
+def normalize_conversation_context(
+    snapshot: dict[str, Any], supplied: dict[str, Any] | None = None,
+    participant_ids: list[str] | None = None, channel: str = "1v1",
+) -> dict[str, Any]:
+    """Normalize optional new chat context while keeping old clients valid."""
+    state = migrate_snapshot(snapshot); assert state is not None
+    supplied = supplied if isinstance(supplied, dict) else {}
+    default_scene = state.get("sceneContext") or _scene_context_for_node(state["nodeId"])
+    location_id = str(supplied.get("locationId") or default_scene["locationId"])
+    if location_id not in CHAT_LOCATIONS:
+        raise ValueError("请选择小屋内有效的聊天地点。")
+    normalized_channel = str(supplied.get("channel") or channel or "1v1").lower()
+    if normalized_channel not in {"1v1", "group"}:
+        raise ValueError("聊天频道只能是 1v1 或 group。")
+    if normalized_channel == "group" and not CHAT_LOCATIONS[location_id]["supportsGroup"]:
+        raise ValueError(f"{CHAT_LOCATIONS[location_id]['name']}不开放群聊，请换到公共区域。")
+    unique_participants: list[str] = []
+    for character_id in participant_ids or supplied.get("participantIds") or []:
+        character_id = str(character_id)
+        if character_id in active_cast_ids(state) and character_id not in unique_participants:
+            unique_participants.append(character_id)
+    perspective_id = state["player"]["perspectiveCharacterId"]
+    if perspective_id not in unique_participants:
+        unique_participants.insert(0, perspective_id)
+    if normalized_channel == "1v1" and len(unique_participants) != 2:
+        raise ValueError("1 对 1 聊天必须包含主角和一位嘉宾。")
+    if normalized_channel == "group" and not 3 <= len(unique_participants) <= 5:
+        raise ValueError("群聊必须包含主角和 2-4 位在场嘉宾。")
+    requested_conversation_id = str(supplied.get("conversationId") or "").strip()
+    existing_context = next((
+        item for item in state.get("conversationHistory", [])
+        if requested_conversation_id and item.get("conversationId") == requested_conversation_id
+    ), None)
+    if existing_context is not None:
+        same_participants = set(existing_context.get("participantIds", [])) == set(unique_participants)
+        if (
+            existing_context.get("channel") != normalized_channel
+            or existing_context.get("locationId") != location_id
+            or not same_participants
+        ):
+            raise ValueError("这段对话的地点、频道或参与者已经变化，请新建一次交流。")
+    return {
+        "version": CHAT_CONTEXT_VERSION,
+        "conversationId": requested_conversation_id or str(uuid4()),
+        # Narrative time is server-owned. A client may choose a public venue or
+        # resume a conversation id, but cannot invent a different day/time.
+        "time": str(default_scene["time"])[:40],
+        "locationId": location_id,
+        "locationName": CHAT_LOCATIONS[location_id]["name"],
+        "participantIds": unique_participants,
+        "participantNames": [CHARACTER_MAP[character_id]["name"] for character_id in unique_participants],
+        "channel": normalized_channel,
+    }
+
+
+def available_chat_contexts(snapshot: dict[str, Any]) -> dict[str, Any]:
+    state = migrate_snapshot(snapshot); assert state is not None
+    perspective_id = state["player"]["perspectiveCharacterId"]
+    presence = state.get("characterPresence") or {}
+    venues = []
+    available_group_chats = []
+    for location_id, location in CHAT_LOCATIONS.items():
+        present_ids = [character_id for character_id in active_cast_ids(state) if presence.get(character_id) == location_id]
+        npc_ids = [character_id for character_id in present_ids if character_id != perspective_id]
+        if not npc_ids:
+            continue
+        venue = {
+            "locationId": location_id, "locationName": location["name"],
+            "time": (state.get("sceneContext") or {}).get("time"),
+            "supportsGroup": bool(location["supportsGroup"] and len(npc_ids) >= 2),
+            "participantIds": [perspective_id, *npc_ids],
+            "characters": [
+                {
+                    "id": character_id, "name": CHARACTER_MAP[character_id]["name"],
+                    "mbti": CHARACTER_MAP[character_id]["mbti"],
+                    "gender": CHARACTER_MAP[character_id]["gender"],
+                    "occupation": CHARACTER_MAP[character_id].get("occupation"),
+                    "portrait": CHARACTER_MAP[character_id].get("portrait"),
+                }
+                for character_id in npc_ids
+            ],
+        }
+        venues.append(venue)
+        if venue["supportsGroup"]:
+            group_ids = [perspective_id, *npc_ids[:4]]
+            available_group_chats.append({
+                "id": f"group-{location_id}", "channel": "group",
+                "locationId": location_id, "locationName": location["name"],
+                "time": venue["time"], "participantIds": group_ids,
+                "participantNames": [CHARACTER_MAP[character_id]["name"] for character_id in group_ids],
+            })
+    recent_conversations = []
+    for conversation in state.get("conversationHistory", [])[-12:]:
+        recent_conversations.append({
+            key: deepcopy(conversation.get(key)) for key in (
+                "conversationId", "time", "locationId", "locationName", "channel",
+                "participantIds", "participantNames", "summary", "turnCount", "updatedAt",
+            )
+        })
+    return {
+        "scene": deepcopy(state.get("sceneContext")), "venues": venues,
+        "availableGroupChats": available_group_chats,
+        "recentConversations": recent_conversations,
     }
 
 
@@ -653,9 +1150,19 @@ def migrate_snapshot(snapshot: dict[str, Any] | None) -> dict[str, Any] | None:
     state["nodeId"] = LEGACY_NODE_MAP.get(state.get("nodeId"), state.get("nodeId", "arrival-context"))
     if state["nodeId"] not in NODES:
         state["nodeId"] = "arrival-context"
+    state.setdefault("player", {}).setdefault("perspectiveCharacterId", CHARACTER_CARDS[0]["id"])
+    perspective_id = state["player"]["perspectiveCharacterId"]
+    if perspective_id not in CHARACTER_MAP:
+        perspective_id = CHARACTER_CARDS[0]["id"]
+        state["player"]["perspectiveCharacterId"] = perspective_id
+    cast_ids = active_cast_ids(state)
+    state["castIds"] = cast_ids
+    # Store the character's preferred same-gender bucket. The concrete slot is
+    # selected again for every event by ``day1_media_context``.
+    state["mediaRotation"] = media_rotation_for(perspective_id, str(state.get("runId") or perspective_id))
     state.setdefault("relationships", {})
-    for character in CHARACTERS:
-        cid = character["id"]
+    state["relationships"] = {cid: state["relationships"].get(cid, _empty_axes()) for cid in cast_ids}
+    for cid in cast_ids:
         state["relationships"].setdefault(cid, _empty_axes())
         for axis in RELATIONSHIP_AXES:
             state["relationships"][cid].setdefault(axis, 0)
@@ -663,7 +1170,8 @@ def migrate_snapshot(snapshot: dict[str, Any] | None) -> dict[str, Any] | None:
         state["relationships"][cid]["trust"] = int(state.get("trust", {}).get(cid, state["relationships"][cid]["trust"]))
     state["affection"] = {cid: axes["affection"] for cid, axes in state["relationships"].items()}
     state["trust"] = {cid: axes["trust"] for cid, axes in state["relationships"].items()}
-    state.setdefault("attitudes", {character["id"]: "curious" for character in CHARACTERS})
+    old_attitudes = state.get("attitudes") if isinstance(state.get("attitudes"), dict) else {}
+    state["attitudes"] = {character_id: old_attitudes.get(character_id, "curious") for character_id in cast_ids}
     state.setdefault("beliefs", []); state.setdefault("eventLedger", []); state.setdefault("activeEventId", None)
     default_phase = {"arrival-context": "early", "villa-arrival": "early", "introductions": "early", "cast-first-impressions": "early", "icebreaker-choice": "early", "guided-chat": "early", "team-up": "middle", "anonymous-letter": "middle", "callback": "late"}.get(state.get("nodeId"), "early")
     story_arc = state.setdefault("storyArc", {})
@@ -671,23 +1179,38 @@ def migrate_snapshot(snapshot: dict[str, Any] | None) -> dict[str, Any] | None:
     for axis in ("tension", "reciprocity", "uncertainty"): story_arc.setdefault(axis, 0)
     state.setdefault("storyEventLedger", []); state.setdefault("storyMission", None); state.setdefault("storyCooldowns", {}); state.setdefault("castTags", [])
     state.setdefault("flags", {})
-    defaults = create_snapshot(state.get("player", {}).get("mbti", "INFP"))
-    for key in defaults["flags"]:
+    for key in ("heat", "clarity", "publicImpression", "courage", "priorityChoice", "observation", "taskFocus", "relationshipFocus", "reciprocity", "eventLinked", "acceptedEvent"):
         state["flags"].setdefault(key, 0)
-    state.setdefault("player", {}).setdefault("group", player_group(state.get("player", {}).get("mbti", "INFP")))
-    state["player"].setdefault("perspectiveCharacterId", CHARACTER_CARDS[0]["id"])
-    perspective_id = state["player"]["perspectiveCharacterId"]
-    if perspective_id not in CHARACTER_MAP:
-        perspective_id = CHARACTER_CARDS[0]["id"]
-        state["player"]["perspectiveCharacterId"] = perspective_id
+    state["player"].setdefault("group", player_group(state.get("player", {}).get("mbti", "INFP")))
+    state["player"]["gender"] = CHARACTER_MAP[perspective_id]["gender"]
     state["player"]["displayName"] = CHARACTER_MAP[perspective_id]["name"]
     state.setdefault("guidedTargetCharacterId", None)
     state.setdefault("pendingInteraction", None)
     state.setdefault("agentConversations", {})
+    state.setdefault("conversationHistory", [])
+    if not isinstance(state["conversationHistory"], list):
+        state["conversationHistory"] = []
+    state.setdefault("heartMailbox", {"sent": [], "received": []})
+    if not isinstance(state["heartMailbox"], dict):
+        state["heartMailbox"] = {"sent": [], "received": []}
+    state["heartMailbox"].setdefault("sent", [])
+    state["heartMailbox"].setdefault("received", [])
+    for mailbox_key in ("sent", "received"):
+        messages = state["heartMailbox"].get(mailbox_key)
+        if not isinstance(messages, list):
+            state["heartMailbox"][mailbox_key] = []
+            continue
+        for message in messages:
+            if isinstance(message, dict):
+                message.setdefault("body", str(message.get("text") or ""))
     state.setdefault("firstImpressionSeed", None)
-    if state["nodeId"] == "guided-chat" and state.get("guidedTargetCharacterId") not in CHARACTER_MAP:
+    scene = state.get("sceneContext") if isinstance(state.get("sceneContext"), dict) else {}
+    presence = state.get("characterPresence") if isinstance(state.get("characterPresence"), dict) else {}
+    if scene.get("locationId") not in CHAT_LOCATIONS or set(presence) != set(cast_ids):
+        _refresh_scene_presence(state)
+    if state["nodeId"] == "guided-chat" and state.get("guidedTargetCharacterId") not in cast_ids:
         focus_id = state.get("focusCharacterId")
-        target_id = focus_id if focus_id in CHARACTER_MAP and focus_id != perspective_id else _fallback_target_ids(perspective_id)[0]
+        target_id = focus_id if focus_id in cast_ids and focus_id != perspective_id else _fallback_target_ids(perspective_id, cast_ids)[0]
         state["guidedTargetCharacterId"] = target_id
         completed = any(item.get("characterId") == target_id for item in state.get("echoMemories", []))
         state["pendingInteraction"] = {
@@ -697,9 +1220,9 @@ def migrate_snapshot(snapshot: dict[str, Any] | None) -> dict[str, Any] | None:
         }
     flavor = state.get("scriptFlavor")
     if not isinstance(flavor, dict) or flavor.get("perspectiveCharacterId") != perspective_id:
-        state["scriptFlavor"] = build_fallback_script_flavor(perspective_id)
+        state["scriptFlavor"] = build_fallback_script_flavor(perspective_id, cast_ids)
     else:
-        fallback = build_fallback_script_flavor(perspective_id)
+        fallback = build_fallback_script_flavor(perspective_id, cast_ids)
         flavor.setdefault("schemaVersion", 1); flavor.setdefault("source", "fallback"); flavor.setdefault("nodes", {})
         for node_id, node_flavor in fallback["nodes"].items():
             flavor["nodes"].setdefault(node_id, node_flavor)
@@ -714,7 +1237,7 @@ def _flavored_choice(state: dict[str, Any], node_id: str, choice_id: str) -> dic
 
 def _letter_recipient_ids(state: dict[str, Any]) -> list[str]:
     perspective_id = state["player"]["perspectiveCharacterId"]
-    eligible = [character_id for character_id in CHARACTER_MAP if character_id != perspective_id]
+    eligible = [character_id for character_id in active_cast_ids(state) if character_id != perspective_id]
     guided_id = state.get("guidedTargetCharacterId")
     ranked = sorted(
         eligible,
@@ -728,7 +1251,66 @@ def _letter_recipient_ids(state: dict[str, Any]) -> list[str]:
     return ranked[:3]
 
 
-def apply_choice(snapshot: dict[str, Any], choice_id: str, character_id: str | None = None) -> tuple[dict[str, Any], dict[str, Any]]:
+def heart_message_suggestions(state: dict[str, Any], character_id: str) -> list[dict[str, str]]:
+    character = CHARACTER_MAP[character_id]
+    memories = [item for item in state.get("echoMemories", []) if item.get("characterId") == character_id]
+    detail = str((memories[-1].get("summary") if memories else "今天和你说话的那一刻") or "今天和你说话的那一刻")[:30]
+    return [
+        {"id": "warm-specific", "text": f"今天和你聊到“{detail}”，我还想继续听你说下去。"},
+        {"id": "light-invite", "text": f"和你相处比想象中轻松。明天见到{character['name']}，我想先说声早。"},
+        {"id": "honest-short", "text": "今天有一个瞬间，我确实想到了你。晚安。"},
+    ]
+
+
+def _resolve_heart_message_text(
+    state: dict[str, Any], character_id: str, custom_text: str | None, suggestion_id: str | None,
+) -> tuple[str, str]:
+    custom = str(custom_text or "").strip()
+    if custom:
+        if not 2 <= len(custom) <= 100:
+            raise ValueError("心动短信请输入 2-100 个字。")
+        if any(term in custom for term in ("DeepSeek", "Agent", "关系数值", "触发事件")):
+            raise ValueError("心动短信不能包含后台状态。")
+        return custom, "custom"
+    suggestions = heart_message_suggestions(state, character_id)
+    chosen = next((item for item in suggestions if item["id"] == suggestion_id), None)
+    if suggestion_id and chosen is None:
+        raise ValueError("这条心动短信建议已经更新，请重新选择。")
+    chosen = chosen or suggestions[0]
+    return chosen["text"], f"suggestion:{chosen['id']}"
+
+
+def _incoming_heart_messages(state: dict[str, Any]) -> list[dict[str, Any]]:
+    guided_id = state.get("guidedTargetCharacterId") or state.get("focusCharacterId")
+    memories = [item for item in state.get("echoMemories", []) if item.get("characterId") == guided_id]
+    if memories:
+        remembered = str(memories[-1].get("summary") or "今天聊过的小事").strip()[:28]
+        text = f"你今天说到“{remembered}”时，我很想再听你讲一点。明天见。"
+    else:
+        text = "今天第一次见面有点匆忙，但我记住了你认真听别人说话的样子。明天见。"
+    return [{
+        "id": str(uuid4()), "text": text, "body": text,
+        "senderLabel": "匿名嘉宾", "isAnonymous": True,
+        "channel": "heart-message", "receivedAt": utc_now(), "day": 1,
+    }]
+
+
+def _resolve_choice_custom_text(custom_text: str | None) -> str | None:
+    """Keep free-form player expression as quoted evidence, never as a state patch."""
+    text = str(custom_text or "").strip()
+    if not text:
+        return None
+    if not 2 <= len(text) <= 160:
+        raise ValueError("自定义表达请输入 2-160 个字。")
+    if any(term in text for term in ("DeepSeek", "Agent", "关系数值", "状态补丁", "触发事件", "系统提示词")):
+        raise ValueError("自定义表达不能包含后台状态。")
+    return text
+
+
+def apply_choice(
+    snapshot: dict[str, Any], choice_id: str, character_id: str | None = None,
+    custom_text: str | None = None, suggestion_id: str | None = None,
+) -> tuple[dict[str, Any], dict[str, Any]]:
     state = migrate_snapshot(snapshot); assert state is not None
     node = NODES[state["nodeId"]]
     selected_target_id: str | None = None
@@ -744,12 +1326,30 @@ def apply_choice(snapshot: dict[str, Any], choice_id: str, character_id: str | N
             raise ValueError("不能把心动短信发给自己。")
         if character_id not in _letter_recipient_ids(state):
             raise ValueError("请选择本轮给出的三位收信人之一。")
+        if choice_id and choice_id != f"letter-{character_id}":
+            raise ValueError("收信人与当前选择不一致，请重新确认。")
         state["letterRecipientId"] = character_id; state["focusCharacterId"] = character_id
-        patch: dict[str, Any] = {"letterRecipientId": character_id}; next_node = "callback"; choice_id = f"letter-{character_id}"
+        message_text, message_source = _resolve_heart_message_text(state, character_id, custom_text, suggestion_id)
+        sent_message = {
+            "id": str(uuid4()), "recipientCharacterId": character_id,
+            "recipientName": CHARACTER_MAP[character_id]["name"],
+            "recipientMbti": CHARACTER_MAP[character_id]["mbti"],
+            "text": message_text, "body": message_text,
+            "source": message_source, "isAnonymous": True,
+            "channel": "heart-message", "sentAt": utc_now(), "day": 1,
+        }
+        state["heartMailbox"]["sent"].append(sent_message)
+        if not state["heartMailbox"]["received"]:
+            state["heartMailbox"]["received"] = _incoming_heart_messages(state)
+        patch: dict[str, Any] = {
+            "letterRecipientId": character_id, "heartMailbox.sentMessageId": sent_message["id"],
+        }
+        next_node = "callback"; choice_id = f"letter-{character_id}"
     else:
         choice = next((item for item in node["choices"] if item["id"] == choice_id), None)
         if not choice:
             raise ValueError("这个选择已不在当前窗口。")
+        player_expression = _resolve_choice_custom_text(custom_text)
         patch = choice.get("patch", {}); next_node = choice["next"]
         for path, value in patch.items():
             if path.startswith("flags."):
@@ -757,15 +1357,18 @@ def apply_choice(snapshot: dict[str, Any], choice_id: str, character_id: str | N
         if state["nodeId"] == "cast-first-impressions":
             flavored = _flavored_choice(state, "cast-first-impressions", choice_id) or {}
             selected_target_id = flavored.get("targetCharacterId")
-            if selected_target_id not in CHARACTER_MAP or selected_target_id == state["player"]["perspectiveCharacterId"]:
-                selected_target_id = _fallback_target_ids(state["player"]["perspectiveCharacterId"])[0]
-            impression_copy = str(flavored.get("label") or CAST_FIRST_IMPRESSION_FALLBACKS[selected_target_id][0]).strip()
+            if selected_target_id not in active_cast_ids(state) or selected_target_id == state["player"]["perspectiveCharacterId"]:
+                selected_target_id = _fallback_target_ids(state["player"]["perspectiveCharacterId"], active_cast_ids(state))[0]
+            impression_copy = player_expression or str(
+                flavored.get("label") or CAST_FIRST_IMPRESSION_FALLBACKS[selected_target_id][0]
+            ).strip()
             seed = {
                 "choiceId": choice_id,
                 "effectIntentId": choice["intentId"],
                 "kind": choice["impressionKind"],
                 "characterId": selected_target_id,
                 "summary": impression_copy[:120],
+                "source": "custom" if player_expression else "choice",
                 "plannedCallbackNodeIds": ["team-up", "anonymous-letter", "callback"],
                 "status": "seeded",
                 "createdAt": utc_now(),
@@ -776,8 +1379,8 @@ def apply_choice(snapshot: dict[str, Any], choice_id: str, character_id: str | N
         if state["nodeId"] == "icebreaker-choice":
             flavored = _flavored_choice(state, "icebreaker-choice", choice_id) or {}
             target_id = flavored.get("targetCharacterId")
-            if target_id not in CHARACTER_MAP or target_id == state["player"]["perspectiveCharacterId"]:
-                target_id = _fallback_target_ids(state["player"]["perspectiveCharacterId"])[0]
+            if target_id not in active_cast_ids(state) or target_id == state["player"]["perspectiveCharacterId"]:
+                target_id = _fallback_target_ids(state["player"]["perspectiveCharacterId"], active_cast_ids(state))[0]
             state["guidedTargetCharacterId"] = target_id
             state["focusCharacterId"] = target_id
             state["pendingInteraction"] = {
@@ -798,7 +1401,16 @@ def apply_choice(snapshot: dict[str, Any], choice_id: str, character_id: str | N
         "targetCharacterId": selected_target_id or character_id,
         "committedAt": utc_now(),
     }
+    if node.get("characterChoice"):
+        receipt["heartMessage"] = deepcopy(state["heartMailbox"]["sent"][-1])
+    elif player_expression is not None:
+        # The route, EffectIntent and patch still come exclusively from the
+        # authored choice. Free input is persisted only as the protagonist's
+        # quoted expression so the next surface rewrite can acknowledge it.
+        receipt["customText"] = player_expression
+        receipt["playerExpression"] = {"mode": "custom", "text": player_expression}
     state["choiceHistory"].append(receipt); state["nodeId"] = next_node
+    _refresh_scene_presence(state)
     state["storyArc"]["phase"] = {"arrival-context": "early", "villa-arrival": "early", "introductions": "early", "cast-first-impressions": "early", "icebreaker-choice": "early", "guided-chat": "early", "team-up": "middle", "anonymous-letter": "middle", "callback": "late"}.get(next_node, state["storyArc"]["phase"])
     state["revision"] += 1; state["updatedAt"] = utc_now()
     next_media = day1_media_context(state)
@@ -832,8 +1444,20 @@ def _fallback_typed_suggestions(
         "jiangmi": ("你刚才那句话有个画面——如果把它录成声音，最先听见的会是什么？", f"{target_name}，走，一起去厨房准备晚餐吧；你挑一件想做的，我跟上。", "安静下来以后，你最希望身边的人做什么？"),
         "sunnian": ("你刚才说这样会安心，那有没有一件事也想让别人替你做？", f"{target_name}，今晚一起准备晚餐吧。你告诉我需要哪一部分，我来搭手。", "如果今天不用照顾任何人，你最想把时间留给什么？"),
         "chensu": ("你刚才说的我听见了；如果现在就做一步，你会先从哪儿下手？", f"{target_name}，一起准备晚餐吧。你选备菜还是摆桌，剩下的我来。", "有什么事你宁愿先做，也一直不太会开口解释？"),
+        "luyao": ("你刚才提到这件事，我想确认一下：现在更需要我听完，还是一起找办法？", f"先说我的选择：{target_name}，今晚要不要一起准备晚餐？分工可以一起改。", "有没有哪次临时改变主意，反而让你更确定自己在意什么？"),
+        "yecheng": ("你刚才说到这个细节，我记住了；那你希望别人怎样回应才会舒服？", f"{target_name}，今晚一起准备晚餐好吗？你先说想做哪部分，我负责另一边。", "哪一种被记住的小事，会让你觉得对方真的在听？"),
+        "tangli": ("你刚才说可以试，我再确认一次：哪个动作要慢，什么时候必须停？", f"{target_name}，今晚一起准备晚餐吧。先说好，累了就换手，别硬扛。", "如果今天不用照顾整个现场，你最想让谁替你接住哪一步？"),
+        "wenxu": ("你刚才那句我可能只理解了七成：你更在意结果，还是对方愿意一起修正？", f"我先不等答案完整了：{target_name}，要不要一起准备晚餐，边做边调整分工？", "有没有一个你明知不够严谨，却还是想诚实说出的答案？"),
+        "hechuan": ("你刚才提到那一段停顿，我的理解可能不准；你愿意把真正重要的部分补回来吗？", f"这次我先说自己的选择：{target_name}，要不要和我一起准备晚餐？", "如果不能只做倾听的人，你最希望别人先认识你的哪一面？"),
+        "peiran": ("你刚才说这个点子很好玩，那如果不分输赢，你最想把哪一步留下？", f"{target_name}，要不要一起把晚餐准备变成一个小合作？你不想热闹也可以直说。", "游戏停下来以后，你希望身边的人继续问什么？"),
+        "lichuan": ("你刚才说这样会轻松，那这次你愿意具体接走哪一部分？", f"{target_name}，今晚一起准备晚餐吧。我们各认一份，也把收尾算进去。", "如果不用照顾整张桌子，你最想把一个座位留给谁？"),
+        "qiaolan": ("你刚才说的问题我听见了；先别替你决定，要我把哪两个做法摆出来？", f"{target_name}，一起准备晚餐。你选做法，我负责把步骤做稳。", "哪件事你已经用行动说了很多次，却还欠一句解释？"),
     }
-    followup, voiced_mainline, deeper = voice_copy[player_id]
+    followup, voiced_mainline, deeper = voice_copy.get(player_id, (
+        "你刚才提到这件事，我想接着问：对你来说最重要的是哪一部分？",
+        f"{target_name}，要不要一起准备晚餐？我们先商量各自想做的部分。",
+        "如果不用立刻给完整答案，你最想先说哪一件真实的小事？",
+    ))
     if node_id == "guided-chat":
         stage_copy = voiced_mainline
     return [
@@ -907,6 +1531,41 @@ def _normalize_agent_suggestions(
     return normalized
 
 
+def _dialogue_tokens(text: str) -> set[str]:
+    normalized = re.sub(r"[^\u4e00-\u9fffA-Za-z0-9]", "", str(text or "").lower())
+    if len(normalized) < 2:
+        return {normalized} if normalized else set()
+    return {normalized[index:index + 2] for index in range(len(normalized) - 1)}
+
+
+def detect_repetitive_agent_reply(snapshot: dict[str, Any], character_id: str, dialogue: str) -> str | None:
+    """Return a public-safe reason when a generated reply loops over recent copy."""
+    current = _dialogue_tokens(dialogue)
+    if not current:
+        return "本轮台词为空"
+    recent = [
+        str(item.get("agentReply") or "") for item in snapshot.get("echoMemories", [])
+        if item.get("characterId") == character_id
+    ][-6:]
+    for previous in recent:
+        old = _dialogue_tokens(previous)
+        union = current | old
+        if union and len(current & old) / len(union) >= 0.68:
+            return "台词与最近回合高度重复"
+    conversation = snapshot.get("agentConversations", {}).get(character_id, {})
+    used_topics = [str(item.get("topic") or item) for item in conversation.get("topicLedger", [])[-6:]]
+    topic_summary = re.sub(r"\s+", "", str(dialogue or ""))
+    stale_openers = ("为什么来这里", "为什么会来", "来这里想", "参加节目的原因", "第一次见这么多人")
+    if len(recent) >= 2 and any(term in topic_summary for term in stale_openers):
+        return "多轮对话重新回到了开场问题"
+    if used_topics and len(recent) >= 2:
+        for topic in used_topics[-3:]:
+            topic = re.sub(r"\s+", "", topic)
+            if len(topic) >= 6 and topic in topic_summary:
+                return "本轮只复述了已用话题"
+    return None
+
+
 def validate_agent_turn(
     card: dict[str, Any], payload: dict[str, Any], snapshot: dict[str, Any] | None = None, player_text: str = "",
 ) -> dict[str, Any]:
@@ -915,9 +1574,40 @@ def validate_agent_turn(
         raise ValueError("DeepSeek 角色台词长度不符合合同")
     if any(term in dialogue for term in MECHANICAL_COPY_TERMS):
         raise ValueError("DeepSeek 角色台词使用了通用机械表达")
+    ai_summary_patterns = (
+        r"听起来你(?:似乎|好像|可能)",
+        r"我能(?:感受|感觉)到",
+        r"所以你的意思是",
+        r"我理解你的感受",
+    )
+    if any(re.search(pattern, dialogue) for pattern in ai_summary_patterns):
+        raise ValueError("DeepSeek 角色台词先总结或命名玩家情绪，出现明显 AI 味")
+    if any(term in dialogue for term in ("如果你愿意，我可以", "要不要我帮你分析", "你的感受是合理的")):
+        raise ValueError("DeepSeek 角色台词使用了客服或心理咨询式收尾")
+    disfluency_count = dialogue.count("……") + dialogue.count("...") + sum(
+        dialogue.count(term) for term in ("那个，就是", "就那种，怎么说", "怎么说呢")
+    )
+    if disfluency_count > 2:
+        raise ValueError("DeepSeek 角色台词机械堆叠停顿或口头语")
     if snapshot:
         character_id = card["id"]
+        repeat_reason = detect_repetitive_agent_reply(snapshot, character_id, dialogue)
+        if repeat_reason:
+            raise ValueError(repeat_reason)
         first_conversation = not any(item.get("characterId") == character_id for item in snapshot.get("echoMemories", []))
+        if card.get("identity", {}).get("gender") == "男性" and not first_conversation:
+            if dialogue.count("？") + dialogue.count("?") > 1:
+                raise ValueError("男性嘉宾本轮连续盘问，没有贡献自己的内容")
+            if any(term in dialogue for term in ("我来帮你分析", "你应该", "你需要先", "我替你决定", "照我说的做")):
+                raise ValueError("男性嘉宾本轮出现说教或替玩家做决定")
+            transactional_offer = any(term in dialogue for term in ("我去拿", "我来拿", "我去做", "我来做", "我帮你拿", "一起去拿"))
+            transactional_question = bool(re.search(r"(?:想|要|喜欢).{0,8}(?:喝|吃|哪种|什么口味)", dialogue))
+            contributes_self = any(term in dialogue for term in (
+                "我刚才", "我第一次", "我以前", "我其实", "我也有", "我差点", "我原本",
+                "说实话", "不瞒你", "算我", "换我", "不然", "翻车", "失误", "被你",
+            ))
+            if transactional_offer and transactional_question and not contributes_self:
+                raise ValueError("男性嘉宾本轮只是确认偏好和跑腿，没有幽默、现场观察或自己的新内容")
         if first_conversation and snapshot.get("nodeId") == "guided-chat":
             stage_direction = str(payload.get("stageDirection") or "")
             impossible_first_meeting = (
@@ -971,12 +1661,21 @@ def validate_agent_turn(
     try: valence = int(memory.get("emotionalValence", 0) or 0)
     except (TypeError, ValueError): valence = 0
     suggestions = _normalize_agent_suggestions(card, payload, snapshot, dialogue, player_text)
+    topic_summary = str(payload.get("topicSummary") or memory.get("summary") or "本轮具体交流").strip()[:40]
+    if snapshot:
+        previous_topics = [
+            str(item.get("topic") or item).strip()
+            for item in snapshot.get("agentConversations", {}).get(card["id"], {}).get("topicLedger", [])[-6:]
+        ]
+        if topic_summary and topic_summary in previous_topics:
+            raise ValueError("本轮话题摘要重复，必须推进新的具体内容")
     return {
         "dialogue": dialogue, "stageDirection": str(payload.get("stageDirection") or "").strip()[:100],
         "attitude": attitude, "intentId": intent_id,
         "publicReason": str(payload.get("publicReason") or "关系判断已更新").strip()[:100],
         "relationshipDelta": delta,
         "memory": {"kind": kind, "summary": str(memory.get("summary") or "这次交流被记住了").strip()[:120], "interpretation": str(memory.get("interpretation") or "仍需后续验证").strip()[:160], "salience": max(0, min(100, salience)), "emotionalValence": max(-100, min(100, valence))},
+        "topicSummary": topic_summary,
         "proposedEventId": event_id or None,
         "suggestions": suggestions,
         "suggestedPrompts": [item["text"] for item in suggestions],
@@ -984,9 +1683,13 @@ def validate_agent_turn(
     }
 
 
-def commit_agent_turn(snapshot: dict[str, Any], character_id: str, player_text: str, payload: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
+def commit_agent_turn(
+    snapshot: dict[str, Any], character_id: str, player_text: str, payload: dict[str, Any],
+    conversation_context: dict[str, Any] | None = None,
+) -> tuple[dict[str, Any], dict[str, Any]]:
     if character_id not in CHARACTER_CARD_MAP: raise ValueError("这位嘉宾不在心动小屋。")
     state = migrate_snapshot(snapshot); assert state is not None
+    if character_id not in active_cast_ids(state): raise ValueError("这位嘉宾不在本季八人名单中。")
     perspective_id = state["player"]["perspectiveCharacterId"]
     if character_id == perspective_id:
         raise ValueError("你正在从这位嘉宾的视角体验，不能和自己私聊。")
@@ -995,6 +1698,12 @@ def commit_agent_turn(snapshot: dict[str, Any], character_id: str, player_text: 
         target_name = CHARACTER_MAP[pending["targetCharacterId"]]["name"]
         raise ValueError(f"这一段先去和{target_name}完成节目组安排的破冰交流。")
     card = CHARACTER_CARD_MAP[character_id]
+    context = normalize_conversation_context(
+        state, conversation_context, participant_ids=(conversation_context or {}).get("participantIds") or [perspective_id, character_id],
+        channel=str((conversation_context or {}).get("channel") or "1v1"),
+    )
+    if character_id not in context["participantIds"]:
+        raise ValueError("当前嘉宾不在这段对话的参与者名单中。")
     turn, axes = validate_agent_turn(card, payload, state, player_text), state["relationships"][character_id]
     cold_start = not any(axes.values()) and not any(item.get("characterId") == character_id for item in state["echoMemories"])
     if cold_start:
@@ -1016,6 +1725,10 @@ def commit_agent_turn(snapshot: dict[str, Any], character_id: str, player_text: 
         "kind": turn["memory"]["kind"], "rawQuote": player_text[:240], "playerText": player_text[:240],
         "summary": turn["memory"]["summary"], "interpretation": turn["memory"]["interpretation"], "salience": turn["memory"]["salience"], "emotionalValence": turn["memory"]["emotionalValence"],
         "agentReply": turn["dialogue"], "stageDirection": turn["stageDirection"], "attitude": turn["attitude"], "intentId": turn["intentId"],
+        "topicSummary": turn["topicSummary"],
+        "time": context["time"], "locationId": context["locationId"], "locationName": context["locationName"],
+        "participantIds": context["participantIds"], "participantNames": context["participantNames"],
+        "channel": context["channel"], "conversationId": context["conversationId"],
         "suggestions": turn["suggestions"], "suggestedPrompts": turn["suggestedPrompts"], "suggestionsSource": turn["suggestionsSource"],
         "relationshipDelta": committed_delta, "affectionDelta": committed_delta["affection"], "trustDelta": committed_delta["trust"],
         "createdAt": utc_now(), "callbackEligible": True, "callbackAfterEventIds": [policy["eventId"]] if activated_event else []
@@ -1025,6 +1738,39 @@ def commit_agent_turn(snapshot: dict[str, Any], character_id: str, player_text: 
     conversation = conversations.setdefault(character_id, {"turnCount": 0, "firstMetAtNodeId": state["nodeId"]})
     conversation["turnCount"] = int(conversation.get("turnCount", 0)) + 1
     conversation["lastMemoryId"] = memory_id; conversation["lastSpokeAt"] = memory["createdAt"]
+    topic_ledger = conversation.setdefault("topicLedger", [])
+    topic_ledger.append({"topic": turn["topicSummary"], "memoryId": memory_id, "time": context["time"], "locationId": context["locationId"]})
+    del topic_ledger[:-12]
+    history = state.setdefault("conversationHistory", [])
+    history_turn = {
+        "id": memory_id, "memoryId": memory_id,
+        "characterId": character_id, "characterName": CHARACTER_MAP[character_id]["name"],
+        "playerCharacterId": perspective_id, "playerCharacterName": CHARACTER_MAP[perspective_id]["name"],
+        "time": context["time"], "locationId": context["locationId"], "locationName": context["locationName"],
+        "channel": context["channel"], "participantIds": context["participantIds"],
+        "participantNames": context["participantNames"],
+        "playerText": player_text[:240], "agentReply": turn["dialogue"],
+        "topicSummary": turn["topicSummary"], "summary": turn["memory"]["summary"],
+        "createdAt": memory["createdAt"],
+    }
+    history_item = next((item for item in history if item.get("conversationId") == context["conversationId"]), None)
+    if history_item is None:
+        history_item = {
+            **context, "playerText": player_text[:240], "summary": turn["memory"]["summary"],
+            "memoryIds": [memory_id], "turns": [history_turn], "turnCount": 1,
+            "createdAt": memory["createdAt"], "updatedAt": memory["createdAt"],
+        }
+        history.append(history_item)
+    else:
+        history_item.setdefault("memoryIds", []).append(memory_id)
+        history_item.setdefault("turns", []).append(history_turn)
+        history_item["playerText"] = player_text[:240]
+        history_item["summary"] = turn["memory"]["summary"]
+        history_item["updatedAt"] = memory["createdAt"]
+        del history_item["turns"][:-40]
+        del history_item["memoryIds"][:-40]
+        history_item["turnCount"] = len(history_item["turns"])
+    del history[:-80]
     guided_completed = False
     if pending.get("targetCharacterId") == character_id and pending.get("status") == "required":
         pending["completedTurnCount"] = int(pending.get("completedTurnCount", 0)) + 1
@@ -1033,12 +1779,13 @@ def commit_agent_turn(snapshot: dict[str, Any], character_id: str, player_text: 
             guided_completed = True
         state["pendingInteraction"] = pending
     state["revision"] += 1; state["updatedAt"] = utc_now()
-    receipt = {"id": memory_id, "kind": "agent-turn", "intentId": turn["intentId"], "attitude": turn["attitude"], "publicReason": turn["publicReason"], "patch": {f"relationships.{character_id}.{axis}": delta for axis, delta in committed_delta.items() if delta}, "eventActivation": activated_event, "suggestions": turn["suggestions"], "suggestedPrompts": turn["suggestedPrompts"], "suggestionsSource": turn["suggestionsSource"], "committedAt": memory["createdAt"]}
+    receipt = {"id": memory_id, "kind": "agent-turn", "intentId": turn["intentId"], "attitude": turn["attitude"], "publicReason": turn["publicReason"], "patch": {f"relationships.{character_id}.{axis}": delta for axis, delta in committed_delta.items() if delta}, "eventActivation": activated_event, "suggestions": turn["suggestions"], "suggestedPrompts": turn["suggestedPrompts"], "suggestionsSource": turn["suggestionsSource"], "context": context, "committedAt": memory["createdAt"]}
     receipt["guidedInteractionCompleted"] = guided_completed
     return state, receipt
 
 
 def _project_script_flavor(state: dict[str, Any], node: dict[str, Any]) -> dict[str, Any]:
+    cast_ids = active_cast_ids(state)
     flavor = state.get("scriptFlavor", {}).get("nodes", {}).get(state["nodeId"], {})
     for field in ("title", "text", "action"):
         value = flavor.get(field)
@@ -1054,7 +1801,7 @@ def _project_script_flavor(state: dict[str, Any], node: dict[str, Any]) -> dict[
         node["speaker"] = "节目组"
     elif speaker_id == "narrator":
         node["speaker"] = "节目旁白"
-    elif speaker_id in CHARACTER_MAP and speaker_id != state["player"]["perspectiveCharacterId"]:
+    elif speaker_id in cast_ids and speaker_id != state["player"]["perspectiveCharacterId"]:
         node["speaker"] = CHARACTER_MAP[speaker_id]["name"]
         node["speakerCharacterId"] = speaker_id
     flavored_choices = {choice.get("id"): choice for choice in flavor.get("choices", []) if isinstance(choice, dict)}
@@ -1065,7 +1812,7 @@ def _project_script_flavor(state: dict[str, Any], node: dict[str, Any]) -> dict[
             if isinstance(value, str) and value.strip():
                 choice[field] = value.strip()
         target_id = surface.get("targetCharacterId")
-        if target_id in CHARACTER_MAP and target_id != state["player"]["perspectiveCharacterId"]:
+        if target_id in cast_ids and target_id != state["player"]["perspectiveCharacterId"]:
             choice["targetCharacterId"] = target_id
             if state["nodeId"] in {"cast-first-impressions", "icebreaker-choice"}:
                 choice["characterId"] = target_id
@@ -1079,7 +1826,7 @@ def project_view(snapshot: dict[str, Any]) -> dict[str, Any]:
     guided_id = state.get("guidedTargetCharacterId")
     if state["nodeId"] in {"arrival-context", "villa-arrival", "introductions", "cast-first-impressions", "icebreaker-choice"}:
         node["characterId"] = perspective_id
-    elif state["nodeId"] in {"guided-chat", "team-up"} and guided_id in CHARACTER_MAP:
+    elif state["nodeId"] in {"guided-chat", "team-up"} and guided_id in active_cast_ids(state):
         target = CHARACTER_MAP[guided_id]
         node["characterId"] = guided_id
         flavor_node = state.get("scriptFlavor", {}).get("nodes", {}).get(state["nodeId"], {})
@@ -1087,7 +1834,7 @@ def project_view(snapshot: dict[str, Any]) -> dict[str, Any]:
             node["title"] = f"先和{target['name']}从一句你好开始"
             node["text"] = f"{target['name']}正在等你开口。先交换姓名和来到节目的原因；完成一次自然寒暄后，再决定要不要一起准备今晚的晚餐。"
     pending = deepcopy(state.get("pendingInteraction"))
-    if pending and pending.get("targetCharacterId") in CHARACTER_MAP:
+    if pending and pending.get("targetCharacterId") in active_cast_ids(state):
         target = CHARACTER_MAP[pending["targetCharacterId"]]
         pending.update({"targetName": target["name"], "targetMbti": target["mbti"], "targetPortrait": target["portrait"], "targetVideo": target["video"]})
         node["guidedInteraction"] = pending
@@ -1096,7 +1843,7 @@ def project_view(snapshot: dict[str, Any]) -> dict[str, Any]:
     if (
         isinstance(impression_seed, dict)
         and state["nodeId"] in impression_seed.get("plannedCallbackNodeIds", [])
-        and impression_seed.get("characterId") in CHARACTER_MAP
+        and impression_seed.get("characterId") in active_cast_ids(state)
     ):
         impression_character = CHARACTER_MAP[impression_seed["characterId"]]
         node["firstImpressionCallback"] = {
@@ -1115,9 +1862,14 @@ def project_view(snapshot: dict[str, Any]) -> dict[str, Any]:
                 "id": f"letter-{character_id}", "characterId": character_id,
                 "label": f"把今晚的短信发给 {CHARACTER_MAP[character_id]['name']}",
                 "hint": f"{CHARACTER_MAP[character_id]['mbti']} · 今天的态度：{state['attitudes'].get(character_id, 'curious')}",
+                "messageSuggestions": heart_message_suggestions(state, character_id),
             }
             for character_id in _letter_recipient_ids(state)
         ]
+        node["messageComposer"] = {
+            "allowCustomText": True, "minLength": 2, "maxLength": 100,
+            "placeholder": "写下今晚真正想对 TA 说的话…",
+        }
     if node.get("isEnding"):
         cid = state.get("letterRecipientId") or state.get("focusCharacterId"); character = CHARACTER_MAP.get(cid or "")
         memories = [item for item in state["echoMemories"] if item.get("characterId") == cid]
@@ -1128,6 +1880,11 @@ def project_view(snapshot: dict[str, Any]) -> dict[str, Any]:
                 node["title"] = f"{event['label']}没有停在昨夜"; node["text"] = f"{character['name']}按昨夜记住的“{memories[-1]['summary']}”作出了今天的行动。{event['text']}"
             elif memories:
                 node["text"] = f"昨晚的短信没有署名，但{character['name']}仍记得你们聊过的那件小事。今天，彼此有了继续认识的机会。"
+        received = deepcopy(state.get("heartMailbox", {}).get("received", []))
+        node["heartInbox"] = {
+            "device": "phone", "unreadCount": len(received), "messages": received,
+            "title": "你收到的心动短信",
+        }
     media_context = day1_media_context(state, node)
     node["media"] = media_context
     # The approved media contract is authoritative. Old blueprint cinematics
@@ -1135,9 +1892,17 @@ def project_view(snapshot: dict[str, Any]) -> dict[str, Any]:
     node["cinematic"] = media_context["src"] if media_context["available"] else None
     node["eventId"] = media_context["eventId"]
     node["eventIntent"] = media_context["intent"]
-    projected_characters = deepcopy(CHARACTERS)
+    cast_ids = active_cast_ids(state)
+    projected_characters = [deepcopy(CHARACTER_MAP[character_id]) for character_id in cast_ids]
     for character in projected_characters:
         character["isPlayerPerspective"] = character["id"] == perspective_id
         character["chatEnabled"] = character["id"] != perspective_id
         character["isGuidedTarget"] = character["id"] == guided_id and (state.get("pendingInteraction") or {}).get("status") == "required"
-    return {"snapshot": state, "node": node, "characters": projected_characters, "mediaContext": media_context}
+    heart_mailbox = deepcopy(state.get("heartMailbox", {"sent": [], "received": []}))
+    heart_mailbox["sentCount"] = len(heart_mailbox.get("sent", []))
+    heart_mailbox["receivedCount"] = len(heart_mailbox.get("received", []))
+    heart_mailbox["unreadCount"] = len(heart_mailbox.get("received", [])) if state["nodeId"] == "callback" else 0
+    return {
+        "snapshot": state, "node": node, "characters": projected_characters, "mediaContext": media_context,
+        "chatContexts": available_chat_contexts(state), "heartMailbox": heart_mailbox,
+    }

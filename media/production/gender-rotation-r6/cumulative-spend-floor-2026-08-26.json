@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "heart-journey/project-spend-floor-v1",
+  "recordedAt": "2026-08-26T11:51:14+08:00",
+  "currency": "CNY",
+  "cumulativeSpendCnyFloor": 200.01,
+  "evidence": "The user stated that this project's prior media budget had already exceeded CNY 200 and required future manual confirmation above that threshold.",
+  "exactHistoricalSpendKnown": false,
+  "useBoundary": "This conservative floor exists only to trigger the manual approval policy. It must not be presented as the exact historical project spend.",
+  "freshIncrementalApprovalRef": "budget-authorization-2026-08-26.md",
+  "freshIncrementalMaxCny": 60
+}

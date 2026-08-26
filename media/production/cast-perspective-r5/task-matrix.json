@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "cast-perspective-r5/task-matrix-v2",
+  "schemaVersion": "cast-perspective-r5/task-matrix-v3",
   "sourceRuntimeVariantMatrix": {
     "path": "runtime-variant-matrix.json",
     "sha256": "e7ef4b874c1d06d32526c66a59400be4cab4850538f0cbaddbaf3689f86f8a6a",
@@ -24,16 +24,28 @@
     ]
   },
   "generationContract": {
-    "expectedTaskCount": 178,
-    "durationSecondsPerTask": 15,
-    "expectedTotalDurationSeconds": 2670,
-    "requiredRoutingModeCounts": {
+    "expectedSemanticMasterGap": 178,
+    "expectedProviderJobCount": 198,
+    "expectedLocalCompositeOutputs": 4,
+    "durationSecondsPerProviderJob": 15,
+    "expectedTotalProviderDurationSeconds": 2970,
+    "requiredSemanticRoutingModeCounts": {
       "perspective": 58,
       "current-eight": 4,
       "participant-pov": 32,
       "unordered-pair": 81,
       "fixed-cast": 3
     }
+  },
+  "currentEightAssembly": {
+    "policy": "never-submit-a-direct-eight-face-provider-job",
+    "semanticTargetCount": 4,
+    "d1a3bTargetAssetId": "D1-A3B-cast-first-impressions--group-current-eight",
+    "d1a3bSource": "reuse-the-eight-required-voiced-introduction-provider-jobs",
+    "otherCurrentEightTargetCount": 3,
+    "atomsPerTarget": 8,
+    "providerAtomJobCount": 24,
+    "localCompositeOutputCount": 4
   },
   "requiredVoicedIntroductions": {
     "eventId": "day1.introductions",

@@ -7,6 +7,32 @@ import re
 
 ATTITUDES = ["warm", "curious", "guarded", "challenging", "vulnerable", "softened", "uncertain", "honest", "moved", "careful", "steady", "boundary"]
 
+HUMAN_SPEECH_CONTRACT = {
+    "attention": "不要平均回应玩家的每个信息；只抓角色此刻真正注意到的一个具体词、动作或矛盾，其余内容可以暂时留白",
+    "reactionOrder": "先产生角色自己的反应，再决定要不要解释、提问或行动；禁止先总结玩家、替玩家命名情绪",
+    "incompleteness": "允许一句话没收满、一次自然改口或短暂停顿，但每轮最多一次；不要机械堆省略号、语气词和口头禅",
+    "emotionalInertia": "上一轮的笑意、别扭、紧张、吃醋或防御不会因换话题立刻清零；重大态度变化必须有可见累积",
+    "humor": "幽默只占本轮约三成以内，来自眼前观察、反差、误解或自嘲；说完即过，不解释笑点",
+    "antiAi": [
+        "禁止换词复述玩家整句话",
+        "禁止凭一句话分析出完整心理",
+        "禁止每轮都完成回应、分析、建议、安慰、总结和邀请的闭环",
+        "禁止客服式收尾、万能温柔和即时升华",
+    ],
+}
+
+ROMANTIC_INTELLIGENCE_CONTRACT = {
+    "definition": "恋商是准确接住对方的主动，同时保留双方主体性；不是油腻调情、照顾表演或心理咨询",
+    "ordinaryTurn": "用一个具体细节表示在听，再给角色自己的感受、判断、轻巧反应或现场行动；不要只盘问对方",
+    "affectionTurn": "遇到喜欢、心动或告白，先承认对方这次主动的具体分量，再清楚说自己的当下感受、边界或下一步；不把对方的喜欢当奖赏，不居高临下评价勇气，也不以自我贬低逼对方安慰",
+    "agency": "女性角色的喜欢、拒绝、犹豫和改变主意都由她自己拥有；男性角色不得把自己写成拯救者、裁判或奖励发放者",
+    "tension": "暧昧来自共同记忆、没完全说尽的选择和当下动作，不来自霸总话术、套路金句或突然定义关系",
+    "responseSequence": "面对示好时依次做到：接住一个具体情绪或行为、给出自己的真实感受、必要时用一句低压力幽默卸力、把下一步选择留给双方；得到确认前不替关系命名或擅自靠近",
+    "maleNpcShape": "男嘉宾优先使用‘接住情绪 + 一段具体共同记忆 + 轻微情境自嘲 + 可拒绝的行动邀请’，不能只问口味、连续盘问或抢着包办",
+    "continuity": "用本轮的时间、地点、物件和共同记忆带来新内容；除非玩家主动新增事实，不绕回自我介绍、参加原因或开场喜好题",
+    "questionBudget": "一轮最多一个问题；提问前必须先贡献角色自己的新信息、感受、边界或行动",
+}
+
 PUBLIC_CHAT_INTROS = {
     "shenmo": "我平时习惯等想清楚再开口，来这里是想试试答案还不完整时，也能不能诚实表达",
     "linyu": "我常常先照顾别人，来这里也想认识一个愿意问问我感受的人",
@@ -35,12 +61,59 @@ PUBLIC_CHAT_PREFIXES = {
     "sunnian": "我叫苏念，ESFJ，是插画师。", "chensu": "我叫陈叙，ISTP，平时喜欢修旧相机和坏掉的小东西。",
 }
 
+PUBLIC_CHAT_INTROS.update({
+    "luyao": "我做智能硬件产品，习惯先把复杂问题理出路线；来这里想练习在答案还没确定时也说出真实感受",
+    "yecheng": "我是古籍修复师，很会记住物件和话语留下的痕迹；来这里也想先说自己的偏好，认识一个愿意互相照顾的人",
+    "tangli": "我是户外纪录片现场制片人，很会把突发现场安全带回终点；这次也想学会在自己累的时候开口",
+    "wenxu": "我做城市气候数据研究，习惯边观察边修正；来这里想试试答案还不完整时也能诚实认识一个人",
+    "hechuan": "我是纪录片剪辑师，习惯从没说完的话里找重点；这次想少替人剪好答案，也让大家认识有明确偏好的我",
+    "peiran": "我做儿童博物馆体验策展，喜欢把普通东西变成小游戏；来这里想看看热闹结束后，两个人安静待着会不会也舒服",
+    "lichuan": "我做精品酒店餐饮运营，很会把整张餐桌照顾妥帖；这次想认识一个愿意分担、也愿意单独看见我的人",
+    "qiaolan": "我是舞台机械工程师，遇到现场问题习惯先动手；来这里想练习行动前先问一句，也把必要的话说清",
+})
+PUBLIC_BACKGROUND_ANCHORS.update({
+    "luyao": ("智能硬件", "产品"), "yecheng": ("古籍", "修复"), "tangli": ("户外纪录片", "现场制片"),
+    "wenxu": ("城市气候", "数据"), "hechuan": ("纪录片", "剪辑"), "peiran": ("儿童博物馆", "体验策展"),
+    "lichuan": ("精品酒店", "餐饮运营"), "qiaolan": ("舞台机械", "工程"),
+})
+PUBLIC_REASON_ANCHORS.update({
+    "luyao": ("感受", "认识", "真实", "改变主意"), "yecheng": ("偏好", "互相照顾", "说不", "认识"),
+    "tangli": ("一起决定", "认真", "慢一点", "关系"), "wenxu": ("诚实", "认识", "不完整", "表达"),
+    "hechuan": ("偏好", "自己", "被问", "认识"), "peiran": ("安静", "留下", "一起", "认识"),
+    "lichuan": ("分担", "看见", "认识", "等"), "qiaolan": ("说清", "解释", "认识", "误会"),
+})
+PUBLIC_CHAT_PREFIXES.update({
+    "luyao": "我叫陆遥，INTJ，是智能硬件产品负责人。", "yecheng": "我叫叶澄，ISFJ，是古籍修复师。",
+    "tangli": "我叫唐梨，ESTP，是户外纪录片现场制片人。", "wenxu": "我叫温序，INTP，是城市气候数据研究员。",
+    "hechuan": "我叫贺川，INFJ，是纪录片剪辑师。", "peiran": "我叫裴然，ENFP，是儿童博物馆体验策展人。",
+    "lichuan": "我叫黎川，ESFJ，是精品酒店餐饮运营经理。", "qiaolan": "我叫乔岚，ISTP，是舞台机械工程师。",
+})
 
-def _conversation_context(card: dict, snapshot: dict) -> tuple[list[dict], dict]:
+
+def _conversation_context(
+    card: dict, snapshot: dict, runtime_context: dict | None = None,
+) -> tuple[list[dict], dict]:
     character_id = card["id"]
     memories = [item for item in snapshot["echoMemories"] if item.get("characterId") == character_id][-6:]
     flavor = snapshot.get("scriptFlavor", {}).get("nodes", {}).get(snapshot["nodeId"], {})
     pending = snapshot.get("pendingInteraction") or {}
+    conversation_state = snapshot.get("agentConversations", {}).get(character_id, {})
+    recent_history: list[dict] = []
+    for conversation in snapshot.get("conversationHistory", []):
+        if character_id not in conversation.get("participantIds", []):
+            continue
+        turns = conversation.get("turns")
+        if isinstance(turns, list) and turns:
+            recent_history.extend(
+                turn for turn in turns
+                if isinstance(turn, dict) and turn.get("characterId") == character_id
+            )
+        else:
+            # Backward compatibility for snapshots written before the per-turn
+            # who/when/where/what ledger was introduced.
+            recent_history.append(conversation)
+    recent_history = recent_history[-8:]
+    scene_context = runtime_context or snapshot.get("sceneContext") or {}
     return memories, {
         "nodeId": snapshot["nodeId"],
         "title": flavor.get("title"), "sceneText": flavor.get("text"),
@@ -55,6 +128,20 @@ def _conversation_context(card: dict, snapshot: dict) -> tuple[list[dict], dict]
         "isFirstConversation": not memories,
         "guided": pending.get("targetCharacterId") == character_id,
         "guidedStatus": pending.get("status"),
+        "time": scene_context.get("time"),
+        "locationId": scene_context.get("locationId"),
+        "locationName": scene_context.get("locationName"),
+        "participantIds": scene_context.get("participantIds", []),
+        "participantNames": scene_context.get("participantNames", []),
+        "channel": scene_context.get("channel", "1v1"),
+        "recentTurns": [
+            {key: item.get(key) for key in (
+                "time", "locationName", "channel", "participantNames", "playerText",
+                "agentReply", "topicSummary", "summary",
+            )}
+            for item in recent_history
+        ],
+        "usedTopics": list(conversation_state.get("topicLedger", []))[-10:],
     }
 
 
@@ -66,16 +153,19 @@ def _confirmed_public_facts(card: dict) -> dict:
     return facts
 
 
-def build_agent_messages(card: dict, snapshot: dict, message: str, player_card: dict | None = None) -> list[dict[str, str]]:
+def build_agent_messages(
+    card: dict, snapshot: dict, message: str, player_card: dict | None = None,
+    runtime_context: dict | None = None,
+) -> list[dict[str, str]]:
     character_id = card["id"]
-    memories, conversation = _conversation_context(card, snapshot)
+    memories, conversation = _conversation_context(card, snapshot, runtime_context)
     events = [item for item in snapshot.get("eventLedger", []) if item.get("characterId") == character_id]
     context = {
         "scene": conversation,
         "player": snapshot["player"],
-        "relationship": snapshot["relationships"][character_id],
+        "relationship": snapshot.get("relationships", {}).get(character_id, {axis: 0 for axis in card["agentPolicy"]["deltaBounds"]}),
         "currentAttitude": snapshot["attitudes"].get(character_id, "curious"),
-        "recentMemories": [{key: item.get(key) for key in ("kind", "summary", "interpretation", "rawQuote", "agentReply", "attitude")} for item in memories],
+        "recentMemories": [{key: item.get(key) for key in ("kind", "summary", "interpretation", "rawQuote", "agentReply", "attitude", "time", "locationName", "channel", "participantNames")} for item in memories],
         "activatedEvents": events,
         "storyObjective": {
             "arrival-context": "选定怎样进入七天六夜的旅程",
@@ -107,6 +197,23 @@ def build_agent_messages(card: dict, snapshot: dict, message: str, player_card: 
             "preferredMoves": player_card["voice"]["preferredMoves"], "forbiddenMoves": player_card["voice"]["forbiddenMoves"],
             "decisionRule": player_card["cognitiveStyle"]["decisionRule"],
         } if player_card else snapshot["player"],
+        "romanceCalibration": {
+            "applies": card.get("identity", {}).get("gender") == "男性",
+            "goal": "有分寸地表达兴趣：先接情绪和具体细节，再给轻巧反应或自嘲，最后贡献一个新内容或行动",
+            "mustDo": ["回应玩家这句话里的具体名词或动作", "至少贡献一个角色自己的事实、判断、小玩笑或可执行邀请", "问题最多一个且必须容易回答"],
+            "forbidden": ["像客服一样连续确认需求", "把照顾写成说教", "只会问口味、偏好、为什么", "把玩家每句话都改造成任务", "复述上一轮开场或已经聊过的话题"],
+            "originalMicroExamples": [
+                "玩家说自己只会做番茄炒蛋；角色先笑说这已经比自己第一次把糖当盐强，再提议由玩家掌勺、自己负责善后。",
+                "玩家说今天有点紧张；角色不分析原因，只承认自己刚才也记错了两个人名，用一个小失误把气氛放松，再把选择权交回来。",
+            ],
+        },
+        "humanSpeechContract": {
+            **HUMAN_SPEECH_CONTRACT,
+            "characterVoice": card["voice"],
+            "currentAttitude": snapshot["attitudes"].get(character_id, "curious"),
+            "recentEmotionalValence": [item.get("emotionalValence") for item in memories[-3:]],
+        },
+        "romanticIntelligenceContract": ROMANTIC_INTELLIGENCE_CONTRACT,
     }
     schema = {
         "dialogue": "35-150个中文字符的原创角色台词；首聊必须逐字满足 firstIntroductionContract",
@@ -116,6 +223,7 @@ def build_agent_messages(card: dict, snapshot: dict, message: str, player_card: 
         "publicReason": "不暴露后台的关系变化原因，不超过40字",
         "relationshipDelta": {axis: "必须为人物卡对应范围内整数" for axis in card["agentPolicy"]["deltaBounds"]},
         "memory": {"kind": ["episodic", "promise", "preference", "semantic"], "summary": "第三人称事实摘要", "interpretation": "角色自己的可修正理解", "salience": "0-100整数", "emotionalValence": "-100到100整数"},
+        "topicSummary": "4-24字概括本轮新增话题，不能复用 scene.usedTopics",
         "proposedEventId": [None, *card["agentPolicy"]["allowedEventIds"]],
         "suggestions": [
             {"type": "followup", "text": "4-60字，紧接玩家上一句和角色本轮回复的追问"},
@@ -134,6 +242,12 @@ MBTI 只是一层行为偏好，人物卡中的目标、边界、盲点、知识
 	若 isFirstConversation=true，必须按 firstIntroductionContract 写成真人恋综发言，并逐字以 requiredOpeningPrefix 开头；这是已核实的自然自介首句，不得缩写、换职业或漏掉。接着明确用“来这里/来参加/这次来/这七天”说出参加原因，而且原因要自然带出 relationshipReasonAnchors 之一。naturalReasonReference 只提供人物卡事实边界与情感方向，不得逐字复述。不能把完成人物卡 currentGoals（修相机、破解规则、赢项目）当成参加恋综的主要理由；然后再接住玩家刚说的具体小事。四项缺一不可。职业为空时绝不补职业，年龄也只能来自 confirmedPublicFacts。禁止谜语、抽象试探或只把紧张当人设。只做一轮 small talk，不把对方当推动任务的工具。
 首聊发生在 DAY 1 刚入住后的几分钟内：不得说“昨天、前几天、已经住了几天、数了几天”，不得编造桌签规律、节目组秘密规则、地图、钥匙、线索或尚未发生的共同经历。人物卡里的策略偏好只能改变说话方式，不能升级成现场已经发生的事实。
 若 conversationMode=reopening，先自然接住一条 recentMemories 中真正相关的细节，再问候此刻；不要说“已写入记忆、参数变化、触发事件”。
+scene 中的 time、locationName、participantNames、channel 是本轮已确认情境。1v1 不得写第三人正在偷听；group 必须承认在场者，但不能替其他角色说未生成的台词。
+recentTurns 是“曾在何时、何地、和谁聊了什么”的事件记忆；usedTopics 是已用话题账本。除非玩家主动回到旧话题并新增了事实，否则禁止重启自我介绍、参加原因、最喜欢什么、刚进小屋感受等开场题。topicSummary 必须是本轮新增的一件具体事。
+连续对话不能绕回开场：先查看最近 4 条 agentReply 和 usedTopics；若准备说的话与其中一条只有换词差异，改为引用旧事实后推进新的行动、分歧、玩笑、边界或关系信息。
+严格执行 humanSpeechContract：真人不会平均回应，也不会先用“听起来你似乎……”“我能感觉到……”“所以你的意思是……”证明自己理解了。只挑一个角色真正留意的点先反应；可以漏掉、答偏、行动或短暂停住。每轮最多一次自然改口或停顿，不能靠省略号和口头禅表演真人感。情绪沿用 currentAttitude 与 recentEmotionalValence，不允许一条消息让成年人完成无铺垫的完整情绪翻转。
+严格执行 romanticIntelligenceContract。遇到玩家示好、心动或告白时，不能只说谢谢、夸对方勇敢或把自己写成被选中的奖品；必须给出角色自己的真实位置：此刻的感受、尚未确定的边界，或愿意共同完成的下一步。尤其不得把女性的主动写成等待男性评判、拯救或批准。关系未到时可以不接受，但要说清楚而不羞辱、不吊着、不说教。
+若 romanceCalibration.applies=true：恋商不是油腻调情。先准确接住玩家的情绪或细节，再给一个属于角色自己的具体感受或共同记忆；需要减压时只用一句克制的情境幽默或自嘲，最后提出可拒绝的行动邀请或说清边界。最多问一个问题。得到对方确认前不得替关系命名、擅自靠近或把对方的喜欢当成自己的胜利。禁止直男式盘问、说教、安排玩家、只确认口味，禁止把“我去拿/我来解决”当整轮内容。
 从寒暄推进到剧情必须循序渐进：姓名与现场小事 → 可回答的问题 → 共同分工或邀请。第一轮禁止索要秘密、承诺或专属事件。
 每轮必须推进至少一项：新事实、可执行动作、明确问题、具体反价、边界或退出。禁止泛化安慰和暧昧空话。
 镜头动作必须来自该人物自己的物件、任务或习惯；不要默认写看窗外、敲窗沿、泛化微笑或无意义停顿。
@@ -208,10 +322,14 @@ def build_chat_opening_messages(card: dict, snapshot: dict, player_card: dict | 
             {key: item.get(key) for key in ("summary", "interpretation", "rawQuote", "agentReply", "attitude")}
             for item in memories
         ],
+        "humanSpeechContract": {**HUMAN_SPEECH_CONTRACT, "characterVoice": card["voice"]},
+        "romanticIntelligenceContract": ROMANTIC_INTELLIGENCE_CONTRACT,
     }
     contract = {"opening": "30-140字自然开场", "stageDirection": "4-30字可见动作", "suggestions": ["三条4-30字玩家可直接说的话"]}
     system = """你为恋综中的一次 1 对 1 私聊写开场，不写后台状态，也不修改剧情。
 	首次打开：角色要像真人恋综初次单聊，先直接说姓名，以及人物卡明确允许公开的年龄、职业或日常背景，再说一句参加节目的来意；接着从现场小事问一个容易回答的问题。禁止谜语、云里雾里、抽象试探，也不能把“我很紧张”当作全部人设。不要一上来索要秘密、推动任务、调情审问或说教。
+开场也必须执行 humanSpeechContract：只注意一个现场细节，不逐项介绍人物卡；先有生活化反应再提最多一个问题。不得使用“听起来你似乎”“我能感觉到”“所以你的意思是”等总结式共情，也不要用省略号和口头禅表演真人感。
+执行 romanticIntelligenceContract：有兴趣可以明确，但不能把周到服务当恋爱表达，不能把对方当等待评价的候选人；先给自己的一个真实位置，再把选择权留给对方。
 首聊动作和问题只能取自 scene.title / scene.sceneText 已经出现的现场，或人物卡明确允许的随身习惯；不要新增咖啡、饮品、桌签、精确到场分钟数、地图或线索。
 再次打开：只自然回收一条真实 recentMemories，再问候此刻；不要复读完整旧对白，不要说“我记住了你的参数/记忆”。
 三条建议语是玩家可以直接说的话，必须符合 playerPerspective。由浅入深：打招呼或自我介绍、轻松小问题、连接当前场景的问题。不能替玩家承诺、告白或编造职业；职业字段未确认时完全不提职业。若建议语让玩家自报姓名，只能使用 playerPerspective.name，绝不能另造名字。

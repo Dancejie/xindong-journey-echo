@@ -1,0 +1,2154 @@
+{
+  "schemaVersion": "heart-journey/r6-technical-media-qa-v1",
+  "generatedAt": "2026-08-26T06:33:06.019796+00:00",
+  "mode": "complete",
+  "verdict": "R6_TECHNICAL_QA_PASS",
+  "exitCode": 0,
+  "claimBoundary": "ffprobe technical evidence only; identity, motion, dialogue/audio content, creative, rights, mobile crop, and runtime integration remain unverified",
+  "source": {
+    "planningManifest": "/Users/dangsijie/.openclaw/workspace/cowork/xindong-journey-echo/media/production/gender-rotation-r6/manifest.r6.json",
+    "planningManifestSha256": "4301f958ec7d4e04655ff8db0d41dcbbf93f0f3f1eb962cfdace671cf745763a",
+    "candidateRoot": "/Users/dangsijie/.openclaw/workspace/cowork/xindong-journey-echo/media/production/gender-rotation-r6/.work-candidates/r6-paid-20260826"
+  },
+  "constraints": {
+    "videoCodec": "h264",
+    "eventAudioCodec": "aac",
+    "durationToleranceSeconds": 0.5,
+    "ratioTolerance": 0.035,
+    "resolutionProfiles": {
+      "480p": {
+        "shortMin": 480,
+        "shortMax": 512,
+        "longMin": 848,
+        "longMax": 896
+      }
+    }
+  },
+  "summary": {
+    "expectedJobs": 81,
+    "candidateFilesScanned": 81,
+    "presentUniqueJobs": 81,
+    "technicalPassed": 81,
+    "technicalFailed": 0,
+    "pendingGeneration": 0,
+    "missingJobs": 0,
+    "duplicateOutputJobs": 0,
+    "duplicateContentGroups": 0,
+    "unexpectedCandidateFiles": 0,
+    "progressPercent": 100.0,
+    "creativeApproved": 0,
+    "runtimeIntegrated": 0
+  },
+  "missingJobIds": [],
+  "duplicateOutputs": [],
+  "duplicateContent": [],
+  "unexpectedCandidatePaths": [],
+  "assets": [
+    {
+      "id": "D1-A3-cast-introductions--F-A-jiangmi--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-001-002/candidates/shots/D1-A3-cast-introductions--F-A-jiangmi--r6/D1-A3-cast-introductions--F-A-jiangmi--r6-candidate.mp4",
+      "sha256": "cddaa0a8702e8bc40a3ef4db763d375451ccd25641fbfb7fdf132e2c709d7080",
+      "sizeBytes": 4835882,
+      "plannedDurationSeconds": 12.0,
+      "durationSeconds": 12.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "D1-A1-island-hotel-establish--F-B-luyao--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-001-002/candidates/shots/D1-A1-island-hotel-establish--F-B-luyao--r6/D1-A1-island-hotel-establish--F-B-luyao--r6-candidate.mp4",
+      "sha256": "690bbbc09a101ee6c34da34b01bdce4e9f16bc9963ecc6661b9a77e7193f5a97",
+      "sizeBytes": 1853967,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "D1-A2-villa-entry--F-B-luyao--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-003-004/candidates/shots/D1-A2-villa-entry--F-B-luyao--r6/D1-A2-villa-entry--F-B-luyao--r6-candidate.mp4",
+      "sha256": "c994d56c0085ded5eb9a8052f56287f3ea0b8bae6fc811e559b7185ea856a3b6",
+      "sizeBytes": 1917494,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "D1-A3-cast-introductions--F-B-luyao--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-003-004/candidates/shots/D1-A3-cast-introductions--F-B-luyao--r6/D1-A3-cast-introductions--F-B-luyao--r6-candidate.mp4",
+      "sha256": "5a61bd6c76e6e6045e2a56adc01f051b7ff4abcaac68d3566f9b626c83c5545a",
+      "sizeBytes": 3511483,
+      "plannedDurationSeconds": 12.0,
+      "durationSeconds": 12.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "D1-A4-icebreaker-selection--F-B-luyao--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-005-006/candidates/shots/D1-A4-icebreaker-selection--F-B-luyao--r6/D1-A4-icebreaker-selection--F-B-luyao--r6-candidate.mp4",
+      "sha256": "f3b9dc02cda52e2ecd9b1b120d18f13172f26f61ce9c316759c13c9291196535",
+      "sizeBytes": 1299829,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "D1-A5-guided-smalltalk--F-B-luyao--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-005-006/candidates/shots/D1-A5-guided-smalltalk--F-B-luyao--r6/D1-A5-guided-smalltalk--F-B-luyao--r6-candidate.mp4",
+      "sha256": "557854181914a1b5c032ef064396cb3b97042b698ec1920c56dcbecda09abba9",
+      "sizeBytes": 1522757,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "D1-A6-first-dinner-team--F-B-luyao--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-007-008/candidates/shots/D1-A6-first-dinner-team--F-B-luyao--r6/D1-A6-first-dinner-team--F-B-luyao--r6-candidate.mp4",
+      "sha256": "11675bc4cace0333839e45bd0a8b72280500a6c1d89ef607df2e184ff1be29e5",
+      "sizeBytes": 2140297,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "D1-A7-heart-message--F-B-luyao--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-007-008/candidates/shots/D1-A7-heart-message--F-B-luyao--r6/D1-A7-heart-message--F-B-luyao--r6-candidate.mp4",
+      "sha256": "8538b3388c85c457d88719c1b2bcaca8b45565cb8f8edc7d5f45ceaacd13ffb6",
+      "sizeBytes": 1207120,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "D2-A1-memory-callback--F-B-luyao--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-009-010/candidates/shots/D2-A1-memory-callback--F-B-luyao--r6/D2-A1-memory-callback--F-B-luyao--r6-candidate.mp4",
+      "sha256": "6dd8e8786509e744c726a3c91520b8fd4545dac0efe5b90bbcbe85361ee766c9",
+      "sizeBytes": 1445487,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-KITCHEN-two-person-shift--F-B-luyao--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-009-010/candidates/shots/EV-KITCHEN-two-person-shift--F-B-luyao--r6/EV-KITCHEN-two-person-shift--F-B-luyao--r6-candidate.mp4",
+      "sha256": "0d557ad22da2c749168e8d887853b977f322f3224d732bb1244a6c673b98d926",
+      "sizeBytes": 2133603,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-RULES-house-friction--F-B-luyao--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-011-012/candidates/shots/EV-RULES-house-friction--F-B-luyao--r6/EV-RULES-house-friction--F-B-luyao--r6-candidate.mp4",
+      "sha256": "ee0f511d8cc95095d988c237b772dac5e434fb7c8bcec2a500a11def5b423617",
+      "sizeBytes": 1412391,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-SIGNAL-first-anonymous-message--F-B-luyao--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-011-012/candidates/shots/EV-SIGNAL-first-anonymous-message--F-B-luyao--r6/EV-SIGNAL-first-anonymous-message--F-B-luyao--r6-candidate.mp4",
+      "sha256": "5fdb779882d29f8ebffb2302cae3d0dbc96a9dd9bfb27771e29ec3a439e44140",
+      "sizeBytes": 1321388,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-IDENTITY-profession-reveal--F-B-luyao--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-013-014/candidates/shots/EV-IDENTITY-profession-reveal--F-B-luyao--r6/EV-IDENTITY-profession-reveal--F-B-luyao--r6-candidate.mp4",
+      "sha256": "55aa2507215394893bcbcc53bc60be1bfe1cdc4193dbe12a47398348747c6361",
+      "sizeBytes": 1190662,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-DATE-blind-box--F-B-luyao--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-013-014/candidates/shots/EV-DATE-blind-box--F-B-luyao--r6/EV-DATE-blind-box--F-B-luyao--r6-candidate.mp4",
+      "sha256": "dd6be43c1934f39a9e01c91ae86c5c7cf9e0513b0807b17cc8fd966d72350d2c",
+      "sizeBytes": 1304658,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-DATE-mutual-signal--F-B-luyao--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-015-016/candidates/shots/EV-DATE-mutual-signal--F-B-luyao--r6/EV-DATE-mutual-signal--F-B-luyao--r6-candidate.mp4",
+      "sha256": "8f9b4224291d67b7d4061c4b17b935e78596c863c8f2e20ee89f485f4c687e92",
+      "sizeBytes": 2136299,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-MISSED-empty-seat--F-B-luyao--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-015-016/candidates/shots/EV-MISSED-empty-seat--F-B-luyao--r6/EV-MISSED-empty-seat--F-B-luyao--r6-candidate.mp4",
+      "sha256": "861f7ced352dcfe7e529bfb2f005096d449da2fdeaf628b6ef8360e9175d3262",
+      "sizeBytes": 1509761,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-CARE-breakfast-callback--F-B-luyao--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-017-018/candidates/shots/EV-CARE-breakfast-callback--F-B-luyao--r6/EV-CARE-breakfast-callback--F-B-luyao--r6-candidate.mp4",
+      "sha256": "b3de8e75a01de9700c19617bca73b651b26caf794bfadaf9b659746c4cc4c33f",
+      "sizeBytes": 1382980,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-TRIANGLE-reverse-invite--F-B-luyao--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-017-018/candidates/shots/EV-TRIANGLE-reverse-invite--F-B-luyao--r6/EV-TRIANGLE-reverse-invite--F-B-luyao--r6-candidate.mp4",
+      "sha256": "11d253d955184d5d4ada61d83c1872e741550c76aae2bb72882c249f112d3ecb",
+      "sizeBytes": 1890076,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-BRIDGE-hidden-courage--F-B-luyao--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-019-020/candidates/shots/EV-BRIDGE-hidden-courage--F-B-luyao--r6/EV-BRIDGE-hidden-courage--F-B-luyao--r6-candidate.mp4",
+      "sha256": "0f2b2bac5a1d7c5e5a8f14a7289a4be03b911e545fc76d77113692ffcb04946b",
+      "sizeBytes": 2269605,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-GROUP-truth-firepit--F-B-luyao--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-019-020/candidates/shots/EV-GROUP-truth-firepit--F-B-luyao--r6/EV-GROUP-truth-firepit--F-B-luyao--r6-candidate.mp4",
+      "sha256": "6c4785e118b34efae99dba32391be6c01254e663d6d3f769d7d69faf7be510ee",
+      "sizeBytes": 1822068,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-BOMBSHELL-ninth-card--F-B-luyao--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-021-022/candidates/shots/EV-BOMBSHELL-ninth-card--F-B-luyao--r6/EV-BOMBSHELL-ninth-card--F-B-luyao--r6-candidate.mp4",
+      "sha256": "9f231aad9b31a95dd914cf0e0995ca0ff39144ba1b597ac71a47b85a9143f33e",
+      "sizeBytes": 1339492,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-PAST-consent-reveal--F-B-luyao--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-021-022/candidates/shots/EV-PAST-consent-reveal--F-B-luyao--r6/EV-PAST-consent-reveal--F-B-luyao--r6-candidate.mp4",
+      "sha256": "23713d54d5ebc27aee01a1f2596744e8e448d4c1a9e6e325ebf8884d26edab15",
+      "sizeBytes": 1282211,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-TRIP-last-two-days--F-B-luyao--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-023-024/candidates/shots/EV-TRIP-last-two-days--F-B-luyao--r6/EV-TRIP-last-two-days--F-B-luyao--r6-candidate.mp4",
+      "sha256": "6a8562114a366a954df841853415a8b9fa0b7854746b3a1a50eaefd79529378f",
+      "sizeBytes": 2154851,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-FINAL-unsent-letter--F-B-luyao--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-023-024/candidates/shots/EV-FINAL-unsent-letter--F-B-luyao--r6/EV-FINAL-unsent-letter--F-B-luyao--r6-candidate.mp4",
+      "sha256": "480caf37cbf593b889eb7d3da074a0098a0e6849b63c6bdb97d5d7e5b305d10a",
+      "sizeBytes": 1210778,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-FINAL-confession-day--F-B-luyao--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-025-026/candidates/shots/EV-FINAL-confession-day--F-B-luyao--r6/EV-FINAL-confession-day--F-B-luyao--r6-candidate.mp4",
+      "sha256": "f868337cc26a8b6e9530c9fe12ca616502f5492314a7ba3b0595244c339e2bd9",
+      "sizeBytes": 2145217,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "D1-A1-island-hotel-establish--M-A-chengye--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-025-026/candidates/shots/D1-A1-island-hotel-establish--M-A-chengye--r6/D1-A1-island-hotel-establish--M-A-chengye--r6-candidate.mp4",
+      "sha256": "53506e9dbb54227ef393347e29c652933eeb1f2366d413a0843308209c6d77dd",
+      "sizeBytes": 2064080,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "D1-A2-villa-entry--M-A-chengye--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-027-028/candidates/shots/D1-A2-villa-entry--M-A-chengye--r6/D1-A2-villa-entry--M-A-chengye--r6-candidate.mp4",
+      "sha256": "dcffae389c2bf46cc79493b10ced6f347ac39a322db5f07636921bca79f7845d",
+      "sizeBytes": 2012099,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "D1-A3-cast-introductions--M-A-chengye--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-027-028/candidates/shots/D1-A3-cast-introductions--M-A-chengye--r6/D1-A3-cast-introductions--M-A-chengye--r6-candidate.mp4",
+      "sha256": "27ecc16f56cfdd992a641199a1082c5fb448803c17349f336ee976cf76ce54ee",
+      "sizeBytes": 3384761,
+      "plannedDurationSeconds": 12.0,
+      "durationSeconds": 12.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "D1-A4-icebreaker-selection--M-A-chengye--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-029-030/candidates/shots/D1-A4-icebreaker-selection--M-A-chengye--r6/D1-A4-icebreaker-selection--M-A-chengye--r6-candidate.mp4",
+      "sha256": "ff5c788b163d85c27db55dac657e886258725a16761709b43c8f36fec8968478",
+      "sizeBytes": 1570205,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "D1-A5-guided-smalltalk--M-A-chengye--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-029-030/candidates/shots/D1-A5-guided-smalltalk--M-A-chengye--r6/D1-A5-guided-smalltalk--M-A-chengye--r6-candidate.mp4",
+      "sha256": "5f39707424c1a206b0d00c4fc9fea4ad24e96d39e6c2b52c90b5478d0d7e280d",
+      "sizeBytes": 1331080,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "D1-A6-first-dinner-team--M-A-chengye--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-031-032/candidates/shots/D1-A6-first-dinner-team--M-A-chengye--r6/D1-A6-first-dinner-team--M-A-chengye--r6-candidate.mp4",
+      "sha256": "30bc0823511bb44039d1799218ee3503a805f6cd12cbe853ead1306c59d90518",
+      "sizeBytes": 2027733,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "D1-A7-heart-message--M-A-chengye--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-031-032/candidates/shots/D1-A7-heart-message--M-A-chengye--r6/D1-A7-heart-message--M-A-chengye--r6-candidate.mp4",
+      "sha256": "eea653cd63f5d2d79b90ffc19f60d9149aabd0d182a6348df3cfe68a6c23fa4b",
+      "sizeBytes": 1210206,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "D2-A1-memory-callback--M-A-chengye--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-033-034/candidates/shots/D2-A1-memory-callback--M-A-chengye--r6/D2-A1-memory-callback--M-A-chengye--r6-candidate.mp4",
+      "sha256": "5bb6c20363861878441f02a43ca3b39170199f40b795edccdda4608fd19d927e",
+      "sizeBytes": 1445339,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-KITCHEN-two-person-shift--M-A-chengye--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-033-034/candidates/shots/EV-KITCHEN-two-person-shift--M-A-chengye--r6/EV-KITCHEN-two-person-shift--M-A-chengye--r6-candidate.mp4",
+      "sha256": "d1dce057b19002a60386545e32e08f371544fc7d5719574f337c5d0efe94b946",
+      "sizeBytes": 2370481,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-RULES-house-friction--M-A-chengye--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-035-036/candidates/shots/EV-RULES-house-friction--M-A-chengye--r6/EV-RULES-house-friction--M-A-chengye--r6-candidate.mp4",
+      "sha256": "41738ef71445d2610c7be51e7aaccd4cb32f0d6b0870f10d06283cf03ba598b8",
+      "sizeBytes": 1203246,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-SIGNAL-first-anonymous-message--M-A-chengye--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-035-036/candidates/shots/EV-SIGNAL-first-anonymous-message--M-A-chengye--r6/EV-SIGNAL-first-anonymous-message--M-A-chengye--r6-candidate.mp4",
+      "sha256": "a40def2a15110ae012a1ba8d5ff3f507bcacf8f129d067b1de442e4608e00b55",
+      "sizeBytes": 1175461,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-IDENTITY-profession-reveal--M-A-chengye--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-037-038/candidates/shots/EV-IDENTITY-profession-reveal--M-A-chengye--r6/EV-IDENTITY-profession-reveal--M-A-chengye--r6-candidate.mp4",
+      "sha256": "8577375667d735a32f270766bc9fe7e6a76a737f218667f3fc68d0c7468d4f57",
+      "sizeBytes": 1112690,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-DATE-blind-box--M-A-chengye--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-037-038/candidates/shots/EV-DATE-blind-box--M-A-chengye--r6/EV-DATE-blind-box--M-A-chengye--r6-candidate.mp4",
+      "sha256": "3722727dd1e2ba5c8104c78ad021ccd744dacc17059841e5ee7ec66f24a53057",
+      "sizeBytes": 1267116,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-DATE-mutual-signal--M-A-chengye--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-039-040/candidates/shots/EV-DATE-mutual-signal--M-A-chengye--r6/EV-DATE-mutual-signal--M-A-chengye--r6-candidate.mp4",
+      "sha256": "e9424bba27959bd55e5588e30160423e3a01c201fda9c4730a09298527934da3",
+      "sizeBytes": 2272985,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-MISSED-empty-seat--M-A-chengye--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-039-040/candidates/shots/EV-MISSED-empty-seat--M-A-chengye--r6/EV-MISSED-empty-seat--M-A-chengye--r6-candidate.mp4",
+      "sha256": "a82cd04e5f088988862bf455deb8dcfdcde471885f2f4fafc149f657bf86e7b6",
+      "sizeBytes": 1306284,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-CARE-breakfast-callback--M-A-chengye--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-041-042/candidates/shots/EV-CARE-breakfast-callback--M-A-chengye--r6/EV-CARE-breakfast-callback--M-A-chengye--r6-candidate.mp4",
+      "sha256": "98a3fc4c424be5099d2d451f0dae1cc4d3cefe1dc1539c3b39cb0ed82d681cb1",
+      "sizeBytes": 1518635,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-TRIANGLE-reverse-invite--M-A-chengye--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-041-042/candidates/shots/EV-TRIANGLE-reverse-invite--M-A-chengye--r6/EV-TRIANGLE-reverse-invite--M-A-chengye--r6-candidate.mp4",
+      "sha256": "f1ec892fad1ea5cad2f33a0b4abcb15ecc05bb8b8f6653372ab24be3f2e7a89e",
+      "sizeBytes": 1952319,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-BRIDGE-hidden-courage--M-A-chengye--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-043-044/candidates/shots/EV-BRIDGE-hidden-courage--M-A-chengye--r6/EV-BRIDGE-hidden-courage--M-A-chengye--r6-candidate.mp4",
+      "sha256": "6cdf554e67274b4507d7df2880bbfb3aabfee53a2bd09c4075c617dab4ed0a35",
+      "sizeBytes": 2379442,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-GROUP-truth-firepit--M-A-chengye--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-043-044/candidates/shots/EV-GROUP-truth-firepit--M-A-chengye--r6/EV-GROUP-truth-firepit--M-A-chengye--r6-candidate.mp4",
+      "sha256": "564bd6d415d5b4e8812fcdee54338d7fd84504c1b543d7593e1610c50bf209ee",
+      "sizeBytes": 2423922,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-BOMBSHELL-ninth-card--M-A-chengye--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-045-046/candidates/shots/EV-BOMBSHELL-ninth-card--M-A-chengye--r6/EV-BOMBSHELL-ninth-card--M-A-chengye--r6-candidate.mp4",
+      "sha256": "42db48c508bfd0622965f9ddf265baad663ffeea565dca18f418790b638c27ba",
+      "sizeBytes": 1304219,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-PAST-consent-reveal--M-A-chengye--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-045-046/candidates/shots/EV-PAST-consent-reveal--M-A-chengye--r6/EV-PAST-consent-reveal--M-A-chengye--r6-candidate.mp4",
+      "sha256": "0db1809a61b09a19f203f81d96df1c28168307d82890ce7821044f35dcba7749",
+      "sizeBytes": 1153980,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-TRIP-last-two-days--M-A-chengye--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-047-048/candidates/shots/EV-TRIP-last-two-days--M-A-chengye--r6/EV-TRIP-last-two-days--M-A-chengye--r6-candidate.mp4",
+      "sha256": "4bfcc6ac39618eb85962cbd2bf6528aa4cbe3ffe23ba434e946f27bf952c5fc8",
+      "sizeBytes": 2133903,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-FINAL-unsent-letter--M-A-chengye--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-047-048/candidates/shots/EV-FINAL-unsent-letter--M-A-chengye--r6/EV-FINAL-unsent-letter--M-A-chengye--r6-candidate.mp4",
+      "sha256": "6fdafbb30fa615334b9e46714a9369311896b3da1959c24f1b71daad38144da8",
+      "sizeBytes": 1124829,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-FINAL-confession-day--M-A-chengye--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-049-050/candidates/shots/EV-FINAL-confession-day--M-A-chengye--r6/EV-FINAL-confession-day--M-A-chengye--r6-candidate.mp4",
+      "sha256": "901c18514321b7b5865c28621f4caaad3638d07d4121a5ba5b24546477bfa67e",
+      "sizeBytes": 2131112,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "D1-A1-island-hotel-establish--M-B-hechuan--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-049-050/candidates/shots/D1-A1-island-hotel-establish--M-B-hechuan--r6/D1-A1-island-hotel-establish--M-B-hechuan--r6-candidate.mp4",
+      "sha256": "12b288bb78cb5cd89693d8ffaa4621dbba2c9f6be6aee30916b7e75e3ec472e2",
+      "sizeBytes": 2090912,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "D1-A2-villa-entry--M-B-hechuan--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-051-052/candidates/shots/D1-A2-villa-entry--M-B-hechuan--r6/D1-A2-villa-entry--M-B-hechuan--r6-candidate.mp4",
+      "sha256": "e749f2f26daefa89ed926d0c0c55c1e15bf0d3395e49c115ffd34a926ffaba03",
+      "sizeBytes": 2118216,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "D1-A3-cast-introductions--M-B-hechuan--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-051-052/candidates/shots/D1-A3-cast-introductions--M-B-hechuan--r6/D1-A3-cast-introductions--M-B-hechuan--r6-candidate.mp4",
+      "sha256": "45191a3d4f18f5fc2024d2b2c3ab0d4eba1dd3ca08cdef0f31127a8c047b884d",
+      "sizeBytes": 4456701,
+      "plannedDurationSeconds": 12.0,
+      "durationSeconds": 12.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "D1-A4-icebreaker-selection--M-B-hechuan--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-053-054/candidates/shots/D1-A4-icebreaker-selection--M-B-hechuan--r6/D1-A4-icebreaker-selection--M-B-hechuan--r6-candidate.mp4",
+      "sha256": "178d9fd25717b9f75d9884ac74c46c36b14b8176e94ee11e1d5e85739a25cfe3",
+      "sizeBytes": 1312765,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "D1-A5-guided-smalltalk--M-B-hechuan--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-053-054/candidates/shots/D1-A5-guided-smalltalk--M-B-hechuan--r6/D1-A5-guided-smalltalk--M-B-hechuan--r6-candidate.mp4",
+      "sha256": "2e1d5a663e0290fbee64bbe0233945f2784b43df97e796024c3a412f1d4942a5",
+      "sizeBytes": 1367448,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "D1-A6-first-dinner-team--M-B-hechuan--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-055-056/candidates/shots/D1-A6-first-dinner-team--M-B-hechuan--r6/D1-A6-first-dinner-team--M-B-hechuan--r6-candidate.mp4",
+      "sha256": "467ee2fe7881d97337df2d1c016b955b2761303508847d31be452f4cfbee726e",
+      "sizeBytes": 2288334,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "D1-A7-heart-message--M-B-hechuan--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-055-056/candidates/shots/D1-A7-heart-message--M-B-hechuan--r6/D1-A7-heart-message--M-B-hechuan--r6-candidate.mp4",
+      "sha256": "4a4b884038e82a73a8d4aca8cd453fecd065c5fdebddcd1b9ff2dcd7e372073e",
+      "sizeBytes": 1415276,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "D2-A1-memory-callback--M-B-hechuan--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-057-058/candidates/shots/D2-A1-memory-callback--M-B-hechuan--r6/D2-A1-memory-callback--M-B-hechuan--r6-candidate.mp4",
+      "sha256": "244feefff3a977d6fe6fc9692b3ce884bb3f48bffc393c1dbdd35d8ebdf6d3b7",
+      "sizeBytes": 1427302,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-KITCHEN-two-person-shift--M-B-hechuan--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-057-058/candidates/shots/EV-KITCHEN-two-person-shift--M-B-hechuan--r6/EV-KITCHEN-two-person-shift--M-B-hechuan--r6-candidate.mp4",
+      "sha256": "a8e8c2a67c813b94cecf2885191eba33555e44af399a6bf128fb56016dbcaace",
+      "sizeBytes": 2164342,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-RULES-house-friction--M-B-hechuan--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-059-060/candidates/shots/EV-RULES-house-friction--M-B-hechuan--r6/EV-RULES-house-friction--M-B-hechuan--r6-candidate.mp4",
+      "sha256": "87a8d5903fc56cd52cab62bd938b7ee9fb002052860bfb1fb46605ce69acbb3f",
+      "sizeBytes": 1589825,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-SIGNAL-first-anonymous-message--M-B-hechuan--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-059-060/candidates/shots/EV-SIGNAL-first-anonymous-message--M-B-hechuan--r6/EV-SIGNAL-first-anonymous-message--M-B-hechuan--r6-candidate.mp4",
+      "sha256": "b630ca94e048a6699cc4a22711076712ee2d31423b3a28c55fc99302042f38b0",
+      "sizeBytes": 1550636,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-IDENTITY-profession-reveal--M-B-hechuan--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-061-062/candidates/shots/EV-IDENTITY-profession-reveal--M-B-hechuan--r6/EV-IDENTITY-profession-reveal--M-B-hechuan--r6-candidate.mp4",
+      "sha256": "0f1f2e457c29a2c5fa0a4ca8b55b510df21994631bc73c135f4104bcaa3e131e",
+      "sizeBytes": 1714826,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-DATE-blind-box--M-B-hechuan--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-061-062/candidates/shots/EV-DATE-blind-box--M-B-hechuan--r6/EV-DATE-blind-box--M-B-hechuan--r6-candidate.mp4",
+      "sha256": "bf2ab99490e3b4331fbc727d1b97542f73b77c76116326b7284c8b3025129cf0",
+      "sizeBytes": 1393942,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-DATE-mutual-signal--M-B-hechuan--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-063-064/candidates/shots/EV-DATE-mutual-signal--M-B-hechuan--r6/EV-DATE-mutual-signal--M-B-hechuan--r6-candidate.mp4",
+      "sha256": "ff6ef07b7cd29c6c57d010affcfd9f8d3c226ab4343acb63224717c266910e50",
+      "sizeBytes": 2050200,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-MISSED-empty-seat--M-B-hechuan--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-063-064/candidates/shots/EV-MISSED-empty-seat--M-B-hechuan--r6/EV-MISSED-empty-seat--M-B-hechuan--r6-candidate.mp4",
+      "sha256": "a333f7021dc77f959fca5d165ffdf62d04520e8203f58884a9a0d56153c7bf64",
+      "sizeBytes": 1449438,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-CARE-breakfast-callback--M-B-hechuan--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-065-066/candidates/shots/EV-CARE-breakfast-callback--M-B-hechuan--r6/EV-CARE-breakfast-callback--M-B-hechuan--r6-candidate.mp4",
+      "sha256": "47fb0ab538d084517318c4f309d96e376144606e0e68828315793e63efeca8fa",
+      "sizeBytes": 1685706,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-TRIANGLE-reverse-invite--M-B-hechuan--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-065-066/candidates/shots/EV-TRIANGLE-reverse-invite--M-B-hechuan--r6/EV-TRIANGLE-reverse-invite--M-B-hechuan--r6-candidate.mp4",
+      "sha256": "b55a46b8986c494308f3ee197f503a08601dde01422f2565b771e4257a93bd1a",
+      "sizeBytes": 2251577,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-BRIDGE-hidden-courage--M-B-hechuan--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-067-068/candidates/shots/EV-BRIDGE-hidden-courage--M-B-hechuan--r6/EV-BRIDGE-hidden-courage--M-B-hechuan--r6-candidate.mp4",
+      "sha256": "16d3405506eca8fcaaef167e56c36e9ac11c829e22693deae8c78ae380d452b9",
+      "sizeBytes": 2317997,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-GROUP-truth-firepit--M-B-hechuan--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-067-068/candidates/shots/EV-GROUP-truth-firepit--M-B-hechuan--r6/EV-GROUP-truth-firepit--M-B-hechuan--r6-candidate.mp4",
+      "sha256": "46bdbd7f4b4777722ca45b9079989ab8bcd4996b32d6d4c8df22219603850814",
+      "sizeBytes": 2276679,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-BOMBSHELL-ninth-card--M-B-hechuan--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-069-070/candidates/shots/EV-BOMBSHELL-ninth-card--M-B-hechuan--r6/EV-BOMBSHELL-ninth-card--M-B-hechuan--r6-candidate.mp4",
+      "sha256": "b6f29daaa8aa7f878be289d2658246c1d954876fe90b5e907ede95e411da3c60",
+      "sizeBytes": 1556042,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-PAST-consent-reveal--M-B-hechuan--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-069-070/candidates/shots/EV-PAST-consent-reveal--M-B-hechuan--r6/EV-PAST-consent-reveal--M-B-hechuan--r6-candidate.mp4",
+      "sha256": "9071e28d984819d77cde1bf1a754ae297d36f6189816b299a6c8819b624085aa",
+      "sizeBytes": 1497404,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-TRIP-last-two-days--M-B-hechuan--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-071-072/candidates/shots/EV-TRIP-last-two-days--M-B-hechuan--r6/EV-TRIP-last-two-days--M-B-hechuan--r6-candidate.mp4",
+      "sha256": "3d40f957f77e45b947ea0acfab7a456439d0dc02894ec26ef57e53dfa7ffe22d",
+      "sizeBytes": 2305611,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-FINAL-unsent-letter--M-B-hechuan--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-071-072/candidates/shots/EV-FINAL-unsent-letter--M-B-hechuan--r6/EV-FINAL-unsent-letter--M-B-hechuan--r6-candidate.mp4",
+      "sha256": "cdd9c46581afe60f6feb0404d1ab8420b2df409670cf1a46f3fcef3b765fe4b9",
+      "sizeBytes": 1161783,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.096,
+      "durationDeltaSeconds": 0.096,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "EV-FINAL-confession-day--M-B-hechuan--r6",
+      "kind": "event-rotation-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-073-073/candidates/shots/EV-FINAL-confession-day--M-B-hechuan--r6/EV-FINAL-confession-day--M-B-hechuan--r6-candidate.mp4",
+      "sha256": "4d4a5b17e4b9a76996b09fe7017532f3c53b806ea068ebc083ab3a5b13e981d0",
+      "sizeBytes": 2372250,
+      "plannedDurationSeconds": 6.0,
+      "durationSeconds": 6.08,
+      "durationDeltaSeconds": 0.08,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": true,
+        "streamCount": 1,
+        "codec": "aac",
+        "sampleRate": "32000",
+        "channels": 2
+      },
+      "errors": []
+    },
+    {
+      "id": "CHAR-luyao-portrait--r6",
+      "kind": "dynamic-portrait-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-074-075/candidates/shots/CHAR-luyao-portrait--r6/CHAR-luyao-portrait--r6-candidate.mp4",
+      "sha256": "fb20b3439b68203cf78abe2367103545b1c08d698d38065a620fc9453a408144",
+      "sizeBytes": 1067527,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.041667,
+      "durationDeltaSeconds": 0.041667,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": false,
+        "streamCount": 0,
+        "codec": null,
+        "sampleRate": null,
+        "channels": null
+      },
+      "errors": []
+    },
+    {
+      "id": "CHAR-yecheng-portrait--r6",
+      "kind": "dynamic-portrait-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-074-075/candidates/shots/CHAR-yecheng-portrait--r6/CHAR-yecheng-portrait--r6-candidate.mp4",
+      "sha256": "55965c4985a6cf576acf5f395db0197502c807d27de280ea67763e513f4ccc33",
+      "sizeBytes": 1467799,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.041667,
+      "durationDeltaSeconds": 0.041667,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": false,
+        "streamCount": 0,
+        "codec": null,
+        "sampleRate": null,
+        "channels": null
+      },
+      "errors": []
+    },
+    {
+      "id": "CHAR-tangli-portrait--r6",
+      "kind": "dynamic-portrait-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-076-077/candidates/shots/CHAR-tangli-portrait--r6/CHAR-tangli-portrait--r6-candidate.mp4",
+      "sha256": "0bac4be9c9193fdb8026b3146bd0995accfd6ad8b3e2032116b4023845b8aee0",
+      "sizeBytes": 1052063,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.041667,
+      "durationDeltaSeconds": 0.041667,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": false,
+        "streamCount": 0,
+        "codec": null,
+        "sampleRate": null,
+        "channels": null
+      },
+      "errors": []
+    },
+    {
+      "id": "CHAR-wenxu-portrait--r6",
+      "kind": "dynamic-portrait-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-076-077/candidates/shots/CHAR-wenxu-portrait--r6/CHAR-wenxu-portrait--r6-candidate.mp4",
+      "sha256": "1037c17c91f36141cbcdd4f577b33faf52012767b0db81a3ddf8f75838f74470",
+      "sizeBytes": 1413934,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.041667,
+      "durationDeltaSeconds": 0.041667,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": false,
+        "streamCount": 0,
+        "codec": null,
+        "sampleRate": null,
+        "channels": null
+      },
+      "errors": []
+    },
+    {
+      "id": "CHAR-hechuan-portrait--r6",
+      "kind": "dynamic-portrait-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-078-079/candidates/shots/CHAR-hechuan-portrait--r6/CHAR-hechuan-portrait--r6-candidate.mp4",
+      "sha256": "b412db1185b79e91a0769c0ebeebb78ac6105e15a45b0e78b9c8039d0a886a4f",
+      "sizeBytes": 1241659,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.041667,
+      "durationDeltaSeconds": 0.041667,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": false,
+        "streamCount": 0,
+        "codec": null,
+        "sampleRate": null,
+        "channels": null
+      },
+      "errors": []
+    },
+    {
+      "id": "CHAR-peiran-portrait--r6",
+      "kind": "dynamic-portrait-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-078-079/candidates/shots/CHAR-peiran-portrait--r6/CHAR-peiran-portrait--r6-candidate.mp4",
+      "sha256": "b2d9f41ab46d76d472a7e41c9fdb8dd899f74efec4c03ca6a35554026fda44b4",
+      "sizeBytes": 878906,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.041667,
+      "durationDeltaSeconds": 0.041667,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": false,
+        "streamCount": 0,
+        "codec": null,
+        "sampleRate": null,
+        "channels": null
+      },
+      "errors": []
+    },
+    {
+      "id": "CHAR-lichuan-portrait--r6",
+      "kind": "dynamic-portrait-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-080-081/candidates/shots/CHAR-lichuan-portrait--r6/CHAR-lichuan-portrait--r6-candidate.mp4",
+      "sha256": "823443622df012ea9a398a21d0e0c1f8920c95261908bd330da30c6e5a6a0927",
+      "sizeBytes": 979608,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.041667,
+      "durationDeltaSeconds": 0.041667,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": false,
+        "streamCount": 0,
+        "codec": null,
+        "sampleRate": null,
+        "channels": null
+      },
+      "errors": []
+    },
+    {
+      "id": "CHAR-qiaolan-portrait--r6",
+      "kind": "dynamic-portrait-candidate",
+      "status": "technical-passed",
+      "candidatePath": "wave-080-081/candidates/shots/CHAR-qiaolan-portrait--r6/CHAR-qiaolan-portrait--r6-candidate.mp4",
+      "sha256": "eb4a9f9a0ec179372492d979a09b4ee7fb65018881e7734af261738327563748",
+      "sizeBytes": 998510,
+      "plannedDurationSeconds": 4.0,
+      "durationSeconds": 4.041667,
+      "durationDeltaSeconds": 0.041667,
+      "video": {
+        "codec": "h264",
+        "width": 496,
+        "height": 864,
+        "pixelFormat": "yuv420p",
+        "averageFrameRate": "24/1"
+      },
+      "audio": {
+        "expected": false,
+        "streamCount": 0,
+        "codec": null,
+        "sampleRate": null,
+        "channels": null
+      },
+      "errors": []
+    }
+  ]
+}

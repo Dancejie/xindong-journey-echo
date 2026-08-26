@@ -23,13 +23,14 @@ from backend.day1_script import (
     validate_day1_node_script,
     validate_day1_script,
 )
-from backend.game_content import CARD_PACKAGE, CHARACTER_CARDS, CHARACTER_MAP, NODES, build_fallback_script_flavor, create_snapshot, utc_now
+from backend.game_content import CARD_PACKAGE, CHARACTER_CARDS, CHARACTER_MAP, NODES, active_cast_ids, build_fallback_script_flavor, create_snapshot, utc_now
 
 
 def repair_surface_fields(snapshot: dict[str, Any], payload: dict[str, Any]) -> tuple[dict[str, Any], list[str]]:
     """Replace only rejected surface fields; engine IDs/targets still come from the validated skeleton."""
     perspective_id = snapshot["player"]["perspectiveCharacterId"]
-    fallback = build_fallback_script_flavor(perspective_id)["nodes"]
+    cast_ids = active_cast_ids(snapshot)
+    fallback = build_fallback_script_flavor(perspective_id, cast_ids)["nodes"]
     raw_nodes = payload.get("nodes") if isinstance(payload.get("nodes"), dict) else {}
     repaired_nodes: dict[str, Any] = {}
     repairs: list[str] = []
@@ -42,7 +43,7 @@ def repair_surface_fields(snapshot: dict[str, Any], payload: dict[str, Any]) -> 
             except ValueError:
                 repairs.append(f"{node_id}.{field}")
         speaker_id = str(raw.get("speakerId") or "").strip()
-        if speaker_id in {"narrator", "program", *(character_id for character_id in CHARACTER_MAP if character_id != perspective_id)}:
+        if speaker_id in {"narrator", "program", *(character_id for character_id in cast_ids if character_id != perspective_id)}:
             safe["speakerId"] = speaker_id
         else:
             repairs.append(f"{node_id}.speakerId")
@@ -67,15 +68,15 @@ def repair_surface_fields(snapshot: dict[str, Any], payload: dict[str, Any]) -> 
                 target["hint"] = _validate_surface_text(candidate.get("hint"), f"{node_id}.{choice_id}.hint", 6, 52)
             except ValueError:
                 repairs.append(f"{node_id}.{choice_id}.hint")
-            if node_id == "icebreaker-choice":
+            if node_id in {"cast-first-impressions", "icebreaker-choice"}:
                 target_id = candidate.get("targetCharacterId")
-                if target_id in CHARACTER_MAP and target_id != perspective_id:
+                if target_id in cast_ids and target_id != perspective_id:
                     target["targetCharacterId"] = target_id
                 else:
                     repairs.append(f"{node_id}.{choice_id}.targetCharacterId")
             else:
                 target["targetCharacterId"] = None
-        if node_id == "icebreaker-choice":
+        if node_id in {"cast-first-impressions", "icebreaker-choice"}:
             targets = [item["targetCharacterId"] for item in safe["choices"]]
             if len(set(targets)) != 3:
                 safe["choices"] = deepcopy(fallback[node_id]["choices"])

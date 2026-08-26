@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "gender-rotation-r6/approval-v1",
+  "batchId": "R6-20260826-ANCHORS-AND-SEEDANCE",
+  "doNotSubmit": false,
+  "manifestSha256": "4301f958ec7d4e04655ff8db0d41dcbbf93f0f3f1eb962cfdace671cf745763a",
+  "approvedTaskCount": 81,
+  "approvedTotalDurationSeconds": 416,
+  "policy": {
+    "provider": "fumin",
+    "model": "seedance-2.0-mini",
+    "ratio": "9:16",
+    "resolution": "480p",
+    "durationRangeSeconds": [4, 15],
+    "generateEventAudio": true,
+    "watermark": false,
+    "concurrency": 2,
+    "maxApiRetry": 0
+  },
+  "pricing": {
+    "currency": "CNY",
+    "unitPriceCnyPerSecond": 0.1234554,
+    "pricingEvidenceRef": "pricing-evidence-2026-08-26.json#derived",
+    "verifiedBy": "Codex same-day settled-ledger review plus live model probe",
+    "verifiedAt": "2026-08-26T11:50:19+08:00"
+  },
+  "budget": {
+    "thresholdCny": 200,
+    "cumulativeSpendCnyFloor": 200.01,
+    "cumulativeSpendExactKnown": false,
+    "cumulativeSpendEvidenceRef": "cumulative-spend-floor-2026-08-26.json",
+    "incrementalSpendCny": 51.3574464,
+    "projectedCumulativeSpendCnyFloor": 251.3674464,
+    "hardTotalMaxAmountCny": 60,
+    "retryTaskCountCap": 0,
+    "retryRequiresNewApproval": true,
+    "manualOverBudgetApprovalRef": "budget-authorization-2026-08-26.md",
+    "manualOverBudgetMaxAmountCny": 60
+  },
+  "userApproval": {
+    "status": "approved",
+    "requiredText": "R6新增上限¥60",
+    "maxCny": 60,
+    "approvalRef": "budget-authorization-2026-08-26.md",
+    "approvedBy": "user",
+    "approvedAt": "2026-08-26T11:10:42+08:00"
+  },
+  "rights": {
+    "status": "approved",
+    "likenessConsentRefIds": [
+      "original-fictional-r6-anchors:anchor-candidates-qa-2026-08-26.md"
+    ],
+    "voiceConsentRefIds": [
+      "synthetic-audio:no-human-voice-reference"
+    ],
+    "referenceRightsRefIds": [
+      "rights-review-2026-08-26.md"
+    ],
+    "reviewedBy": "Codex project-scope provenance review",
+    "reviewedAt": "2026-08-26T11:51:14+08:00"
+  },
+  "approval": {
+    "reviewedBy": "Codex R6 production gate",
+    "reviewedAt": "2026-08-26T11:51:14+08:00",
+    "authorizedBy": "user",
+    "authorizedAt": "2026-08-26T11:10:42+08:00",
+    "scopeRef": "budget-authorization-2026-08-26.md"
+  }
+}

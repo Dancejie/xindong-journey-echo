@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "gender-rotation-r6/approval-v1",
+  "batchId": "R6-REPLACE-WITH-BATCH-ID",
+  "doNotSubmit": true,
+  "manifestSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "approvedTaskCount": 81,
+  "approvedTotalDurationSeconds": 698,
+  "policy": {
+    "provider": "fumin",
+    "model": "seedance-2.0-mini",
+    "ratio": "9:16",
+    "resolution": "480p",
+    "durationRangeSeconds": [4, 15],
+    "generateEventAudio": true,
+    "watermark": false,
+    "concurrency": 2,
+    "maxApiRetry": 0
+  },
+  "pricing": {
+    "currency": "CNY",
+    "unitPriceCnyPerSecond": 0.0655711467,
+    "pricingEvidenceRef": "pricing-evidence-2026-08-25.json#derived",
+    "verifiedBy": null,
+    "verifiedAt": null
+  },
+  "budget": {
+    "thresholdCny": 200,
+    "cumulativeSpendCny": null,
+    "cumulativeSpendEvidenceRef": null,
+    "incrementalSpendCny": 45.7686604,
+    "projectedCumulativeSpendCny": null,
+    "hardTotalMaxAmountCny": 60,
+    "retryTaskCountCap": 0,
+    "retryRequiresNewApproval": true,
+    "manualOverBudgetApprovalRef": null,
+    "manualOverBudgetMaxAmountCny": null
+  },
+  "userApproval": {
+    "status": "pending",
+    "requiredText": "R6新增上限¥60",
+    "maxCny": null,
+    "approvalRef": null,
+    "approvedBy": null,
+    "approvedAt": null
+  },
+  "rights": {
+    "status": "pending",
+    "likenessConsentRefIds": [],
+    "voiceConsentRefIds": [],
+    "referenceRightsRefIds": [],
+    "reviewedBy": null,
+    "reviewedAt": null
+  },
+  "approval": {
+    "reviewedBy": null,
+    "reviewedAt": null,
+    "authorizedBy": null,
+    "authorizedAt": null,
+    "scopeRef": null
+  }
+}

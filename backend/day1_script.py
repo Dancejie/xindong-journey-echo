@@ -19,6 +19,7 @@ from backend.game_content import (
     MECHANICAL_COPY_TERMS,
     NODES,
     ROOT,
+    active_cast_ids,
     build_fallback_script_flavor,
     migrate_snapshot,
     split_story_beats,
@@ -37,6 +38,11 @@ INTRO_BACKGROUND_ANCHORS = {
     "guyan": ("游戏", "外包"), "jiangwan": ("心理咨询",),
     "jiangmi": ("声音", "录音", "故事"), "sunnian": ("插画",), "chensu": ("相机", "修"),
 }
+INTRO_BACKGROUND_ANCHORS.update({
+    "luyao": ("智能硬件", "产品"), "yecheng": ("古籍", "修复"), "tangli": ("户外纪录片", "现场制片"),
+    "wenxu": ("城市气候", "数据"), "hechuan": ("纪录片", "剪辑"), "peiran": ("儿童博物馆", "体验策展"),
+    "lichuan": ("精品酒店", "餐饮运营"), "qiaolan": ("舞台机械", "工程"),
+})
 INTRO_RIDDLE_TERMS = (
     "你猜", "猜我", "先猜", "暂时不说", "以后会知道", "先看你怎么回答", "试探", "秘密", "谜底", "看表现",
     "都叫我", "外号", "节目组发的卡片", "节目组给的卡", "不会不慌",
@@ -60,26 +66,40 @@ PROTAGONIST_SURFACE_ANCHORS = {
     "sunnian": ["大家", "一起", "你需要", "我来"],
     "chensu": ["我来", "能做", "先做", "不用"],
 }
+PROTAGONIST_SURFACE_ANCHORS.update({
+    "luyao": ["先说清", "时间", "修改", "具体"], "yecheng": ["一起", "偏好", "分担", "你想"],
+    "tangli": ["现在", "试试", "慢一点", "可以停"], "wenxu": ["不确定", "如果", "修正", "具体"],
+    "hechuan": ["也许", "我的理解", "你愿意", "我自己"], "peiran": ["游戏", "点子", "一起", "安静"],
+    "lichuan": ["大家", "分工", "我想", "一起"], "qiaolan": ["能做", "先问", "两个办法", "我来"],
+})
 INTRO_SAFE_BACKGROUND = {
     "shenmo": "在投行做VP", "linyu": "是建筑工程师", "chengye": "经营一家极限运动品牌",
     "guyan": "做游戏策划，也接外包", "jiangwan": "是心理咨询师",
     "jiangmi": "平时喜欢录声音日记，也会写小故事", "sunnian": "是插画师",
     "chensu": "平时喜欢修旧相机和坏掉的小东西",
 }
+INTRO_SAFE_BACKGROUND.update({
+    "luyao": "是智能硬件产品负责人", "yecheng": "是古籍修复师", "tangli": "是户外纪录片现场制片人",
+    "wenxu": "是城市气候数据研究员", "hechuan": "是纪录片剪辑师", "peiran": "是儿童博物馆体验策展人",
+    "lichuan": "是精品酒店餐饮运营经理", "qiaolan": "是舞台机械工程师",
+})
 TARGETED_CHOICE_NODE_IDS = {"cast-first-impressions", "icebreaker-choice"}
 
 
-def _ensemble_context(perspective_id: str) -> dict[str, Any]:
+def _ensemble_context(perspective_id: str, cast_ids: list[str] | None = None) -> dict[str, Any]:
     """Public group-introduction facts the writer may safely turn into visible ensemble beats."""
     members = []
+    allowed = set(cast_ids or CHARACTER_CARD_MAP)
     for card in CHARACTER_CARD_MAP.values():
+        if card["id"] not in allowed:
+            continue
         if card["id"] == perspective_id:
             continue
         public = _public_cast_card(card)
         public["groupIntroductionReference"] = INTRODUCTION_FALLBACKS[card["id"]]["intro-clear"][0]
         members.append(public)
     return {
-        "castSize": len(CHARACTER_CARD_MAP),
+        "castSize": len(allowed),
         "otherCastCount": len(members),
         "sequenceFact": "主角说完后，其余七位嘉宾继续并完成自我介绍；最后一个名字说完才进入第一印象小结",
         "members": members,
@@ -145,9 +165,10 @@ def build_day1_script_messages(snapshot: dict[str, Any]) -> list[dict[str, str]]
     if state is None:
         raise ValueError("剧情状态不存在")
     perspective_id = state["player"]["perspectiveCharacterId"]
+    cast_ids = active_cast_ids(state)
     protagonist = CHARACTER_CARD_MAP[perspective_id]
     protagonist_for_prompt = _card_for_prompt(protagonist)
-    public_cast = [_public_cast_card(card) for card in CHARACTER_CARD_MAP.values() if card["id"] != perspective_id]
+    public_cast = [_public_cast_card(CHARACTER_CARD_MAP[character_id]) for character_id in cast_ids if character_id != perspective_id]
     output_contract = {
         "introductionHardContract": {
             "allThreeChoiceLabelsMustContainLiteralTokens": {
@@ -214,7 +235,7 @@ speakerId 只能填写以下一个英文字符串：narrator、program，或同�
         "主角语言硬约束（写选项时优先看这一段）：\n" + json.dumps(protagonist_style, ensure_ascii=False) +
         "\n\n主角完整人物卡：\n" + json.dumps(protagonist_for_prompt, ensure_ascii=False) +
 	        "\n\n同场嘉宾公共卡：\n" + json.dumps(public_cast, ensure_ascii=False) +
-	        "\n\n群像自我介绍上下文：\n" + json.dumps(_ensemble_context(perspective_id), ensure_ascii=False) +
+	        "\n\n群像自我介绍上下文：\n" + json.dumps(_ensemble_context(perspective_id, cast_ids), ensure_ascii=False) +
         "\n\n确定性剧情骨架：\n" + json.dumps(_story_skeleton(), ensure_ascii=False) +
         "\n\n输出合同：\n" + json.dumps(output_contract, ensure_ascii=False)
     )
@@ -290,7 +311,8 @@ def validate_day1_script(snapshot: dict[str, Any], payload: dict[str, Any]) -> d
     if not isinstance(raw_nodes, dict) or set(raw_nodes) != set(DAY1_SCRIPT_NODE_IDS):
         raise ValueError("DeepSeek 台本节点与确定性骨架不一致")
     normalized: dict[str, Any] = {}
-    allowed_speakers = {"narrator", "program", *(character_id for character_id in CHARACTER_MAP if character_id != perspective_id)}
+    cast_ids = active_cast_ids(state)
+    allowed_speakers = {"narrator", "program", *(character_id for character_id in cast_ids if character_id != perspective_id)}
     for node_id in DAY1_SCRIPT_NODE_IDS:
         raw = raw_nodes.get(node_id)
         if not isinstance(raw, dict):
@@ -336,7 +358,7 @@ def validate_day1_script(snapshot: dict[str, Any], payload: dict[str, Any]) -> d
             labels.add(label)
             target_id = choice.get("targetCharacterId")
             if node_id in TARGETED_CHOICE_NODE_IDS:
-                if target_id not in CHARACTER_MAP or target_id == perspective_id:
+                if target_id not in cast_ids or target_id == perspective_id:
                     raise ValueError(f"{node_id} 的目标必须是非主角嘉宾")
                 targets.append(target_id)
                 target_name = CHARACTER_MAP[target_id]["name"]
@@ -356,7 +378,8 @@ def validate_day1_script(snapshot: dict[str, Any], payload: dict[str, Any]) -> d
             raise ValueError(f"{node_id} 的三个选项必须指向三位不同嘉宾")
         if node_id == "introductions":
             introduction_copy = title + text + action + "".join(item["label"] + item["hint"] for item in choices)
-            for character_id, character in CHARACTER_MAP.items():
+            for character_id in cast_ids:
+                character = CHARACTER_MAP[character_id]
                 if character_id != perspective_id and character["name"] in introduction_copy:
                     raise ValueError("自我介绍节点编造了另一位嘉宾刚刚做过的事")
             for left_index, left in enumerate(choices):
@@ -385,6 +408,7 @@ def build_day1_node_messages(snapshot: dict[str, Any], node_id: str) -> list[dic
     if state is None or node_id not in NODES:
         raise ValueError("剧情节点不存在")
     perspective_id = state["player"]["perspectiveCharacterId"]
+    cast_ids = active_cast_ids(state)
     protagonist = CHARACTER_CARD_MAP[perspective_id]
     protagonist_name = protagonist["names"]["primary"]
     protagonist_for_prompt = _card_for_prompt(protagonist)
@@ -417,7 +441,8 @@ def build_day1_node_messages(snapshot: dict[str, Any], node_id: str) -> list[dic
     }
     system = """你是《心动之旅》的现场台本编辑。只改写当前一个节点的可见文案，不决定路线、任务结果或媒体路径。
 playerIdentity 是最高优先级硬约束：玩家正在扮演 protagonistId 对应的人物。“你”就是该人物本人，场内绝不存在一个独立于“你”的同名 NPC。不得写“你和主角名”、不得让主角名转身等你或对你说话，也不得给主角虚构职业。
-必须结合主角完整人物卡、已经发生的选择、当前事件目标和相关人物记忆写成真人恋综口语；不能把同一套固定台本只替换名字。
+	必须结合主角完整人物卡、已经发生的选择、当前事件目标和相关人物记忆写成真人恋综口语；不能把同一套固定台本只替换名字。
+	choiceHistory 中的 customText/playerExpression 是玩家在上一步亲自输入的原话，只能作为“主角刚刚这样说/这样选择”的引用证据；不得把其中尚未发生的愿望、猜测或夸张表述升级为客观场景事实，也不得改变确定性路线、任务结果或人物关系。
 title/text 清楚说明刚发生什么、现场在哪里、玩家现在要做什么。每个选项是主角当场真会说或做的一句话，三项具体且有真实取舍。
 textBeats 必须把旁白拆成2-4个短段，每段只承担一个信息：先承接上一幕，再交代现场或规则，最后落到玩家动作。长文不能整段作为唯一beat。
 禁止“看清一个人、赢任务、观察还是相信、说出自己的需要、建立信任、推进剧情、完成主线”等机械句，也禁止谜语、抽象试探、金句式说教。
@@ -456,8 +481,8 @@ choice id、intent、next、patch、节点顺序、目标规则和媒体全部�
             },
         },
         "protagonistCard": protagonist_for_prompt,
-        "ensembleContext": _ensemble_context(perspective_id),
-        "publicCast": [_public_cast_card(card) for card in CHARACTER_CARD_MAP.values() if card["id"] != perspective_id],
+        "ensembleContext": _ensemble_context(perspective_id, cast_ids),
+        "publicCast": [_public_cast_card(CHARACTER_CARD_MAP[character_id]) for character_id in cast_ids if character_id != perspective_id],
         "focusCharacterIds": sorted(focus_ids), "relevantCharacterMemories": relevant_memories,
         "currentParticipants": {
             "player": {"id": perspective_id, "name": protagonist_name},
@@ -465,7 +490,10 @@ choice id、intent、next、patch、节点顺序、目标规则和媒体全部�
             "rule": "guided-chat/team-up只允许玩家与guidedCounterpart两人；其他节点只使用确定性骨架声明的人物",
         },
         "choiceHistory": [
-            {key: item.get(key) for key in ("choiceId", "effectIntentId", "targetCharacterId", "fromEventId")}
+            {key: item.get(key) for key in (
+                "choiceId", "effectIntentId", "targetCharacterId", "fromEventId",
+                "customText", "playerExpression",
+            )}
             for item in state.get("choiceHistory", [])[-8:]
         ],
         "firstImpressionSeed": state.get("firstImpressionSeed"),
@@ -532,7 +560,7 @@ def validate_day1_node_script(snapshot: dict[str, Any], node_id: str, payload: d
     for duration in re.findall(r"(?:半|[零一二三四五六七八九十\d]+)(?:分钟|小时)", visible_copy):
         if duration not in current_evidence:
             raise ValueError(f"{node_id} 新增了骨架外的精确时长：{duration}")
-    package = build_fallback_script_flavor(state["player"]["perspectiveCharacterId"])
+    package = build_fallback_script_flavor(state["player"]["perspectiveCharacterId"], active_cast_ids(state))
     package["nodes"][node_id] = raw_node
     return validate_day1_script(state, {"nodes": package["nodes"]})["nodes"][node_id]
 
@@ -563,7 +591,7 @@ def install_day1_script(snapshot: dict[str, Any], payload: dict[str, Any] | None
     try:
         flavor = validate_day1_script(state, payload or {})
     except (TypeError, ValueError):
-        flavor = build_fallback_script_flavor(perspective_id)
+        flavor = build_fallback_script_flavor(perspective_id, active_cast_ids(state))
     next_state = deepcopy(state)
     next_state["scriptFlavor"] = flavor
     return next_state
@@ -577,7 +605,13 @@ def validate_cached_day1_script_package(snapshot: dict[str, Any], package: dict[
     perspective_id = state["player"]["perspectiveCharacterId"]
     current_card_version = str(CARD_PACKAGE.get("contentVersion") or "")
     package_card_version = str(package.get("characterCardContentVersion") or "")
-    if not package_card_version or package_card_version != current_card_version:
+    legacy_additive_upgrade = (
+        perspective_id in CHARACTER_CARD_MAP
+        and perspective_id in tuple(card["id"] for card in CARD_PACKAGE["cards"][:8])
+        and package_card_version == "3.0.0-local-research"
+        and current_card_version == "3.1.0-dual-roster"
+    )
+    if not package_card_version or (package_card_version != current_card_version and not legacy_additive_upgrade):
         raise ValueError("缓存人物卡版本与当前运行时不一致")
     generator = package.get("generator")
     if not isinstance(generator, dict) or not str(generator.get("provider") or "").strip() or not str(generator.get("model") or "").strip():
@@ -591,22 +625,23 @@ def validate_cached_day1_script_package(snapshot: dict[str, Any], package: dict[
     raw_payload = deepcopy(entry.get("payload") if isinstance(entry.get("payload"), dict) else entry)
     node_sources: dict[str, str] = {}
     raw_nodes = raw_payload.get("nodes") if isinstance(raw_payload, dict) else None
-    if isinstance(raw_nodes, dict) and "cast-first-impressions" not in raw_nodes:
-        fallback_nodes = build_fallback_script_flavor(perspective_id)["nodes"]
-        # v1 caches predate both the authored transition and the clarified card
-        # instructions. Preserve their DeepSeek character surfaces elsewhere,
-        # while these two nodes wait for contextual generation on entry.
+    if isinstance(raw_nodes, dict):
+        fallback_nodes = build_fallback_script_flavor(perspective_id, active_cast_ids(state))["nodes"]
+        # Targeted choices are season-cast data, not reusable prose.  Always
+        # rebuild them for the persisted eight-person cast while preserving the
+        # cached protagonist voice on non-targeted nodes.
         raw_nodes["cast-first-impressions"] = fallback_nodes["cast-first-impressions"]
         raw_nodes["icebreaker-choice"] = fallback_nodes["icebreaker-choice"]
         node_sources.update({
-            "cast-first-impressions": "engine-fallback-transition-v1",
-            "icebreaker-choice": "engine-fallback-plain-rules-v1",
+            "cast-first-impressions": "engine-cast-contextualized",
+            "icebreaker-choice": "engine-cast-contextualized",
         })
     flavor = validate_day1_script(state, raw_payload)
     flavor.update({
         "source": "deepseek-cached", "generatedAt": generated_at,
         "generator": {"provider": str(generator["provider"]), "model": str(generator["model"])},
-        "characterCardContentVersion": package_card_version,
+        "characterCardContentVersion": current_card_version,
+        "sourceCharacterCardContentVersion": package_card_version,
         "nodeSources": node_sources,
     })
     return flavor

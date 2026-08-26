@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Offline, fail-closed validation for the 178-task R5 paid media batch.
+"""Offline, fail-closed validation for the R5 paid media batch.
 
 The authoritative job set is derived from runtime-variant-matrix.json entries
 whose status is requiresGeneration. This program performs no HTTP requests and
@@ -29,8 +29,10 @@ EXPECTED_GENERATE_AUDIO = True
 EXPECTED_WATERMARK = False
 EXPECTED_CONCURRENCY = 2
 EXPECTED_MAX_API_RETRY = 0
-EXPECTED_TASK_COUNT = 178
-EXPECTED_TOTAL_DURATION_SECONDS = 2670
+EXPECTED_SEMANTIC_GAP = 178
+EXPECTED_TASK_COUNT = 198
+EXPECTED_LOCAL_COMPOSITE_COUNT = 4
+EXPECTED_TOTAL_DURATION_SECONDS = 2970
 EXPECTED_RUNTIME_TOTAL = 188
 EXPECTED_RUNTIME_REUSABLE = 10
 EXPECTED_RUNTIME_MATRIX_SHA256 = "e7ef4b874c1d06d32526c66a59400be4cab4850538f0cbaddbaf3689f86f8a6a"
@@ -217,7 +219,7 @@ def validate_runtime_matrix(
     summary = require_object(runtime.get("summary"), "runtimeMatrix.summary")
     require_exact(summary.get("totalUniqueMasters"), EXPECTED_RUNTIME_TOTAL, "runtimeMatrix.summary.totalUniqueMasters")
     require_exact(summary.get("currentReusable"), EXPECTED_RUNTIME_REUSABLE, "runtimeMatrix.summary.currentReusable")
-    require_exact(summary.get("generationGap"), EXPECTED_TASK_COUNT, "runtimeMatrix.summary.generationGap")
+    require_exact(summary.get("generationGap"), EXPECTED_SEMANTIC_GAP, "runtimeMatrix.summary.generationGap")
     require_exact(
         summary.get("contentContractRejectedTargetAssetIds"),
         ["D1-A3-cast-introductions--p-jiangmi"],
@@ -254,7 +256,7 @@ def validate_runtime_matrix(
             required[target_id] = master
             routing_counts[require_text(master.get("routingMode"), f"runtimeMatrix master {target_id}.routingMode")] += 1
 
-    require_exact(status_counts["requiresGeneration"], EXPECTED_TASK_COUNT, "runtimeMatrix requiresGeneration count")
+    require_exact(status_counts["requiresGeneration"], EXPECTED_SEMANTIC_GAP, "runtimeMatrix requiresGeneration count")
     require_exact(status_counts["existingApprovedReusable"], EXPECTED_RUNTIME_REUSABLE, "runtimeMatrix reusable count")
     require_exact(dict(routing_counts), EXPECTED_ROUTING_COUNTS, "runtimeMatrix requiresGeneration routing counts")
     return required
@@ -274,10 +276,11 @@ def validate_task_matrix(
             "characters",
             "requiredCurrentEightMaster",
             "claimBoundary",
+            "currentEightAssembly",
         },
         "taskMatrix",
     )
-    require_exact(matrix.get("schemaVersion"), "cast-perspective-r5/task-matrix-v2", "taskMatrix.schemaVersion")
+    require_exact(matrix.get("schemaVersion"), "cast-perspective-r5/task-matrix-v3", "taskMatrix.schemaVersion")
     source = require_object(matrix.get("sourceRuntimeVariantMatrix"), "taskMatrix.sourceRuntimeVariantMatrix")
     require_exact_keys(
         source,
@@ -296,7 +299,7 @@ def validate_task_matrix(
     require_exact(source.get("schemaVersion"), "heart-journey/runtime-variant-matrix-v1", "taskMatrix source schemaVersion")
     require_exact(source.get("expectedTotalUniqueMasters"), EXPECTED_RUNTIME_TOTAL, "taskMatrix source total")
     require_exact(source.get("expectedCurrentReusable"), EXPECTED_RUNTIME_REUSABLE, "taskMatrix source reusable")
-    require_exact(source.get("expectedGenerationGap"), EXPECTED_TASK_COUNT, "taskMatrix source gap")
+    require_exact(source.get("expectedGenerationGap"), EXPECTED_SEMANTIC_GAP, "taskMatrix source gap")
     runtime_path = resolve_relative_file(matrix_path, source.get("path"), "taskMatrix source path")
     runtime_hash = file_sha256(runtime_path)
     require_exact(runtime_hash, EXPECTED_RUNTIME_MATRIX_SHA256, "runtime variant matrix file sha256")
@@ -315,10 +318,28 @@ def validate_task_matrix(
         "taskMatrix.derivation",
     )
     contract = require_object(matrix.get("generationContract"), "taskMatrix.generationContract")
-    require_exact(contract.get("expectedTaskCount"), EXPECTED_TASK_COUNT, "taskMatrix generation task count")
-    require_exact(contract.get("durationSecondsPerTask"), EXPECTED_DURATION, "taskMatrix generation duration")
-    require_exact(contract.get("expectedTotalDurationSeconds"), EXPECTED_TOTAL_DURATION_SECONDS, "taskMatrix total duration")
-    require_exact(contract.get("requiredRoutingModeCounts"), EXPECTED_ROUTING_COUNTS, "taskMatrix routing counts")
+    require_exact(contract.get("expectedSemanticMasterGap"), EXPECTED_SEMANTIC_GAP, "taskMatrix semantic gap")
+    require_exact(contract.get("expectedProviderJobCount"), EXPECTED_TASK_COUNT, "taskMatrix provider job count")
+    require_exact(contract.get("expectedLocalCompositeOutputs"), EXPECTED_LOCAL_COMPOSITE_COUNT, "taskMatrix local composite count")
+    require_exact(contract.get("durationSecondsPerProviderJob"), EXPECTED_DURATION, "taskMatrix provider duration")
+    require_exact(contract.get("expectedTotalProviderDurationSeconds"), EXPECTED_TOTAL_DURATION_SECONDS, "taskMatrix total provider duration")
+    require_exact(contract.get("requiredSemanticRoutingModeCounts"), EXPECTED_ROUTING_COUNTS, "taskMatrix semantic routing counts")
+
+    assembly = require_object(matrix.get("currentEightAssembly"), "taskMatrix.currentEightAssembly")
+    require_exact(
+        assembly,
+        {
+            "policy": "never-submit-a-direct-eight-face-provider-job",
+            "semanticTargetCount": 4,
+            "d1a3bTargetAssetId": EXPECTED_CURRENT_EIGHT_TARGET,
+            "d1a3bSource": "reuse-the-eight-required-voiced-introduction-provider-jobs",
+            "otherCurrentEightTargetCount": 3,
+            "atomsPerTarget": 8,
+            "providerAtomJobCount": 24,
+            "localCompositeOutputCount": 4,
+        },
+        "taskMatrix.currentEightAssembly",
+    )
 
     characters_raw = require_object(matrix.get("characters"), "taskMatrix.characters")
     characters: dict[str, str] = {}
@@ -447,18 +468,38 @@ def validate_shot(
 ) -> tuple[str, int, str]:
     label = f"manifest.shots[{index}]"
     merged = {**defaults, **shot}
-    target_id = require_text(shot.get("targetAssetId"), f"{label}.targetAssetId")
-    expected_shot_id = f"{target_id}--r5"
+    target_id = require_text(shot.get("semanticTargetAssetId"), f"{label}.semanticTargetAssetId")
+    require_exact(shot.get("targetAssetId"), target_id, f"{label}.targetAssetId")
+    require_exact(shot.get("targetRuntimeAssetId"), target_id, f"{label}.targetRuntimeAssetId")
+    role = require_text(shot.get("providerJobRole"), f"{label}.providerJobRole")
+    actual_identity_cast = require_text_list(shot.get("identityCast"), f"{label}.identityCast", allow_empty=False)
+    require_exact(shot.get("semanticIdentityCast"), semantic.get("identityCast"), f"{label}.semanticIdentityCast")
+    if role == "direct-semantic-master-candidate":
+        if semantic.get("routingMode") == "current-eight":
+            raise GateError(f"{label} cannot submit a direct current-eight provider job")
+        require_exact(actual_identity_cast, semantic.get("identityCast"), f"{label}.identityCast")
+        require_exact(shot.get("atomCharacterId"), None, f"{label}.atomCharacterId")
+        expected_shot_id = f"{target_id}--r5"
+        expected_kind = "self-introduction" if semantic.get("eventId") == EXPECTED_INTRO_EVENT_ID else "runtime-variant"
+    elif role == "single-identity-current-eight-atom":
+        if semantic.get("routingMode") != "current-eight" or target_id == EXPECTED_CURRENT_EIGHT_TARGET:
+            raise GateError(f"{label} atom role is not legal for {target_id}")
+        atom_id = require_text(shot.get("atomCharacterId"), f"{label}.atomCharacterId")
+        if atom_id not in EXPECTED_CHARACTER_ORDER:
+            raise GateError(f"{label}.atomCharacterId is not in the fixed cast")
+        require_exact(actual_identity_cast, [atom_id], f"{label}.identityCast")
+        expected_shot_id = f"{target_id}--atom-{atom_id}--r5"
+        expected_kind = "current-eight-atom"
+    else:
+        raise GateError(f"{label}.providerJobRole is unsupported: {role!r}")
     shot_id = require_text(shot.get("id"), f"{label}.id")
     require_exact(shot_id, expected_shot_id, f"{label}.id semantic naming")
-    require_exact(shot.get("targetRuntimeAssetId"), target_id, f"{label}.targetRuntimeAssetId")
-    for field in SEMANTIC_FIELDS:
+    for field in [item for item in SEMANTIC_FIELDS if item != "identityCast"]:
         if field not in shot:
             raise GateError(f"{label} is missing semantic field {field}")
         require_exact(shot.get(field), semantic.get(field), f"{label}.{field}")
 
     kind = require_text(shot.get("kind"), f"{label}.kind")
-    expected_kind = "self-introduction" if semantic.get("eventId") == EXPECTED_INTRO_EVENT_ID else "runtime-variant"
     require_exact(kind, expected_kind, f"{label}.kind")
     require_exact(merged.get("doNotSubmit"), defaults.get("doNotSubmit"), f"{label}.doNotSubmit")
     require_exact(merged.get("ratio"), EXPECTED_RATIO, f"{label}.ratio")
@@ -474,8 +515,8 @@ def validate_shot(
     require_exact(actual_prompt_hash, expected_prompt_hash, f"{label}.promptSha256")
     prompt = prompt_path.read_text(encoding="utf-8")
 
-    identity_cast = require_text_list(shot.get("identityCast"), f"{label}.identityCast", allow_empty=False)
-    for character_id in identity_cast:
+    identity_cast = actual_identity_cast
+    for character_id in actual_identity_cast:
         display_name = characters.get(character_id)
         if display_name is None:
             raise GateError(f"{label}.identityCast contains unknown id {character_id!r}")
@@ -483,7 +524,7 @@ def validate_shot(
             raise GateError(f"{label} prompt must explicitly anchor {character_id} using name {display_name!r}")
     if kind == "self-introduction":
         perspective = semantic.get("perspectiveCharacterId")
-        require_exact(identity_cast, [perspective], f"{label}.identityCast for introduction")
+        require_exact(actual_identity_cast, [perspective], f"{label}.identityCast for introduction")
 
     image_path = resolve_relative_file(manifest_path, shot.get("reference_image"), f"{label}.reference_image")
     expected_image_hash = require_sha(shot.get("referenceImageSha256"), f"{label}.referenceImageSha256")
@@ -500,25 +541,36 @@ def validate_shot(
         require_exact(file_sha256(video_path), expected_video_hash, f"{label}.referenceVideoSha256")
         require_exact(shot.get("referenceVideoRole"), "motion-only", f"{label}.referenceVideoRole")
 
-    require_exact(shot.get("rightsStatus"), "approved", f"{label}.rightsStatus")
-    require_ref_ids(shot.get("rightsRefIds"), f"{label}.rightsRefIds")
-    likeness_refs = require_ref_ids(shot.get("likenessConsentRefIds"), f"{label}.likenessConsentRefIds")
-    if not likeness_refs <= global_rights["likeness"]:
-        raise GateError(f"{label}.likenessConsentRefIds are not covered by batch approval")
+    planning_only = defaults.get("doNotSubmit") is True
+    rights_status = require_text(shot.get("rightsStatus"), f"{label}.rightsStatus")
+    rights_refs = require_ref_ids(shot.get("rightsRefIds"), f"{label}.rightsRefIds", allow_empty=planning_only)
+    likeness_refs = require_ref_ids(shot.get("likenessConsentRefIds"), f"{label}.likenessConsentRefIds", allow_empty=planning_only)
+    if planning_only:
+        require_exact(rights_status, "pending", f"{label}.rightsStatus")
+        if rights_refs or likeness_refs:
+            raise GateError(f"{label} planning manifest must not invent rights or likeness consent refs")
+    else:
+        require_exact(rights_status, "approved", f"{label}.rightsStatus")
+        if not likeness_refs <= global_rights["likeness"]:
+            raise GateError(f"{label}.likenessConsentRefIds are not covered by batch approval")
     audio_mode = require_text(shot.get("audioMode"), f"{label}.audioMode")
     if audio_mode not in {"character-speech", "ambient-only"}:
         raise GateError(f"{label}.audioMode must be character-speech or ambient-only")
     voice_refs = require_ref_ids(
         shot.get("voiceConsentRefIds"),
         f"{label}.voiceConsentRefIds",
-        allow_empty=audio_mode == "ambient-only",
+        allow_empty=planning_only or audio_mode == "ambient-only",
     )
-    if audio_mode == "character-speech" and not voice_refs <= global_rights["voice"]:
+    if planning_only and voice_refs:
+        raise GateError(f"{label} planning manifest must not invent voice consent refs")
+    if not planning_only and audio_mode == "character-speech" and not voice_refs <= global_rights["voice"]:
         raise GateError(f"{label}.voiceConsentRefIds are not covered by batch approval")
     if audio_mode == "ambient-only" and voice_refs:
         raise GateError(f"{label}.voiceConsentRefIds must be empty for ambient-only audio")
     if kind == "self-introduction" and audio_mode != "character-speech":
         raise GateError(f"{label} self-introduction must contain approved character speech")
+    if kind == "current-eight-atom" and audio_mode != "ambient-only":
+        raise GateError(f"{label} current-eight atom must use ambient-only audio")
     if has_reference_video:
         motion_refs = require_ref_ids(shot.get("referenceVideoRightsRefIds"), f"{label}.referenceVideoRightsRefIds")
         if not motion_refs <= global_rights["referenceVideo"]:
@@ -528,8 +580,8 @@ def validate_shot(
     require_text(shot.get("stateOut"), f"{label}.stateOut")
     require_text(shot.get("identityNotes"), f"{label}.identityNotes")
     output_name = require_text(shot.get("output_name"), f"{label}.output_name")
-    require_exact(output_name, f"{target_id}--r5-candidate.mp4", f"{label}.output_name semantic naming")
-    return target_id, EXPECTED_DURATION, shot_id
+    require_exact(output_name, f"{shot_id}-candidate.mp4", f"{label}.output_name semantic naming")
+    return shot_id, EXPECTED_DURATION, target_id
 
 
 def validate_production(
@@ -667,7 +719,7 @@ def validate_templates(manifest_path: Path, approval_path: Path, matrix_path: Pa
     validate_manifest_constants(manifest, template=True)
     validate_approval_constants(approval, template=True)
     expected_jobs, _characters, _runtime_path, runtime_hash = validate_task_matrix(matrix, matrix_path)
-    require_exact(len(expected_jobs), EXPECTED_TASK_COUNT, "derived template task count")
+    require_exact(len(expected_jobs), EXPECTED_SEMANTIC_GAP, "derived template semantic-gap count")
     require_exact(approval.get("runtimeVariantMatrixSha256"), runtime_hash, "approval template runtime matrix hash")
     require_exact(manifest.get("doNotSubmit"), True, "manifest template doNotSubmit")
     require_exact(manifest.get("defaults", {}).get("doNotSubmit"), True, "manifest template defaults.doNotSubmit")
@@ -678,7 +730,7 @@ def validate_templates(manifest_path: Path, approval_path: Path, matrix_path: Pa
     if missing:
         raise GateError(f"approval template is missing schema-required fields: {sorted(missing)}")
     print("R5 TEMPLATE CHECK VALID: runtime matrix 188 total / 10 reusable / 178 requiresGeneration.")
-    print("Eight voiced introductions and the D1-A3B current-eight master are present in the paid semantic gap.")
+    print("Production contract: 198 provider jobs / 2970s plus 4 local current-eight composites; D1-A3B reuses the 8 voiced introductions.")
     print("SUBMISSION BLOCKED: templates contain placeholders and doNotSubmit=true. No network request was made.")
 
 

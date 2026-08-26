@@ -7,8 +7,10 @@ type Character = {
   memorySeed: string; voice: string; boundary: string; quickPrompts: string[]
   independentInterest: string; eventLabel: string
   age?: number | string; occupation?: string; publicFacts?: { occupation?: string; publicPersona?: string }
+  gender?: '男性' | '女性' | string; mediaStatus?: 'ready' | 'planned' | string; mediaFallbackKind?: string
   opener?: ChatOpener | string; openingLine?: string; suggestedPrompts?: ChatSuggestionInput[]
   isPlayerPerspective?: boolean; chatEnabled?: boolean; isGuidedTarget?: boolean
+  location?: string; availableAtLocations?: string[]; groupChatEnabled?: boolean
 }
 
 type SceneIdentityCard = {
@@ -27,6 +29,29 @@ type Memory = {
   relationshipDelta: Record<string, number>
   suggestions?: ChatSuggestionInput[]; suggestedPrompts?: ChatSuggestionInput[]
   suggestionsSource?: 'deepseek' | 'engine-fallback' | string
+  time?: string; locationId?: string; locationName?: string; channel?: '1v1' | 'group' | string
+  participantIds?: string[]; participantNames?: string[]; conversationId?: string
+}
+
+type HeartMessage = {
+  id?: string; text: string; isAnonymous?: boolean
+  senderCharacterId?: string; recipientCharacterId?: string; sentAt?: string; receivedAt?: string; day?: number
+}
+
+type ConversationContext = {
+  version?: string; conversationId?: string; time?: string
+  locationId?: string; locationName?: string; participantIds?: string[]; channel?: '1v1' | 'group'
+}
+
+type ChatVenueCharacter = { id: string; name: string; mbti: string }
+type ChatVenue = {
+  locationId: string; locationName: string; time?: string; supportsGroup: boolean
+  characters: ChatVenueCharacter[]
+}
+type ChatContexts = { scene?: ConversationContext; venues: ChatVenue[]; revision?: number }
+
+type GroupReply = {
+  characterId: string; characterName: string; reply: string; stageDirection?: string
 }
 
 type RelationshipAxes = { trust: number; affection: number; respect: number; fear: number; debt: number; attraction: number; resentment: number }
@@ -70,7 +95,9 @@ type ChatOpenerPayload = {
 
 type Snapshot = {
   runId: string; revision: number; nodeId: string
-  player: { mbti: string; displayName: string; perspectiveCharacterId?: string }
+  player: { mbti: string; displayName: string; gender?: string; perspectiveCharacterId?: string }
+  castIds?: string[]
+  mediaRotation?: { slot?: string; leadGender?: string; anchorCharacterId?: string; selectionBucket?: string[]; eventId?: string | null }
   flags: { heat: number; clarity: number; publicImpression: number }
   affection: Record<string, number>; trust: Record<string, number>
   relationships: Record<string, RelationshipAxes>; attitudes: Record<string, string>
@@ -82,6 +109,9 @@ type Snapshot = {
   guidedTargetCharacterId?: string | null; pendingChat?: PendingChat | null
   pendingInteraction?: PendingChat | null
   chatOpeners?: Record<string, ChatOpenerPayload>
+  sceneContext?: ConversationContext
+  characterPresence?: Record<string, string>
+  heartMailbox?: { sent?: HeartMessage[]; received?: HeartMessage[] }
 }
 
 type Choice = { id: string; label: string; hint: string; characterId?: string; targetCharacterId?: string }
@@ -102,11 +132,13 @@ type StoryNode = {
   allowDirector?: boolean
   guidedTargetCharacterId?: string | null; pendingChat?: PendingChat | null
   guidedInteraction?: PendingChat | null
+  location?: string; time?: string
 }
 type View = {
   snapshot: Snapshot; node: StoryNode; characters: Character[]
   guidedTargetCharacterId?: string | null; pendingChat?: PendingChat | null
   chatOpeners?: Record<string, ChatOpenerPayload>
+  chatContexts?: ChatContexts
 }
 type Receipt = { kind: string; intentId?: string; attitude?: string; publicReason?: string; patch?: Record<string, unknown>; eventActivation?: StoryEvent | null; mission?: StoryMission; title?: string; playerMissionPrompt?: string }
 
@@ -602,7 +634,7 @@ function SceneMedia({ src, poster, fallbackSrc, fallbackPoster, active, cue, ass
   src: string; poster?: string; fallbackSrc?: string; fallbackPoster?: string
   active: boolean; cue?: string; assetId?: string; firstPassConsumed?: boolean; soundEnabled?: boolean; onTimeUpdate?: (currentTime: number) => void
 }) {
-  const [layers, setLayers] = useState(() => [{ src, poster }])
+  const [layers, setLayers] = useState<Array<{ src: string; poster?: string }>>(() => src ? [{ src, poster }] : [])
   const [visibleSrc, setVisibleSrc] = useState(src)
   const desiredSrcRef = useRef(src)
   const fallbackRef = useRef({ src: fallbackSrc, poster: fallbackPoster })
@@ -613,6 +645,13 @@ function SceneMedia({ src, poster, fallbackSrc, fallbackPoster, active, cue, ass
     fallbackRef.current = { src: fallbackSrc, poster: fallbackPoster }
     promotionRef.current = ''
     if (promotionTimerRef.current) window.clearTimeout(promotionTimerRef.current)
+    if (!src) {
+      setVisibleSrc('')
+      setLayers([])
+      return () => {
+        if (promotionTimerRef.current) window.clearTimeout(promotionTimerRef.current)
+      }
+    }
     setLayers(current => {
       const desired = { src, poster }
       const existing = current.find(layer => layer.src === src)
@@ -644,7 +683,11 @@ function SceneMedia({ src, poster, fallbackSrc, fallbackPoster, active, cue, ass
       })
       return
     }
-    setLayers(current => current.length > 1 ? current.filter(layer => layer.src !== failedSrc) : current)
+    // Do not leave either a failed video element or the previous scene playing
+    // behind the new protagonist poster. A missing variant is a deliberate
+    // static fallback, never permission to borrow another character's footage.
+    setVisibleSrc('')
+    setLayers([])
   }
   return <div className="scene-media" data-media-cue={cue || undefined} data-media-asset-id={assetId || undefined} role={cue ? 'img' : undefined} aria-label={cue ? `剧情动态画面：${cue}` : undefined}>
     {poster && <img className="scene-media__poster" src={poster} alt="" aria-hidden="true" />}
@@ -687,21 +730,14 @@ function CharacterIdentityPlate({ identity, context = '嘉宾登场', className 
 }
 
 function SceneIdentitySequence({ cards, sceneKey, timeline = [], currentTime = 0, context = '嘉宾登场', className = '' }: { cards: SceneIdentityCard[]; sceneKey: string; timeline?: SceneIdentityTimeline[]; currentTime?: number; context?: string; className?: string }) {
-  const [index, setIndex] = useState(0)
   const [timelineCycleDone, setTimelineCycleDone] = useState(false)
   const lastTimelineTimeRef = useRef(0)
   const signature = cards.map(card => identityId(card) || `${card.name}:${card.mbti}`).join('|')
   const timelineSignature = timeline.map(item => `${item.characterId}:${item.startSeconds}:${item.endSeconds}`).join('|')
   useEffect(() => {
-    setIndex(0)
     setTimelineCycleDone(false)
     lastTimelineTimeRef.current = 0
   }, [sceneKey, signature, timelineSignature])
-  useEffect(() => {
-    if (timeline.length || cards.length < 2 || index >= cards.length - 1) return
-    const timer = window.setTimeout(() => setIndex(current => Math.min(current + 1, cards.length - 1)), 3400)
-    return () => window.clearTimeout(timer)
-  }, [cards.length, index, sceneKey, signature, timeline.length, timelineSignature])
   const timelineWrappedThisFrame = timeline.length > 0 && currentTime + .2 < lastTimelineTimeRef.current
   useEffect(() => {
     if (!timeline.length) return
@@ -711,9 +747,9 @@ function SceneIdentitySequence({ cards, sceneKey, timeline = [], currentTime = 0
   const timedEntry = timeline.find(item => currentTime >= item.startSeconds && currentTime < item.endSeconds)
   const identity = timeline.length
     ? (!timelineCycleDone && !timelineWrappedThisFrame && timedEntry ? cards.find(card => identityId(card) === timedEntry.characterId) : undefined)
-    : (cards[index] || cards[0])
+    : cards[0]
   if (!identity) return null
-  const identityKey = timedEntry ? `${timedEntry.characterId}:${timedEntry.startSeconds}` : `${identityId(identity) || identity.name}:${index}`
+  const identityKey = timedEntry ? `${timedEntry.characterId}:${timedEntry.startSeconds}` : `${identityId(identity) || identity.name}:lead`
   const durationSeconds = timedEntry ? timedEntry.endSeconds - timedEntry.startSeconds : 3.4
   return <CharacterIdentityPlate key={`${sceneKey}:${identityKey}`} identity={identity} context={context} className={className} durationSeconds={durationSeconds} />
 }
@@ -736,20 +772,39 @@ function LoginGate({ message }: { message: string }) {
   )
 }
 
+const MBTI_ORDER = ['INTJ', 'ISFJ', 'ESTP', 'INTP', 'INFJ', 'ENFP', 'ESFJ', 'ISTP']
+
 function Landing({ characters, onStart, busy }: { characters: Character[]; onStart: (mbti: string, perspectiveCharacterId: string) => void; busy: boolean }) {
-  const [phase, setPhase] = useState<'intro' | 'cast'>('intro')
-  const [selectedId, setSelectedId] = useState(characters[0]?.id || '')
-  const selected = characters.find(character => character.id === selectedId) || characters[0]
-  const backgroundVideo = phase === 'cast' && selected ? selected.video : '/media/video/E01-arrival-reveal.mp4'
+  const [phase, setPhase] = useState<'intro' | 'mbti' | 'role'>('intro')
+  const [selectedMbti, setSelectedMbti] = useState('')
+  const [selectedId, setSelectedId] = useState('')
+  const availableMbtis = useMemo(() => {
+    const values = new Set(characters.map(character => character.mbti).filter(Boolean))
+    return [...values].sort((left, right) => {
+      const leftIndex = MBTI_ORDER.indexOf(left)
+      const rightIndex = MBTI_ORDER.indexOf(right)
+      if (leftIndex < 0 || rightIndex < 0) return left.localeCompare(right)
+      return leftIndex - rightIndex
+    })
+  }, [characters])
+  const roleOptions = useMemo(() => characters.filter(character => character.mbti === selectedMbti), [characters, selectedMbti])
+  const selected = roleOptions.find(character => character.id === selectedId)
+  const backgroundVideo = phase === 'role' && selected ? (selected.video || '').trim() : '/media/video/E01-arrival-reveal.mp4'
+  const backgroundPoster = phase === 'role' && selected ? selected.portrait : undefined
+  const chooseMbti = (mbti: string) => {
+    setSelectedMbti(mbti)
+    setSelectedId('')
+    setPhase('role')
+  }
   return (
     <main className={`landing landing--${phase}`}>
       <div className="landing-media" aria-hidden="true">
-        <SceneMedia src={backgroundVideo} poster={selected?.portrait} active soundEnabled={false} />
+        <SceneMedia src={backgroundVideo} poster={backgroundPoster} active soundEnabled={false} />
         <div className="landing-scrim" />
         <div className="sun-glow" />
       </div>
       <header className="landing-topbar">
-        <span>全球首档 MBTI 沉浸式恋爱实验</span>
+        <span>MBTI 沉浸式恋爱观察实验</span>
         <span className="live-pill"><i /> DAY 1</span>
       </header>
       {phase === 'intro' ? <>
@@ -762,62 +817,215 @@ function Landing({ characters, onStart, busy }: { characters: Character[]; onSta
           <h2>七天六夜，故事从第一声“你好”开始。</h2>
           <p>欢迎来到《心动之旅》。八位来自不同生活轨迹的嘉宾，将在海岛酒店一起生活七天六夜。从初次见面、一起做饭，到组队约会和每晚的心动短信，共同生活的衣食住行会碰撞出怎样的火花？让我们一起期待。</p>
           <blockquote>帮助别人，也照见自己。找到一位愿意同行的人，更好地发现自己、爱自己。</blockquote>
-          <button className="primary-button start-button" onClick={() => { unlockAudioIntent(); setPhase('cast') }}><span>认识本季八位嘉宾</span><i>→</i></button>
+          <button className="primary-button start-button" onClick={() => { unlockAudioIntent(); setPhase('mbti') }}><span>先选择你的 MBTI</span><i>→</i></button>
         </section>
-      </> : selected && <>
-        <section className="landing-copy landing-copy--cast">
-          <p className="landing-overline">选择你的观察视角</p>
-          <h1 className="selected-name">{selected.name}</h1>
-          <p className="selected-tagline">{publicOccupation(selected)} · {selected.mbti} · {selected.tagline}</p>
+      </> : phase === 'mbti' ? <>
+        <section className="landing-copy landing-copy--selection">
+          <p className="landing-overline">STEP 1 · 选择人格</p>
+          <h1 className="selection-title">你想以哪种方式，走进这七天？</h1>
+          <p className="selection-subtitle">先选择 MBTI，再从对应的一男一女两位角色中确定你的观察视角。</p>
         </section>
-        <section className="cast-picker" aria-label="选择观察人物">
-          {characters.map(character => <button key={character.id} className={character.id === selected.id ? 'active' : ''} onClick={() => setSelectedId(character.id)} style={{ '--accent': character.accent } as React.CSSProperties} aria-pressed={character.id === selected.id} aria-label={`从${character.name}，${character.mbti}，${character.tagline}的视角进入`}>
-            <img src={character.portrait} alt={`${character.name}头像`} />
-            <span className="cast-picker__copy"><b>{character.name}</b><em>{publicOccupation(character)} · {character.mbti}</em><small>{character.tagline}</small></span>
-          </button>)}
+        <section className="mbti-step glass-card" aria-label="选择 MBTI">
+          <div className="selection-step-heading"><span>本季开放 8 种人格</span><small>每种都有男性与女性角色</small></div>
+          <div className="mbti-grid">
+            {availableMbtis.map(mbti => {
+              const count = characters.filter(character => character.mbti === mbti).length
+              return <button key={mbti} onClick={() => chooseMbti(mbti)} aria-label={`选择 ${mbti}，有 ${count} 位角色`}><b>{mbti}</b><span>{count >= 2 ? '一男一女 · 2 位角色' : `${count} 位角色`}</span><i>→</i></button>
+            })}
+          </div>
+          <button className="selection-back" onClick={() => setPhase('intro')}>← 返回节目介绍</button>
         </section>
-        <section className="character-preview glass-card" style={{ '--accent': selected.accent } as React.CSSProperties}>
-          <div className="character-preview__heading"><span>{selected.mbti}</span><small>观察视角只决定开场线索，不替 TA 做选择</small></div>
-          <h2>{selected.publicMask}</h2>
-          <p>{selected.independentInterest}</p>
-          <dl><div><dt>表达方式</dt><dd>{selected.voice}</dd></div><div><dt>关系边界</dt><dd>{selected.boundary}</dd></div></dl>
-          <button className="primary-button start-button" disabled={busy} onClick={() => { unlockAudioIntent(); onStart(selected.mbti, selected.id) }}><span>{busy ? '正在开启…' : `跟随${selected.name}进入小屋`}</span><i>→</i></button>
-          <button className="back-to-intro" onClick={() => setPhase('intro')}>← 返回节目介绍</button>
+      </> : <>
+        <section className="landing-copy landing-copy--role">
+          <p className="landing-overline">STEP 2 · 选择角色</p>
+          <h1 className="selection-title">{selectedMbti} 的两个故事起点</h1>
+          <p className="selection-subtitle">选择性别与具体人物。另一位同类型嘉宾仍可能进入本局，成为你可以认识的人。</p>
+        </section>
+        <section className="role-step" aria-label={`选择 ${selectedMbti} 角色`}>
+          <div className="role-picker">
+            {roleOptions.map(character => <button key={character.id} className={character.id === selected?.id ? 'active' : ''} onClick={() => setSelectedId(character.id)} style={{ '--accent': character.accent } as React.CSSProperties} aria-pressed={character.id === selected?.id} aria-label={`选择${character.gender || ''}角色${character.name}，${publicOccupation(character)}，${character.tagline}`}>
+              <img src={character.portrait} alt={`${character.name}头像`} />
+              <span><em>{character.gender || '嘉宾'}</em><b>{character.name}</b><small>{publicOccupation(character)}</small><small>{character.tagline}</small></span><i>→</i>
+            </button>)}
+          </div>
+          {selected ? <section className="character-preview glass-card" style={{ '--accent': selected.accent } as React.CSSProperties}>
+            <div className="character-preview__heading"><span>{selected.mbti} · {selected.gender || '嘉宾'}</span><small>你的视角 · 开局后不可与自己私聊</small></div>
+            <h2>{selected.publicMask}</h2>
+            <p>{selected.independentInterest}</p>
+            <dl><div><dt>表达方式</dt><dd>{selected.voice}</dd></div><div><dt>关系边界</dt><dd>{selected.boundary}</dd></div></dl>
+            {selected.mediaStatus === 'planned' && <p className="static-media-note">当前以静态人物图进入；动态形象准备完成后会自动启用，不会借用其他嘉宾的视频。</p>}
+            <button className="primary-button start-button" disabled={busy} onClick={() => { unlockAudioIntent(); onStart(selected.mbti, selected.id) }}><span>{busy ? '正在开启…' : `跟随${selected.name}进入小屋`}</span><i>→</i></button>
+          </section> : <div className="role-empty glass-card"><span>选择一位角色</span><p>点击上方的男性或女性角色，先读完人物详情，再决定是否以 TA 的视角开局。</p></div>}
+          <button className="selection-back" onClick={() => { setSelectedId(''); setPhase('mbti') }}>← 重新选择 MBTI</button>
         </section>
       </>}
     </main>
   )
 }
 
-function CharacterDock({ characters, snapshot, guidedCharacterId, guidedComplete = false, onOpen }: {
-  characters: Character[]; snapshot: Snapshot; guidedCharacterId?: string | null; guidedComplete?: boolean; onOpen: (character: Character) => void
+function sceneContext(node: StoryNode, snapshot: Snapshot) {
+  const [eyebrowLocation, eyebrowTime] = (node.eyebrow || '').split('/').map(value => value.trim())
+  const locationName = snapshot.sceneContext?.locationName || node.location || eyebrowLocation || '心动小屋'
+  return {
+    locationId: snapshot.sceneContext?.locationId,
+    locationName,
+    location: locationName,
+    time: snapshot.sceneContext?.time || node.time || eyebrowTime || '',
+  }
+}
+
+function HeartInboxPhone({ snapshot, characters }: { snapshot: Snapshot; characters: Character[] }) {
+  const incoming = snapshot.heartMailbox?.received || []
+  const sent = snapshot.heartMailbox?.sent || []
+  const outgoing = sent[sent.length - 1]
+  const recipient = outgoing?.recipientCharacterId ? characters.find(character => character.id === outgoing.recipientCharacterId) : undefined
+  return (
+    <section className="heart-phone" aria-label="心动短信手机">
+      <div className="heart-phone__speaker" aria-hidden="true" />
+      <header><span>22:30</span><b>心动短信</b><i>{incoming.length ? `${incoming.length} 条新消息` : '收件结果'}</i></header>
+      <div className="heart-phone__screen">
+        {incoming.length ? incoming.map((message, index) => (
+          <article className="heart-message heart-message--incoming" key={message.id || `${index}-${message.text}`}>
+            <span>{message.isAnonymous === false && message.senderCharacterId ? (characters.find(character => character.id === message.senderCharacterId)?.name || '一位嘉宾') : '匿名嘉宾'} 发来{message.receivedAt ? ` · ${new Date(message.receivedAt).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}` : ''}</span>
+            <p>{message.text}</p>
+          </article>
+        )) : <article className="heart-message heart-message--pending">
+          <span>你的收件箱</span>
+          <p>节目组尚未公布收件结果。收到的真实短信会直接出现在这里。</p>
+        </article>}
+        {outgoing && <article className="heart-message heart-message--outgoing">
+          <span>你发给 {recipient?.name || '今晚想继续认识的人'}</span>
+          <p>{outgoing.text}</p>
+        </article>}
+      </div>
+      <footer><span>来自本轮真实收发记录</span><i>●</i></footer>
+    </section>
+  )
+}
+
+const HEART_MESSAGE_SUGGESTIONS = [
+  '今天和你聊天很舒服，希望明天还能坐近一点。',
+  '谢谢你记住我随口说的小事，想继续认识你。',
+  '今晚的海风很好，下次一起去露台走走吧。',
+]
+
+function HeartMessageComposer({ choices, characters, busy, disabled, onSend }: {
+  choices: Choice[]; characters: Character[]; busy: boolean; disabled: boolean
+  onSend: (choice: Choice, text: string) => Promise<void>
+}) {
+  const [selectedId, setSelectedId] = useState(choices[0]?.id || '')
+  const [draft, setDraft] = useState(HEART_MESSAGE_SUGGESTIONS[0])
+  const selectedChoice = choices.find(choice => choice.id === selectedId) || choices[0]
+  const selectedCharacterId = selectedChoice?.characterId || selectedChoice?.targetCharacterId
+  const selectedCharacter = characters.find(character => character.id === selectedCharacterId)
+  return (
+    <section className="heart-compose" aria-label="编辑心动短信">
+      <div className="character-choices character-choices--compact" role="list" aria-label="选择收信人">
+        {choices.map(choice => {
+          const characterId = choice.characterId || choice.targetCharacterId
+          const character = characters.find(item => item.id === characterId)
+          const selected = choice.id === selectedChoice?.id
+          return <button type="button" role="listitem" className={selected ? 'selected' : ''} key={choice.id} onClick={() => setSelectedId(choice.id)} disabled={busy || disabled} style={character ? { '--accent': character.accent } as React.CSSProperties : undefined} aria-pressed={selected}>
+            {character && <img src={character.portrait} alt={`${character.name}头像`} />}
+            <span><b>{character?.name || choice.label}</b><small>{character ? `${character.mbti} · ${publicOccupation(character)}` : choice.hint}</small></span>
+            <i>{selected ? '✓' : '○'}</i>
+          </button>
+        })}
+      </div>
+      {selectedChoice && <div className="heart-compose__phone">
+        <header><span>发送给</span><b>{selectedCharacter?.name || '一位嘉宾'}</b><small>匿名发送</small></header>
+        <div className="heart-compose__suggestions" aria-label="短信建议">
+          {HEART_MESSAGE_SUGGESTIONS.map((suggestion, index) => <button type="button" key={suggestion} onClick={() => setDraft(suggestion)}><i>0{index + 1}</i>{suggestion}</button>)}
+        </div>
+        <label><span>写下你真正想说的话</span><textarea value={draft} onChange={event => setDraft(event.target.value)} maxLength={120} rows={3} placeholder="也可以完全自己写…" /></label>
+        <footer><small>{draft.trim().length}/120 · 你可以继续修改</small><button type="button" disabled={busy || disabled || !draft.trim()} onClick={() => onSend(selectedChoice, draft.trim())}>{busy ? '发送中…' : '发送这条短信'}</button></footer>
+      </div>}
+    </section>
+  )
+}
+
+function FreeChoiceComposer({ choices, busy, disabled, onSend }: {
+  choices: Choice[]; busy: boolean; disabled: boolean; onSend: (choice: Choice, customText: string) => Promise<void>
+}) {
+  const [draft, setDraft] = useState('')
+  const [routeId, setRouteId] = useState(choices[0]?.id || '')
+  const route = choices.find(choice => choice.id === routeId) || choices[0]
+  if (!route) return null
+  return <section className="free-choice-composer" aria-label="自定义行动">
+    <label><span>或者，用你自己的方式表达</span><textarea rows={2} maxLength={180} value={draft} onChange={event => setDraft(event.target.value)} placeholder="例如：先和大家打声招呼，再去看看有没有人需要帮忙…" /></label>
+    <div className="free-choice-composer__routes"><span>这句话更接近</span>{choices.map((choice, index) => <button type="button" className={choice.id === route.id ? 'selected' : ''} aria-pressed={choice.id === route.id} key={choice.id} onClick={() => setRouteId(choice.id)}>方案 {String(index + 1).padStart(2, '0')}</button>)}</div>
+    <button className="free-choice-composer__send" type="button" disabled={busy || disabled || !draft.trim()} onClick={() => onSend(route, draft.trim())}>{busy ? '正在写入故事…' : '用这句话推进剧情 →'}</button>
+    <small>当前剧情仍沿你选中的行动路线推进；自定义原话会一并发送，供后端人物记忆接入。</small>
+  </section>
+}
+
+function CharacterDock({ characters, snapshot, chatContexts, guidedCharacterId, guidedComplete = false, currentLocation, currentTime, groupDisabled = false, onOpen, onOpenGroup }: {
+  characters: Character[]; snapshot: Snapshot; guidedCharacterId?: string | null; guidedComplete?: boolean
+  chatContexts?: ChatContexts; currentLocation: string; currentTime?: string; groupDisabled?: boolean
+  onOpen: (character: Character, context: ConversationContext) => void
+  onOpenGroup: (venue: ChatVenue) => void
 }) {
   const guidedRef = useRef<HTMLButtonElement>(null)
-  const perspectiveCharacter = characters.find(character => character.id === snapshot.player.perspectiveCharacterId) || characters.find(character => character.isPlayerPerspective)
-  const availableCharacters = characters.filter(character => character.id !== perspectiveCharacter?.id && !character.isPlayerPerspective)
+  const venues = chatContexts?.venues || []
+  const initialVenueId = chatContexts?.scene?.locationId && venues.some(venue => venue.locationId === chatContexts.scene?.locationId)
+    ? chatContexts.scene.locationId
+    : venues[0]?.locationId || 'all'
+  const [locationFilter, setLocationFilter] = useState(initialVenueId)
+  const castIdSet = snapshot.castIds?.length === 8 ? new Set(snapshot.castIds) : null
+  const runCharacters = castIdSet ? characters.filter(character => castIdSet.has(character.id)) : characters
+  const perspectiveCharacter = runCharacters.find(character => character.id === snapshot.player.perspectiveCharacterId) || runCharacters.find(character => character.isPlayerPerspective)
+  const presentNpcIds = new Set(venues.flatMap(venue => venue.characters.map(character => character.id)))
+  const availableCharacters = runCharacters.filter(character => character.id !== perspectiveCharacter?.id && !character.isPlayerPerspective && (!venues.length || presentNpcIds.has(character.id)))
+  const selectedVenue = venues.find(venue => venue.locationId === locationFilter)
+  const selectedIds = new Set(selectedVenue?.characters.map(character => character.id) || [])
+  const filteredCharacters = locationFilter === 'all' ? availableCharacters : availableCharacters.filter(character => selectedIds.has(character.id))
   const guidedCharacter = availableCharacters.find(character => character.id === guidedCharacterId)
   const dockCharacters = guidedCharacter
-    ? [perspectiveCharacter, guidedCharacter].filter((character): character is Character => !!character)
-    : [perspectiveCharacter, ...availableCharacters].filter((character): character is Character => !!character)
+    ? [perspectiveCharacter, guidedCharacter, ...filteredCharacters.filter(character => character.id !== guidedCharacter.id)].filter((character, index, values): character is Character => !!character && values.findIndex(item => item?.id === character.id) === index)
+    : [perspectiveCharacter, ...filteredCharacters].filter((character): character is Character => !!character)
   useEffect(() => {
     if (guidedCharacter) guidedRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
   }, [guidedCharacter?.id, snapshot.nodeId])
+  useEffect(() => {
+    if (!venues.length) return
+    if (locationFilter === 'all' || venues.some(venue => venue.locationId === locationFilter)) return
+    setLocationFilter(initialVenueId)
+  }, [initialVenueId, locationFilter, venues])
+  const venueForCharacter = (characterId: string) => venues.find(venue => venue.characters.some(character => character.id === characterId))
   return (
-    <nav className={`character-dock ${guidedCharacter ? 'character-dock--guided' : ''}`} aria-label="1 对 1 心动私聊">
+    <nav className={`character-dock ${guidedCharacter ? 'character-dock--guided' : ''} ${venues.length ? 'character-dock--with-location' : ''}`} aria-label="按地点发起嘉宾交流">
       <div className="dock-label">
         <span>{guidedCharacter ? (guidedComplete ? '这次交流已完成' : '该你开口了') : '心动小屋'}</span>
-        <small>{guidedCharacter ? (guidedComplete ? `${guidedCharacter.name}已记住这次对话` : `去和${guidedCharacter.name}打个招呼`) : '选一位嘉宾 1 对 1 交流'}</small>
+        <small>{guidedCharacter ? (guidedComplete ? `${guidedCharacter.name}已记住这次对话` : `去和${guidedCharacter.name}打个招呼`) : `${currentLocation}${currentTime ? ` · ${currentTime}` : ''}`}</small>
       </div>
+      {!!venues.length && <div className="dock-location-filter" aria-label="按真实地点筛选嘉宾">
+        <span>嘉宾在哪里</span>
+        <select value={locationFilter} onChange={event => setLocationFilter(event.target.value)}>
+          <option value="all">全部地点</option>
+          {venues.map(venue => <option value={venue.locationId} key={venue.locationId}>{venue.locationName} · {venue.characters.length}人</option>)}
+        </select>
+        {selectedVenue?.supportsGroup
+          ? <button className="dock-group-launch" type="button" disabled={groupDisabled} onClick={() => onOpenGroup(selectedVenue)}>{groupDisabled ? '先完成破冰' : `和${selectedVenue.characters.length}人群聊`}</button>
+          : <small>{selectedVenue ? `${selectedVenue.locationName}仅支持私聊` : '选择地点可发起群聊'}</small>}
+      </div>}
       <div className="dock-scroll">
         {dockCharacters.map((character) => {
           const memoryCount = snapshot.echoMemories.filter(m => m.characterId === character.id).length
           const guided = character.id === guidedCharacter?.id
           const isSelf = character.id === snapshot.player.perspectiveCharacterId || character.isPlayerPerspective === true
           const chatUnavailable = isSelf || character.chatEnabled === false
+          const venue = isSelf ? undefined : venueForCharacter(character.id)
+          const context: ConversationContext = {
+            time: venue?.time || chatContexts?.scene?.time || currentTime,
+            locationId: venue?.locationId || chatContexts?.scene?.locationId,
+            locationName: venue?.locationName || chatContexts?.scene?.locationName || currentLocation,
+            participantIds: [snapshot.player.perspectiveCharacterId, character.id].filter((value): value is string => !!value),
+            channel: '1v1',
+          }
           return (
-            <button ref={guided ? guidedRef : undefined} className={`dock-avatar ${guided ? 'dock-avatar--guided' : ''} ${chatUnavailable ? 'dock-avatar--unavailable' : ''} ${isSelf ? 'dock-avatar--self' : ''}`} key={character.id} onClick={() => !chatUnavailable && onOpen(character)} disabled={chatUnavailable} style={{ '--accent': character.accent } as React.CSSProperties} aria-label={isSelf ? `${character.name}，你的当前视角，不可与自己私聊` : chatUnavailable ? `${character.name}，当前暂不可私聊` : guided ? `剧情正在等你，与${character.name}交流` : `与${character.name}交流，${character.mbti}，${character.tagline}`}>
+            <button ref={guided ? guidedRef : undefined} className={`dock-avatar ${guided ? 'dock-avatar--guided' : ''} ${chatUnavailable ? 'dock-avatar--unavailable' : ''} ${isSelf ? 'dock-avatar--self' : ''}`} key={character.id} onClick={() => !chatUnavailable && onOpen(character, context)} disabled={chatUnavailable} style={{ '--accent': character.accent } as React.CSSProperties} aria-label={isSelf ? `${character.name}，你的当前视角，不可与自己私聊` : chatUnavailable ? `${character.name}，当前暂不可私聊` : guided ? `剧情正在等你，与${character.name}交流` : `在${venue?.locationName || currentLocation}与${character.name}交流，${character.mbti}，${character.tagline}`}>
               <span className="dock-avatar__photo"><img src={character.portrait} alt="" />{(guided || memoryCount > 0) && <i className={guided ? `guided-badge ${guidedComplete ? 'guided-badge--done' : ''}` : ''}>{guided ? (guidedComplete ? '✓' : 1) : memoryCount}</i>}</span>
-              <span className="dock-avatar__copy"><span><b>{character.name}</b><em>{character.mbti}</em></span><small>{isSelf ? '你的视角 · 不可私聊' : chatUnavailable ? '当前剧情中暂不可私聊' : character.tagline}</small></span>
+              <span className="dock-avatar__copy"><span><b>{character.name}</b><em>{character.mbti}</em></span><small className="dock-avatar__role">{publicOccupation(character)} · {character.gender || '嘉宾'}</small><small>{isSelf ? '你的视角 · 不可私聊' : chatUnavailable ? '当前剧情中暂不可私聊' : `${venue?.locationName || currentLocation} · ${character.tagline}`}</small></span>
             </button>
           )
         })}
@@ -826,10 +1034,11 @@ function CharacterDock({ characters, snapshot, guidedCharacterId, guidedComplete
   )
 }
 
-function ChatSheet({ character, characters, snapshot, embeddedOpener, onClose, onSend, busy }: {
+function ChatSheet({ character, characters, snapshot, embeddedOpener, context, error, onClose, onSend, busy }: {
   character: Character; characters: Character[]; snapshot: Snapshot; embeddedOpener?: ChatOpenerPayload
+  context: ConversationContext; error?: string
   onClose: () => void
-  onSend: (message: string) => Promise<void>; busy: boolean
+  onSend: (message: string, context: ConversationContext) => Promise<void>; busy: boolean
 }) {
   const [draft, setDraft] = useState('')
   const firstLoadRef = useRef(true)
@@ -855,6 +1064,8 @@ function ChatSheet({ character, characters, snapshot, embeddedOpener, onClose, o
   const [remotePrompts, setRemotePrompts] = useState<ChatSuggestionInput[]>(() => promptsFromPayload(initialPayload))
   const axes = snapshot.relationships?.[character.id]
   const attitude = snapshot.attitudes?.[character.id] || 'curious'
+  const currentLocation = context.locationName || '心动小屋'
+  const currentTime = context.time
   useEffect(() => {
     const currentEmbedded = embeddedOpener || snapshot.chatOpeners?.[character.id]
     if (currentEmbedded) {
@@ -921,7 +1132,7 @@ function ChatSheet({ character, characters, snapshot, embeddedOpener, onClose, o
     const message = draft.trim()
     if (!message || busy) return
     setDraft('')
-    await onSend(message)
+    await onSend(message, context)
   }
   return (
     <div className="sheet-backdrop" role="dialog" aria-modal="true" aria-label={`与${character.name}私聊`}>
@@ -929,11 +1140,13 @@ function ChatSheet({ character, characters, snapshot, embeddedOpener, onClose, o
         <div className="chat-portrait">
           <div className="chat-portrait__media">
             <img className="chat-portrait__blur" src={character.portrait} alt="" />
-            <EventMediaVideo className="chat-portrait__subject" src={character.video} poster={character.portrait} active firstPassConsumed />
+            {(character.video || '').trim()
+              ? <EventMediaVideo className="chat-portrait__subject" src={character.video} poster={character.portrait} active firstPassConsumed />
+              : <img className="chat-portrait__subject chat-portrait__subject--static" src={character.portrait} alt={`${character.name}静态人物形象`} />}
           </div>
           <div className="chat-portrait__scrim" />
           <button className="close-button" onClick={onClose} aria-label="关闭私聊">×</button>
-          <div className="chat-identity"><span>{character.mbti}</span><h2>{character.name}</h2><p>{publicOccupation(character)} · {character.tagline}</p></div>
+          <div className="chat-identity"><span>{character.mbti}</span><h2>{character.name}</h2><p>{publicOccupation(character)} · {character.tagline}</p><small>{currentLocation}{currentTime ? ` · ${currentTime}` : ''}</small></div>
           <div className="memory-seal"><HeartMark small /><span>{memories.length ? `${memories.length} 段共同记忆` : '从这一句话开始记住你'}</span></div>
         </div>
         <div className="chat-body">
@@ -950,7 +1163,7 @@ function ChatSheet({ character, characters, snapshot, embeddedOpener, onClose, o
             {memories.slice(-10).map(memory => (
               <div className="message-pair" key={memory.id}>
                 <div className="message player"><p>{memory.playerText}</p></div>
-                <div className="message agent"><b>{character.name} · {ATTITUDE_LABELS[memory.attitude] || memory.attitude}</b>{memory.stageDirection && <em>{memory.stageDirection}</em>}<p>{memory.agentReply}</p><small>{memory.summary || '已写入你们的共同记忆'}</small></div>
+                <div className="message agent"><b>{character.name} · {ATTITUDE_LABELS[memory.attitude] || memory.attitude}</b>{memory.stageDirection && <em>{memory.stageDirection}</em>}<p>{memory.agentReply}</p><small>{memory.locationName || memory.time ? `${memory.locationName || currentLocation}${memory.time ? ` · ${memory.time}` : ''}｜` : ''}{memory.summary || '已写入你们的共同记忆'}</small></div>
               </div>
             ))}
             {busy && <div className="message agent typing"><i /><i /><i /></div>}
@@ -959,6 +1172,7 @@ function ChatSheet({ character, characters, snapshot, embeddedOpener, onClose, o
           <div className="quick-prompts" aria-label="对话建议">
             {suggestedPrompts.map((prompt, index) => <button className={`quick-prompt quick-prompt--${prompt.kind}`} key={`${index}-${prompt.kind}-${prompt.text}`} onClick={() => { setDraft(prompt.text); inputRef.current?.focus() }} aria-label={`${prompt.label}：${prompt.text}`}><i>{prompt.label}</i>{prompt.text}</button>)}
           </div>
+          {error && <p className="chat-error" role="alert">{error}</p>}
           <form className="chat-composer" onSubmit={submit}>
             <textarea ref={inputRef} value={draft} maxLength={240} rows={1} placeholder={`只对${character.name}说…`} onChange={e => setDraft(e.target.value)} />
             <button type="submit" disabled={!draft.trim() || busy} aria-label="发送">↗</button>
@@ -968,6 +1182,106 @@ function ChatSheet({ character, characters, snapshot, embeddedOpener, onClose, o
       </section>
     </div>
   )
+}
+
+function createConversationId() {
+  return typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+    ? crypto.randomUUID()
+    : `group-${Date.now()}-${Math.random().toString(16).slice(2)}`
+}
+
+function GroupChatSheet({ venue, characters, snapshot, busy, error, onClose, onSend }: {
+  venue: ChatVenue; characters: Character[]; snapshot: Snapshot; busy: boolean; error?: string
+  onClose: () => void
+  onSend: (message: string, participantIds: string[], context: ConversationContext) => Promise<void>
+}) {
+  const perspectiveId = snapshot.player.perspectiveCharacterId
+  const availableIds = venue.characters.map(character => character.id).filter(id => id !== perspectiveId)
+  const [selectedIds, setSelectedIds] = useState(() => availableIds.slice(0, Math.min(3, availableIds.length)))
+  const [conversationId, setConversationId] = useState(createConversationId)
+  const [draft, setDraft] = useState('')
+  const streamRef = useRef<HTMLDivElement>(null)
+  const selectedCharacters = selectedIds.map(id => characters.find(character => character.id === id)).filter((character): character is Character => !!character)
+  const venueMemories = snapshot.echoMemories.filter(memory => memory.channel === 'group' && memory.locationId === venue.locationId)
+  const visibleMemories = venueMemories.slice(-18)
+  const toggleParticipant = (characterId: string) => {
+    setSelectedIds(current => {
+      const selected = current.includes(characterId)
+      if (selected && current.length <= 2) return current
+      if (!selected && current.length >= 4) return current
+      const next = selected ? current.filter(id => id !== characterId) : [...current, characterId]
+      setConversationId(createConversationId())
+      return next
+    })
+  }
+  useEffect(() => {
+    const stream = streamRef.current
+    if (!stream) return
+    const frame = window.requestAnimationFrame(() => stream.scrollTo({ top: stream.scrollHeight, behavior: 'smooth' }))
+    return () => window.cancelAnimationFrame(frame)
+  }, [busy, visibleMemories.length])
+  const submit = async (event?: FormEvent) => {
+    event?.preventDefault()
+    const message = draft.trim()
+    if (!message || busy || selectedIds.length < 2) return
+    setDraft('')
+    const participantIds = [perspectiveId, ...selectedIds].filter((value): value is string => !!value)
+    await onSend(message, selectedIds, {
+      conversationId,
+      time: venue.time || snapshot.sceneContext?.time,
+      locationId: venue.locationId,
+      locationName: venue.locationName,
+      participantIds,
+      channel: 'group',
+    })
+  }
+  const promptOptions = [
+    `我们都在${venue.locationName}，要不要先说说刚才各自注意到谁了？`,
+    '如果明天要三个人组队，你们最想一起做什么？',
+    '先不聊任务了，你们来这里最想被别人看见哪一面？',
+  ]
+  return <div className="sheet-backdrop" role="dialog" aria-modal="true" aria-label={`${venue.locationName}群聊`}>
+    <section className="group-chat-sheet">
+      <div className="group-chat__backdrop" aria-hidden="true">
+        {selectedCharacters.slice(0, 3).map((character, index) => <img src={character.portrait} alt="" key={character.id} style={{ '--portrait-index': index } as React.CSSProperties} />)}
+      </div>
+      <div className="group-chat__scrim" />
+      <header className="group-chat__header">
+        <div><span>{venue.locationName} · {venue.time || snapshot.sceneContext?.time || '此刻'}</span><h2>和在场的人聊一会儿</h2><p>选择 2–4 位嘉宾；每个人都会依据自己的角色卡回应，并分别记住这次对话。</p></div>
+        <button type="button" onClick={onClose} aria-label="关闭群聊">×</button>
+      </header>
+      <div className="group-chat__participants" aria-label="选择群聊嘉宾">
+        {venue.characters.map(item => {
+          const character = characters.find(candidate => candidate.id === item.id)
+          const selected = selectedIds.includes(item.id)
+          const unavailable = !selected && selectedIds.length >= 4
+          return <button type="button" key={item.id} className={selected ? 'selected' : ''} disabled={unavailable || (selected && selectedIds.length <= 2)} onClick={() => toggleParticipant(item.id)} aria-pressed={selected}>
+            {character && <img src={character.portrait} alt="" />}<span><b>{item.name}</b><small>{item.mbti}</small></span><i>{selected ? '✓' : '+'}</i>
+          </button>
+        })}
+      </div>
+      <div className="group-chat__history" ref={streamRef} role="log" aria-live="polite">
+        {!visibleMemories.length && <div className="group-chat__empty"><b>这处群聊还没有记录</b><span>你的第一句话会带上时间、地点和在场嘉宾，写进每个人各自的记忆。</span></div>}
+        {visibleMemories.map((memory, index) => {
+          const previous = visibleMemories[index - 1]
+          const showPlayer = !previous || previous.conversationId !== memory.conversationId || previous.playerText !== memory.playerText || previous.time !== memory.time
+          const speaker = characters.find(character => character.id === memory.characterId)
+          return <div className="group-chat__turn" key={memory.id}>
+            {showPlayer && <div className="message player"><p>{memory.playerText}</p><small>{memory.locationName} · {memory.time}{memory.participantNames?.length ? ` · 与${memory.participantNames.filter(name => name !== snapshot.player.displayName).join('、')}` : ''}</small></div>}
+            <div className="message agent"><b>{speaker?.name || '嘉宾'} · {ATTITUDE_LABELS[memory.attitude] || memory.attitude}</b>{memory.stageDirection && <em>{memory.stageDirection}</em>}<p>{memory.agentReply}</p><small>{memory.summary || '这句话已分别写入角色记忆'}</small></div>
+          </div>
+        })}
+        {busy && <div className="message agent typing"><i /><i /><i /></div>}
+      </div>
+      <div className="group-chat__prompts" aria-label="群聊开场建议">{promptOptions.map(prompt => <button type="button" key={prompt} onClick={() => setDraft(prompt)}>{prompt}</button>)}</div>
+      {error && <p className="group-chat__error" role="alert">{error}</p>}
+      <form className="group-chat__composer" onSubmit={submit}>
+        <textarea rows={1} maxLength={240} value={draft} onChange={event => setDraft(event.target.value)} placeholder={`对${selectedCharacters.map(character => character.name).join('、') || '在场嘉宾'}说…`} />
+        <button type="submit" disabled={busy || selectedIds.length < 2 || !draft.trim()}>↗</button>
+      </form>
+      <p className="group-chat__rule">群聊只可邀请此刻确实在 {venue.locationName} 的嘉宾；不会补写不在场的人。</p>
+    </section>
+  </div>
 }
 
 function Cinematic({ src, title, identityCards, identityTimeline, onDone }: { src: string; title: string; identityCards?: SceneIdentityCard[]; identityTimeline?: SceneIdentityTimeline[]; onDone: () => void }) {
@@ -1040,6 +1354,8 @@ function resolveSceneMedia(view: View, guidedCharacterId?: string | null) {
   const eventAsset = eventId ? EVENT_MEDIA[eventId] : undefined
   const missionMedia = snapshot.storyMission?.media
   const perspectiveCharacter = characters.find(character => character.id === snapshot.player.perspectiveCharacterId)
+  const perspectiveFallbackSrc = perspectiveCharacter?.video?.trim() || ''
+  const perspectiveFallbackPoster = perspectiveCharacter?.portrait
   const missionMediaReady = !!missionMedia?.src && missionMedia.available !== false && missionMedia.status !== 'planned'
   const nodeMediaReady = !!node.media?.src && node.media.available !== false && node.media.status !== 'planned'
   const explicitNodeSrc = node.sceneVideo || node.backgroundVideo || (nodeMediaReady ? node.media?.src : undefined)
@@ -1049,8 +1365,8 @@ function resolveSceneMedia(view: View, guidedCharacterId?: string | null) {
   // The backend resolver owns cast identity. Never resurrect a static Jiangmi
   // event table when the committed mission says its exact variant is missing.
   if (snapshot.storyMission && eventAsset) {
-    const safeFallbackSrc = missionMedia?.fallback?.src || perspectiveCharacter?.video || ''
-    const safeFallbackPoster = missionMedia?.fallback?.poster || perspectiveCharacter?.portrait
+    const safeFallbackSrc = missionMedia?.fallback?.src || perspectiveFallbackSrc
+    const safeFallbackPoster = missionMedia?.fallback?.poster || perspectiveFallbackPoster
     return {
       src: (missionMediaReady ? missionMedia?.src : undefined) || safeFallbackSrc,
       poster: (missionMediaReady ? missionMedia?.poster : undefined) || safeFallbackPoster,
@@ -1065,8 +1381,8 @@ function resolveSceneMedia(view: View, guidedCharacterId?: string | null) {
   if (snapshot.storyMission && missionMediaReady && missionMedia?.src) return {
     src: missionMedia.src,
     poster: missionMedia.poster,
-    fallbackSrc: missionMedia.fallback ? missionMedia.fallback.src : nodeAsset.fallbackSrc,
-    fallbackPoster: missionMedia.fallback ? missionMedia.fallback.poster : nodeAsset.fallbackPoster,
+    fallbackSrc: missionMedia.fallback?.src || perspectiveFallbackSrc,
+    fallbackPoster: missionMedia.fallback?.poster || perspectiveFallbackPoster,
     assetId: missionMedia.assetId,
     cue: snapshot.storyMission.visualCue || node.mediaCue || node.action,
     identityCards: missionMedia.identityCards,
@@ -1074,9 +1390,9 @@ function resolveSceneMedia(view: View, guidedCharacterId?: string | null) {
   }
   if (explicitNodeSrc) return {
     src: explicitNodeSrc,
-    poster: node.poster || node.media?.poster || nodeAsset.poster || nodeAsset.fallbackPoster,
-    fallbackSrc: node.media?.fallback ? node.media.fallback.src : nodeAsset.fallbackSrc,
-    fallbackPoster: node.media?.fallback ? node.media.fallback.poster : nodeAsset.fallbackPoster,
+    poster: node.poster || node.media?.poster || perspectiveFallbackPoster,
+    fallbackSrc: node.media?.fallback?.src || perspectiveFallbackSrc,
+    fallbackPoster: node.media?.fallback?.poster || perspectiveFallbackPoster,
     assetId: node.media?.assetId || nodeAsset.assetId,
     cue: node.mediaCue || node.action,
     identityCards: node.media?.identityCards,
@@ -1085,24 +1401,24 @@ function resolveSceneMedia(view: View, guidedCharacterId?: string | null) {
   if (guidedCharacter?.video) return {
     src: guidedCharacter.video,
     poster: guidedCharacter.portrait,
-    fallbackSrc: nodeAsset.fallbackSrc,
-    fallbackPoster: nodeAsset.fallbackPoster,
+    fallbackSrc: perspectiveFallbackSrc,
+    fallbackPoster: perspectiveFallbackPoster,
     assetId: `CHAR-${guidedCharacter.id}-guided-scene`,
     cue: node.mediaCue || node.action || `${guidedCharacter.name}停下手边的事，正在等你开口`,
     identityCards: [identityCardFromCharacter(guidedCharacter)],
   }
   if (node.cinematic) return {
     src: node.cinematic,
-    poster: node.poster || node.media?.poster || nodeAsset.poster || nodeAsset.fallbackPoster,
-    fallbackSrc: node.media?.fallback?.src || nodeAsset.fallbackSrc,
-    fallbackPoster: node.media?.fallback?.poster || nodeAsset.fallbackPoster,
+    poster: node.poster || node.media?.poster || perspectiveFallbackPoster,
+    fallbackSrc: node.media?.fallback?.src || perspectiveFallbackSrc,
+    fallbackPoster: node.media?.fallback?.poster || perspectiveFallbackPoster,
     assetId: nodeAsset.assetId,
     cue: node.mediaCue || node.action,
     identityCards: node.media?.identityCards,
     identityTimeline: node.media?.identityTimeline,
   }
-  const safeFallbackSrc = node.media?.fallback?.src || perspectiveCharacter?.video || ''
-  const safeFallbackPoster = node.media?.fallback?.poster || perspectiveCharacter?.portrait
+  const safeFallbackSrc = node.media?.fallback?.src || perspectiveFallbackSrc
+  const safeFallbackPoster = node.media?.fallback?.poster || perspectiveFallbackPoster
   return {
     src: safeFallbackSrc,
     poster: safeFallbackPoster,
@@ -1118,6 +1434,8 @@ function resolveSceneMedia(view: View, guidedCharacterId?: string | null) {
 function Game({ view, onView, onRestart }: { view: View; onView: (view: View) => void; onRestart: () => Promise<void> }) {
   const { snapshot, node, characters } = view
   const [chatCharacter, setChatCharacter] = useState<Character | null>(null)
+  const [chatContext, setChatContext] = useState<ConversationContext | null>(null)
+  const [groupVenue, setGroupVenue] = useState<ChatVenue | null>(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [receipt, setReceipt] = useState<Receipt | null>(null)
@@ -1130,6 +1448,7 @@ function Game({ view, onView, onRestart }: { view: View; onView: (view: View) =>
   const nodeCharacter = characters.find(character => character.id === (node.speakerCharacterId || node.characterId))
   const activeCharacter = nodeCharacter?.id === perspectiveId ? undefined : nodeCharacter
   const sceneIdentityCharacter = activeCharacter || perspectiveCharacter
+  const activeSceneContext = sceneContext(node, snapshot)
   const narrationBeats = useMemo(() => buildNarrationBeats(node.text || '', node.textBeats), [node.text, node.textBeats])
   const presentationKey = `${snapshot.nodeId}:${node.title}:${narrationBeats.join('\u241e')}`
   // A cinematic is an authored reading beat, not merely a visual layer. Keep
@@ -1140,7 +1459,22 @@ function Game({ view, onView, onRestart }: { view: View; onView: (view: View) =>
   const storyOverlayPhase = useStoryOverlayPhase(typewriter.readyForChoices, presentationKey)
   const guidedCandidateId = resolveGuidedCharacterId(view)
   const guidedCharacterId = guidedCandidateId && guidedCandidateId !== perspectiveId && characters.some(character => character.id === guidedCandidateId) ? guidedCandidateId : null
-  const sceneMedia = resolveSceneMedia(view, guidedCharacterId)
+  const resolvedSceneMedia = resolveSceneMedia(view, guidedCharacterId)
+  const liveCharacterIds = new Set(characters.map(character => character.id))
+  const hasOutOfCastAuthoredIdentity = (resolvedSceneMedia.identityCards || []).some(identity => {
+    const characterId = identity.characterId || identity.id
+    return !!characterId && !liveCharacterIds.has(characterId)
+  })
+  // Defensive compatibility for an older cached API payload: never keep
+  // playing footage that names somebody outside this season's live cast.
+  const sceneMedia = hasOutOfCastAuthoredIdentity && perspectiveCharacter ? {
+    ...resolvedSceneMedia,
+    src: resolvedSceneMedia.fallbackSrc || perspectiveCharacter.video || '',
+    poster: resolvedSceneMedia.fallbackPoster || perspectiveCharacter.portrait,
+    assetId: `CHAR-${perspectiveCharacter.id}-portrait`,
+    identityCards: [identityCardFromCharacter(perspectiveCharacter)],
+    identityTimeline: [],
+  } : resolvedSceneMedia
   const authoredIdentityCards = sceneMedia.identityCards || []
   const authoredIdentityTimeline = sceneMedia.identityTimeline || []
   const sceneIdentityCards = authoredIdentityCards.length ? authoredIdentityCards.map(identity => {
@@ -1160,20 +1494,36 @@ function Game({ view, onView, onRestart }: { view: View; onView: (view: View) =>
   const pendingAutoOpen = !!pendingChat && (typeof pendingChat !== 'object' || (pendingChat.autoOpen !== false && pendingChat.status !== 'completed'))
   const pendingToken = typeof pendingChat === 'object' && pendingChat?.id ? pendingChat.id : `${snapshot.runId}:${snapshot.nodeId}:${guidedCharacterId}`
   const availableChoices = node.choices.filter(choice => (choice.characterId || choice.targetCharacterId) !== perspectiveId)
+  const contextForCharacter = (characterId: string): ConversationContext => {
+    const venue = view.chatContexts?.venues.find(candidate => candidate.characters.some(character => character.id === characterId))
+    return {
+      time: venue?.time || view.chatContexts?.scene?.time || activeSceneContext.time,
+      locationId: venue?.locationId || view.chatContexts?.scene?.locationId || activeSceneContext.locationId,
+      locationName: venue?.locationName || view.chatContexts?.scene?.locationName || activeSceneContext.locationName,
+      participantIds: [perspectiveId, characterId].filter((value): value is string => !!value),
+      channel: '1v1',
+    }
+  }
   useEffect(() => {
     if (!typewriter.readyForChoices || !guidedCharacterId || !pendingAutoOpen || autoOpenedChatRef.current === pendingToken) return
     const target = characters.find(character => character.id === guidedCharacterId)
     if (!target) return
     autoOpenedChatRef.current = pendingToken
+    setChatContext(contextForCharacter(target.id))
     setChatCharacter(target)
-  }, [characters, guidedCharacterId, pendingAutoOpen, pendingToken, typewriter.readyForChoices])
-  const choose = async (choice: Choice) => {
+  }, [characters, guidedCharacterId, pendingAutoOpen, pendingToken, typewriter.readyForChoices, view.chatContexts])
+  const choose = async (choice: Choice, customText = '') => {
     if (!typewriter.readyForChoices) return
     unlockAudioIntent()
     setBusy(true); setError('')
     try {
       const result = await api<View & { receipt: Receipt }>(`/api/runs/${snapshot.runId}/choices`, {
-        method: 'POST', body: JSON.stringify({ choiceId: choice.id, characterId: choice.characterId || choice.targetCharacterId, revision: snapshot.revision })
+        method: 'POST', body: JSON.stringify({
+          choiceId: choice.id,
+          characterId: choice.characterId || choice.targetCharacterId,
+          revision: snapshot.revision,
+          ...(customText ? { customText, heartMessage: node.characterChoice ? customText : undefined } : {}),
+        })
       })
       setReceipt(result.receipt); setTimeout(() => setReceipt(null), 3300)
       onView(result)
@@ -1181,14 +1531,26 @@ function Game({ view, onView, onRestart }: { view: View; onView: (view: View) =>
     } catch (reason) { setError((reason as Error).message) }
     finally { setBusy(false) }
   }
-  const send = async (message: string) => {
+  const send = async (message: string, context: ConversationContext) => {
     if (!chatCharacter) return
     setBusy(true); setError('')
     try {
       const result = await api<View & { receipt: Receipt }>(`/api/runs/${snapshot.runId}/agents/${chatCharacter.id}/messages`, {
-        method: 'POST', body: JSON.stringify({ message, revision: snapshot.revision })
+        method: 'POST', body: JSON.stringify({ message, revision: snapshot.revision, context })
       })
       setReceipt(result.receipt); setTimeout(() => setReceipt(null), 3300)
+      onView(result)
+    } catch (reason) { setError((reason as Error).message) }
+    finally { setBusy(false) }
+  }
+  const sendGroup = async (message: string, participantIds: string[], context: ConversationContext) => {
+    setBusy(true); setError('')
+    try {
+      const result = await api<View & { replies: GroupReply[]; receipts: Receipt[]; context: ConversationContext }>(`/api/runs/${snapshot.runId}/group-messages`, {
+        method: 'POST', body: JSON.stringify({ message, participantIds, revision: snapshot.revision, context })
+      })
+      const firstReceipt = result.receipts?.[0]
+      if (firstReceipt) { setReceipt(firstReceipt); setTimeout(() => setReceipt(null), 3300) }
       onView(result)
     } catch (reason) { setError((reason as Error).message) }
     finally { setBusy(false) }
@@ -1242,7 +1604,7 @@ function Game({ view, onView, onRestart }: { view: View; onView: (view: View) =>
         <button className="signal-button" aria-label="关系状态"><HeartMark small /><span>{snapshot.flags.heat + snapshot.echoMemories.length}</span></button>
       </header>
       <section className="scene-stage">
-        <SceneMedia src={sceneMedia.src} poster={sceneMedia.poster} fallbackSrc={sceneMedia.fallbackSrc} fallbackPoster={sceneMedia.fallbackPoster} assetId={sceneMedia.assetId} cue={sceneMedia.cue} active={!chatCharacter && !cinematic} firstPassConsumed={cinematicPreviewedSrc === sceneMedia.src} onTimeUpdate={setScenePlaybackTime} />
+        <SceneMedia src={sceneMedia.src} poster={sceneMedia.poster} fallbackSrc={sceneMedia.fallbackSrc} fallbackPoster={sceneMedia.fallbackPoster} assetId={sceneMedia.assetId} cue={sceneMedia.cue} active={!chatCharacter && !groupVenue && !cinematic} firstPassConsumed={cinematicPreviewedSrc === sceneMedia.src} onTimeUpdate={setScenePlaybackTime} />
         <div className="scene-atmosphere" />
         <div className="scene-time"><span>{node.eyebrow}</span><i /></div>
         {!!sceneIdentityCards.length && <SceneIdentitySequence
@@ -1264,6 +1626,7 @@ function Game({ view, onView, onRestart }: { view: View; onView: (view: View) =>
           </button>
         </div>}
         {storyOverlayPhase === 'interaction' && <div className="story-reveal" data-story-layer="interaction">
+          {snapshot.nodeId === 'callback' && <HeartInboxPhone snapshot={snapshot} characters={characters} />}
           {node.gameBrief && <GameBrief brief={node.gameBrief} />}
           {snapshot.storyMission ? <DirectorMission mission={snapshot.storyMission} characters={characters} busy={busy} onResolve={resolveMission} /> : directorAvailable && memoriesDone && <button className="director-trigger" disabled={busy} onClick={directStory}><span><b>让剧情导演读取此刻的关系证据</b><small>从已研究的恋综事件库中激活下一项主任务</small></span><i>{busy ? '…' : '↗'}</i></button>}
           {(node.requiresMemory || node.requiresGuidedInteraction) && <div className={`link-proof ${(node.requiresGuidedInteraction ? requiredInteractionDone : eventDone) ? 'done' : ''} ${guidedCharacterId && !requiredInteractionDone ? 'guided' : ''}`}>
@@ -1271,7 +1634,8 @@ function Game({ view, onView, onRestart }: { view: View; onView: (view: View) =>
           </div>}
           {!!availableChoices.length && <section className={`choice-section ${node.characterChoice ? 'choice-section--cast' : ''}`} aria-label="剧情选择">
             <div className="choice-section__heading"><span>{node.characterChoice ? '今晚，你想把心动短信发给谁？' : '这一刻，你准备怎么做？'}</span><small>你的选择会改变接下来的相处</small></div>
-            <div className={`choice-stack ${node.characterChoice ? 'character-choices' : ''} ${snapshot.nodeId === 'icebreaker-choice' ? 'choice-stack--icebreaker' : ''}`}>
+            {node.characterChoice ? <HeartMessageComposer choices={availableChoices} characters={characters} busy={busy} disabled={(!!node.requiresGuidedInteraction && !requiredInteractionDone) || (!!node.requiresMemory && !memoriesDone) || (!!node.requiresEvent && !eventDone)} onSend={choose} /> : <>
+            <div className={`choice-stack ${snapshot.nodeId === 'icebreaker-choice' ? 'choice-stack--icebreaker' : ''} ${snapshot.nodeId !== 'icebreaker-choice' && availableChoices.every(choice => choice.characterId || choice.targetCharacterId) ? 'choice-stack--character-grid' : ''}`}>
               {availableChoices.map((choice, index) => {
                 const choiceCharacterId = choice.characterId || choice.targetCharacterId
                 const character = choiceCharacterId ? characters.find(c => c.id === choiceCharacterId) : null
@@ -1300,14 +1664,28 @@ function Game({ view, onView, onRestart }: { view: View; onView: (view: View) =>
                 )
               })}
             </div>
+            <FreeChoiceComposer choices={availableChoices} busy={busy} disabled={(!!node.requiresGuidedInteraction && !requiredInteractionDone) || (!!node.requiresMemory && !memoriesDone) || (!!node.requiresEvent && !eventDone)} onSend={choose} />
+            </>}
           </section>}
           {node.isEnding && <div className="ending-proof"><span>首个联通闭环已完成</span><p>你的文字选择进入角色记忆，并在剧情回声中触发了新的表达。</p><button disabled={busy} onClick={restart}>{busy ? '正在重启心动信号…' : '重新开始一段旅程'}</button></div>}
           {error && <p className="error-note">{error}</p>}
         </div>}
       </section>
       </div>
-      <CharacterDock characters={characters} snapshot={snapshot} guidedCharacterId={typewriter.readyForChoices ? guidedCharacterId : null} guidedComplete={node.requiresGuidedInteraction ? requiredInteractionDone : node.requiresEvent ? eventDone : memoriesDone} onOpen={setChatCharacter} />
-      {chatCharacter && chatCharacter.id !== perspectiveId && <ChatSheet key={chatCharacter.id} character={chatCharacter} characters={characters} snapshot={snapshot} embeddedOpener={view.chatOpeners?.[chatCharacter.id] || snapshot.chatOpeners?.[chatCharacter.id]} onClose={() => setChatCharacter(null)} onSend={send} busy={busy} />}
+      <CharacterDock
+        characters={characters}
+        snapshot={snapshot}
+        chatContexts={view.chatContexts}
+        guidedCharacterId={typewriter.readyForChoices ? guidedCharacterId : null}
+        guidedComplete={node.requiresGuidedInteraction ? requiredInteractionDone : node.requiresEvent ? eventDone : memoriesDone}
+        groupDisabled={snapshot.nodeId === 'guided-chat' && !requiredInteractionDone}
+        currentLocation={activeSceneContext.location}
+        currentTime={activeSceneContext.time}
+        onOpen={(character, context) => { setError(''); setGroupVenue(null); setChatContext(context); setChatCharacter(character) }}
+        onOpenGroup={venue => { setError(''); setChatCharacter(null); setChatContext(null); setGroupVenue(venue) }}
+      />
+      {chatCharacter && chatCharacter.id !== perspectiveId && <ChatSheet key={chatCharacter.id} character={chatCharacter} characters={characters} snapshot={snapshot} embeddedOpener={view.chatOpeners?.[chatCharacter.id] || snapshot.chatOpeners?.[chatCharacter.id]} context={chatContext || contextForCharacter(chatCharacter.id)} error={error} onClose={() => { setChatCharacter(null); setChatContext(null) }} onSend={send} busy={busy} />}
+      {groupVenue && <GroupChatSheet key={`${groupVenue.locationId}:${snapshot.nodeId}`} venue={groupVenue} characters={characters} snapshot={snapshot} onClose={() => setGroupVenue(null)} onSend={sendGroup} busy={busy} error={error} />}
       {cinematic && <Cinematic src={cinematic} title={cinematicTitle} identityCards={sceneIdentityCards} identityTimeline={authoredIdentityTimeline} onDone={() => { setCinematicPreviewedSrc(cinematic); setCinematic(null) }} />}
       {receipt && <ReceiptToast receipt={receipt} />}
     </main>

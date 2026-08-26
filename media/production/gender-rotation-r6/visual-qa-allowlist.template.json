@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "heart-journey/r6-visual-qa-allowlist-v1",
+  "planningManifestSha256": "4301f958ec7d4e04655ff8db0d41dcbbf93f0f3f1eb962cfdace671cf745763a",
+  "reviewedBy": "FILL_HUMAN_REVIEWER",
+  "reviewedAt": "FILL_ISO_8601_TIME",
+  "approvedAssets": [
+    {
+      "sourceId": "D1-A1-island-hotel-establish--F-B-luyao--r6",
+      "candidatePath": "media/production/gender-rotation-r6/.work-candidates/FILL/D1-A1-island-hotel-establish--F-B-luyao--r6-candidate.mp4",
+      "sha256": "FILL_AFTER_VISUAL_QA",
+      "identityCast": [
+        "luyao"
+      ],
+      "visualQaVerdict": "passed",
+      "audioQaVerdict": "passed"
+    },
+    {
+      "sourceId": "reuse:D1-A1-island-hotel-establish:F-A-jiangmi",
+      "candidatePath": "frontend/public/media/video/D1-A1-island-hotel-establish.mp4",
+      "sha256": "2274200e00d2a98c76fb763b7de35fba82113a622291cddf51b76142cf840d89",
+      "identityCast": [
+        "jiangmi"
+      ],
+      "visualQaVerdict": "passed",
+      "audioQaVerdict": "passed"
+    },
+    {
+      "sourceId": "D1-A3B-cast-first-impressions--F-B-luyao--r6",
+      "candidatePath": "media/production/gender-rotation-r6/.work-candidates/FILL/D1-A3B-cast-first-impressions--F-B-luyao--r6-candidate.mp4",
+      "sha256": "FILL_AFTER_LOCAL_COMPOSITE_VISUAL_QA",
+      "identityCast": [
+        "luyao",
+        "chensu"
+      ],
+      "visualQaVerdict": "passed",
+      "audioQaVerdict": "passed"
+    }
+  ]
+}

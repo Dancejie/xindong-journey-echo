@@ -4,7 +4,7 @@
   "planStatus": "blocked-template",
   "doNotSubmit": true,
   "taskMatrix": "task-matrix.json",
-  "scope": "178 paid provider candidates: the exact requiresGeneration semantic-master gap in runtime-variant-matrix.json, including all 8 voiced introductions and the D1-A3B current-eight master.",
+  "scope": "178 semantic-master gaps resolved by 198 paid provider candidates and 4 local composites; D1-A3B reuses the 8 voiced introductions and is not submitted separately.",
   "defaults": {
     "doNotSubmit": true,
     "ratio": "9:16",
@@ -16,11 +16,14 @@
   "policy": {
     "provider": "fumin",
     "model": "seedance-2.0-mini",
-    "expectedTaskCount": 178,
+    "expectedSemanticMasterGap": 178,
+    "expectedTaskCount": 198,
+    "expectedLocalCompositeOutputs": 4,
     "concurrency": 2,
     "maxApiRetry": 0,
     "candidateRoot": ".work-candidates",
     "approvalRule": "Every output remains a candidate until identity, speech, audio, frame, continuity and runtime QA pass. No automatic paid retry."
   },
-  "shots": []
+  "shots": [],
+  "localCompositeOutputs": []
 }

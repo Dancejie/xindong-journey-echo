@@ -1,0 +1,95 @@
+{
+  "schemaVersion": "heart-journey/gender-doubled-cast-proposal-v1",
+  "status": "proposal-not-canonical",
+  "rule": "Each represented MBTI has one male and one female playable character.",
+  "currentCardSource": {
+    "path": "../../../content/character_cards.v3.json",
+    "sha256": "15f28585f118591c318e0a052b61b9e9d600a00a3f0ddc4c3ebb19951af4302e",
+    "currentCount": 8
+  },
+  "newCharacters": [
+    {
+      "id": "luyao",
+      "displayName": "陆遥",
+      "mbti": "INTJ",
+      "gender": "female",
+      "counterpartOf": "shenmo",
+      "occupationDraft": "智能硬件产品负责人",
+      "mediaDirection": "冷静利落、主动决策，用极轻的冷幽默缓解紧张"
+    },
+    {
+      "id": "yecheng",
+      "displayName": "叶澄",
+      "mbti": "ISFJ",
+      "gender": "female",
+      "counterpartOf": "linyu",
+      "occupationDraft": "古籍修复师",
+      "mediaDirection": "安静有礼、重视物件和承诺留下的痕迹，原则处坚定"
+    },
+    {
+      "id": "tangli",
+      "displayName": "唐梨",
+      "mbti": "ESTP",
+      "gender": "female",
+      "counterpartOf": "chengye",
+      "occupationDraft": "户外纪录片现场制片人",
+      "mediaDirection": "明快直接、反应快，行动力来自现场责任感而非炫技"
+    },
+    {
+      "id": "wenxu",
+      "displayName": "温序",
+      "mbti": "INTP",
+      "gender": "female",
+      "counterpartOf": "guyan",
+      "occupationDraft": "城市气候数据研究员",
+      "mediaDirection": "联想跳跃、有轻微黑色幽默，像在验证一个有趣假设"
+    },
+    {
+      "id": "hechuan",
+      "displayName": "贺川",
+      "mbti": "INFJ",
+      "gender": "male",
+      "counterpartOf": "jiangwan",
+      "occupationDraft": "纪录片剪辑师",
+      "mediaDirection": "温和沉静，擅长把被忽略的人重新带回对话"
+    },
+    {
+      "id": "peiran",
+      "displayName": "裴然",
+      "mbti": "ENFP",
+      "gender": "male",
+      "counterpartOf": "jiangmi",
+      "occupationDraft": "儿童博物馆体验策展人",
+      "mediaDirection": "松弛好奇、反应快，能让陌生人自然参与同一个游戏"
+    },
+    {
+      "id": "lichuan",
+      "displayName": "黎川",
+      "mbti": "ESFJ",
+      "gender": "male",
+      "counterpartOf": "sunnian",
+      "occupationDraft": "精品酒店餐饮运营经理",
+      "mediaDirection": "大方可靠、现场统筹力强，亲切但有自己的秩序"
+    },
+    {
+      "id": "qiaolan",
+      "displayName": "乔岚",
+      "mbti": "ISTP",
+      "gender": "female",
+      "counterpartOf": "chensu",
+      "occupationDraft": "舞台机械工程师",
+      "mediaDirection": "话少、稳、手上有办法，幽默干脆但不冷漠"
+    }
+  ],
+  "resultingRoster": {
+    "count": 16,
+    "male": 8,
+    "female": 8,
+    "mbtiPairs": 8
+  },
+  "blockingPrerequisites": [
+    "Generate and human-approve one original still identity anchor for every new character.",
+    "Generate and review full interoperable character cards before treating draft names, jobs or voices as canon.",
+    "Record likeness and voice consent references; this plan intentionally leaves rights pending."
+  ]
+}
